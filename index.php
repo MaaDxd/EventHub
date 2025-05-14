@@ -30,7 +30,7 @@ require_once 'includes/cabecera.php'; ?>
               <img src="https://i.gifer.com/QwMf.gif" class="d-block w-100" alt="Eventos deportivos">
               <div class="carousel-caption">
                 <h5>Deportivos</h5>
-                <p>Momentos inolvidables, a solo un clic</p>
+                <p>Momentos inolvidables, a solo un clic clic</p>
               </div>
             </div>
             <div class="carousel-item">
