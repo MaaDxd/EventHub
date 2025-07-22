@@ -119,7 +119,7 @@
                 <div class="swiper-wrapper">
                     @if(isset($events) && count($events) > 0)
                         @foreach($events as $event)
-                            <div class="swiper-slide" style="background-image:url('{{ $event[image] }}')">
+                            <div class="swiper-slide" style="background-image: url('{{ $event['image'] }}')">
                                 <div class="event-info">
                                     <h5>{{ $event['title'] }}</h5>
                                     <p>{{ $event['date'] }} - {{ $event['location'] }}</p>
