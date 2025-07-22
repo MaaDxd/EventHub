@@ -17,7 +17,7 @@
     <div class="min-h-screen flex flex-col">
         <header class="bg-white shadow p-4">
             <div class="container mx-auto flex justify-between items-center">
-                <a href="/" class="text-xl font-bold">EventHub</a>
+                <a href="{{ route('welcome') }}" class="text-xl font-bold">EventHub</a>
                 <nav>
                     @auth
                         <form method="POST" action="{{ route('logout') }}">
@@ -34,9 +34,7 @@
         <main class="flex-grow container mx-auto p-4">
             @yield('content')
         </main>
-        <footer class="bg-white shadow p-4 text-center text-sm text-gray-600">
-            &copy; 2024 EventHub
-        </footer>
+
     </div>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     @yield('scripts')
