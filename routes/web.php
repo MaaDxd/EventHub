@@ -13,7 +13,9 @@ Route::get('/', function () {
         ['image' => 'https://source.unsplash.com/random/800x600?theater', 'title' => 'Obra de Teatro', 'date' => '05 de Octubre, 2024', 'location' => 'Teatro Municipal'],
     ];
     return view('welcome', ['events' => $events]);
-});
+})->name('welcome');
+
+
 
 // Rutas para autenticación
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
