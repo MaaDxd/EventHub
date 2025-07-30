@@ -1,31 +1,35 @@
-<footer class="bg-dark mt-5 py-4 border-top shadow-lg">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-6 text-md-start text-center mb-3 mb-md-0">
-                <a href="#" class="navbar-brand fw-bold fs-3" style="color: #ff5722; letter-spacing: 2px;">
-                    <i class="bi bi-lightning-charge-fill me-2" style="color: #17a2b8;"></i>EventHub
+<footer class="bg-gradient-to-br from-[#1A0046] to-[#32004E] py-10 border-t-2 border-white/10 shadow-2xl mt-10">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            <div class="flex flex-col items-center md:items-start">
+                <a href="#" class="font-extrabold text-3xl tracking-wide flex items-center mb-2 drop-shadow-lg">
+                    <i class="bi bi-lightning-charge-fill mr-3 text-yellow-400 animate-pulse"></i>EventHub
                 </a>
-                <p class="mb-0 small" style="color: #adb5bd;">&copy; {{ date('Y') }} EventHub. Todos los derechos reservados.</p>
+                <p class="mb-0 text-base text-white/80">&copy; {{ date('Y') }} EventHub. Todos los derechos reservados.</p>
             </div>
-            <div class="col-md-6 text-md-end text-center">
-                <ul class="list-inline mb-0">
-                    <li class="list-inline-item mx-2">
-                        <a href="#" class="text-decoration-none" style="color: #17a2b8; font-weight: 500;">
-                            <i class="bi bi-house-door-fill me-1"></i>Inicio
+            <ul class="flex flex-wrap justify-center md:justify-end gap-6 mt-4 md:mt-0">
+                <li>
+                    <a href="#" class="flex items-center bg-white/10 hover:bg-white/30 hover:text-[#1A0046] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg backdrop-blur-md">
+                        <i class="bi bi-house-door-fill mr-2"></i>Inicio
+                    </a>
+                </li>
+                <li>
+                    @auth
+                        <a href="{{ route('dashboard.creator') }}" class="flex items-center bg-white/10 hover:bg-white/30 hover:text-[#1A0046] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg backdrop-blur-md">
+                            <i class="bi bi-calendar-event-fill mr-2"></i>Eventos
                         </a>
-                    </li>
-                    <li class="list-inline-item mx-2">
-                        <a href="#" class="text-decoration-none" style="color: #17a2b8; font-weight: 500;">
-                            <i class="bi bi-calendar-event-fill me-1"></i>Eventos
+                    @else
+                        <a href="#" class="flex items-center bg-white/10 hover:bg-white/30 hover:text-[#1A0046] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg backdrop-blur-md">
+                            <i class="bi bi-calendar-event-fill mr-2"></i>Eventos
                         </a>
-                    </li>
-                    <li class="list-inline-item mx-2">
-                        <a href="#" class="text-decoration-none" style="color: #17a2b8; font-weight: 500;">
-                            <i class="bi bi-envelope-fill me-1"></i>Contacto
-                        </a>
-                    </li>
-                </ul>
-            </div>
+                    @endauth
+                </li>
+                <li>
+                    <a href="{{ route('contact') }}" class="flex items-center bg-white/10 hover:bg-white/30 hover:text-[#1A0046] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg backdrop-blur-md">
+                        <i class="bi bi-envelope-fill mr-2"></i>Contacto
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </footer>

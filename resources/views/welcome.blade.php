@@ -3,27 +3,62 @@
 @section('content')
 <style>
     .gradient-bg {
-        background: linear-gradient(135deg, #4f3a65 0%, #704b8c 25%, #9b59b6 50%, #3498db 75%, #2c3e50 100%);
+        background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
         color: white;
         font-family: 'Poppins', sans-serif;
     }
     .hero-section {
         padding: 120px 0;
         text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, rgba(50, 0, 78, 0.3) 0%, rgba(26, 0, 70, 0.6) 100%);
+        z-index: 1;
+    }
+    .hero-section > .container {
+        position: relative;
+        z-index: 2;
     }
     .hero-section h1 {
-        font-size: 4rem;
-        font-weight: 700;
-        animation: fadeInDown 1s ease-in-out;
+        font-size: 4.5rem;
+        font-weight: 800;
+        background: linear-gradient(to right, #fff, #e0e0e0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        animation: fadeInDown 1.2s ease-out;
+        margin-bottom: 1rem;
     }
     .hero-section p {
         font-size: 1.5rem;
         margin-bottom: 30px;
-        animation: fadeInUp 1s ease-in-out;
+        animation: fadeInUp 1.2s ease-out 0.3s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+        color: rgba(255, 255, 255, 0.9);
     }
     .event-slider {
         padding: 80px 0;
         position: relative;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(10px);
+    }
+    .event-slider h2 {
+        color: white;
+        font-weight: 700;
+        margin-bottom: 3rem;
+        text-align: center;
+        font-size: 2.5rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .swiper-container {
         width: 100%;
@@ -38,54 +73,71 @@
         height: 400px;
         border-radius: 15px;
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        transition: transform 0.3s ease;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        transition: all 0.4s ease;
+        border: 2px solid rgba(255, 255, 255, 0.1);
     }
     .swiper-slide:hover {
-        transform: scale(1.05);
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        border-color: rgba(255, 255, 255, 0.2);
     }
     .swiper-slide .event-info {
         position: absolute;
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(0,0,0,0.6);
+        background: linear-gradient(to top, rgba(26, 0, 70, 0.95), rgba(50, 0, 78, 0.8), transparent);
         color: white;
-        padding: 20px;
+        padding: 30px 20px 20px;
         text-align: left;
     }
     .event-info h5 {
-        font-size: 1.25rem;
-        font-weight: 600;
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .event-info p {
-        font-size: 0.9rem;
+        font-size: 1rem;
         margin: 0;
+        opacity: 0.9;
     }
     .swiper-button-next, .swiper-button-prev {
-        background-color: rgba(0,0,0,0.5);
-        width: 40px;
-        height: 40px;
+        background-color: rgba(255, 255, 255, 0.15);
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+    .swiper-button-next:hover, .swiper-button-prev:hover {
+        background-color: rgba(255, 255, 255, 0.25);
+        transform: scale(1.1);
     }
     .swiper-button-next:after, .swiper-button-prev:after {
-        font-size: 18px;
+        font-size: 20px;
+        font-weight: bold;
+        color: white;
     }
     .swiper-pagination-bullet {
-        background: white;
+        background: rgba(255, 255, 255, 0.6);
         opacity: 0.6;
+        width: 10px;
+        height: 10px;
+        transition: all 0.3s ease;
     }
     .swiper-pagination-bullet-active {
         opacity: 1;
-        background: #9b59b6;
+        background: #fff;
+        width: 30px;
+        border-radius: 5px;
     }
     @keyframes fadeInDown {
         from {
             opacity: 0;
-            transform: translateY(-20px);
+            transform: translateY(-30px);
         }
         to {
             opacity: 1;
@@ -95,7 +147,7 @@
     @keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(30px);
         }
         to {
             opacity: 1;
@@ -159,10 +211,10 @@
                 reverseDirection: false,
             },
             coverflowEffect: {
-                rotate: 50,
+                rotate: 30,
                 stretch: 0,
                 depth: 100,
-                modifier: 1,
+                modifier: 1.5,
                 slideShadows: true,
             },
             pagination: {
@@ -181,22 +233,26 @@
             mousewheel: {
                 invert: false,
             },
-            speed: 800,
+            speed: 1000,
             direction: 'horizontal',
             allowTouchMove: true,
         });
 
-        // Botones para cambiar dirección del autoplay
+        // Botones para cambiar dirección del autoplay con efecto suave
         document.querySelector('.swiper-button-next').addEventListener('click', function() {
             swiper.autoplay.stop();
-            swiper.params.autoplay.reverseDirection = false;
-            swiper.autoplay.start();
+            setTimeout(() => {
+                swiper.params.autoplay.reverseDirection = false;
+                swiper.autoplay.start();
+            }, 300);
         });
 
         document.querySelector('.swiper-button-prev').addEventListener('click', function() {
             swiper.autoplay.stop();
-            swiper.params.autoplay.reverseDirection = true;
-            swiper.autoplay.start();
+            setTimeout(() => {
+                swiper.params.autoplay.reverseDirection = true;
+                swiper.autoplay.start();
+            }, 300);
         });
     });
 </script>

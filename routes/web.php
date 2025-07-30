@@ -69,3 +69,8 @@ Route::middleware('auth')->group(function () {
         }
     })->name('dashboard');
 });
+
+// Ruta de contacto
+Route::get('/contact', function () {
+    return view('layouts.contact');
+})->name('contact');
