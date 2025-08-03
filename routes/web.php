@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfileController;
 
 // Ruta raíz para evitar error 404
 Route::get('/', function () {
@@ -56,6 +57,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/user', function () {
         return view('dashboard_user');
     })->middleware('role:user')->name('dashboard.user');
+
+    // Rutas para perfil de usuario
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     // Ruta por defecto que redirige según rol
     Route::get('/dashboard', function () {
