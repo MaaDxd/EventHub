@@ -12,7 +12,7 @@ class ProfileController extends Controller
     /**
      * Show the profile management form.
      */
-    public function show()
+    public function show(Request $request)
     {
         return view('profile.show', [
             'user' => Auth::user()

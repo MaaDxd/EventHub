@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EventController;
+
+
 
 // Ruta raíz para evitar error 404
 Route::get('/', function () {
@@ -41,6 +44,13 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
+// Rutas específicas para registro por tipo de usuario
+Route::get('register/user', [RegisterController::class, 'showUserRegistrationForm'])->name('register.user');
+Route::post('register/user', [RegisterController::class, 'registerUser']);
+
+Route::get('register/creator', [RegisterController::class, 'showCreatorRegistrationForm'])->name('register.creator');
+Route::post('register/creator', [RegisterController::class, 'registerCreator']);
+
 // Rutas protegidas para dashboards según roles
 Route::middleware('auth')->group(function () {
     // Rutas para administradores
@@ -63,6 +73,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
+    // Rutas para eventos (solo creadores)
+    Route::middleware('role:creator')->group(function () {
+        Route::get('/events', [EventController::class, 'index'])->name('events.index');
+        Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+        Route::post('/events', [EventController::class, 'store'])->name('events.store');
+        Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+        Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+        Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+    });
+
     // Ruta por defecto que redirige según rol
     Route::get('/dashboard', function () {
         $user = Auth::user();
@@ -80,3 +100,4 @@ Route::middleware('auth')->group(function () {
 Route::get('/contact', function () {
     return view('layouts.contact');
 })->name('contact');
+

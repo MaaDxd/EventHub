@@ -4,6 +4,8 @@
 use Illuminate\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 
+
+
 define('LARAVEL_START', microtime(true));
 
 // Register the Composer autoloader...
@@ -16,3 +18,4 @@ $app = require_once __DIR__.'/bootstrap/app.php';
 $status = $app->handleCommand(new ArgvInput);
 
 exit($status);
+
