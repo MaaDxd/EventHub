@@ -102,8 +102,8 @@
                                 <div>
                                     <h3 class="font-semibold text-gray-800">{{ $event->title }}</h3>
                                     <p class="text-sm text-gray-600">{{ $event->date->format('d/m/Y') }} a las {{ $event->time }}</p>
-                                    <span class="inline-block px-2 py-1 text-xs font-semibold text-white rounded-full" style="background-color: {{ $event->category->color }}">
-                                        {{ $event->category->name }}
+                                    <span class="inline-block px-2 py-1 text-xs font-semibold text-white rounded-full" style="background-color: {{ $event->category ? $event->category->color : '#6366f1' }}">
+                                        {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
                                     </span>
                                 </div>
                             </div>

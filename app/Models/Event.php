@@ -17,6 +17,7 @@ class Event extends Model
         'location',
         'image',
         'category_id',
+        'category_type',
         'creator_id',
         'status',
     ];
