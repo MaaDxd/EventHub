@@ -24,12 +24,27 @@ class EventController extends Controller
             'date' => 'required|date|after:today',
             'time' => 'required',
             'location' => 'required|string|max:255',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if (!in_array($value, ['concierto', 'evento'])) {
+                        if (!Category::where('id', $value)->exists()) {
+                            $fail('La categoría seleccionada no es válida.');
+                        }
+                    }
+                },
+            ],
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->all();
         $data['creator_id'] = Auth::id();
+
+        // Si la categoría es 'concierto' o 'evento', guarda 0 en category_id y el tipo en category_type
+        if (in_array($data['category_id'], ['concierto', 'evento'])) {
+            $data['category_type'] = $data['category_id'];
+            $data['category_id'] = 0;
+        }
 
         // Handle image upload
         if ($request->hasFile('image')) {
