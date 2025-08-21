@@ -10,29 +10,10 @@ use App\Http\Controllers\EventController;
 
 
 // Ruta raíz para evitar error 404
-Route::get('/', function () {
-    $events = [
-        [
-            'image' => 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
-            'title' => 'Concierto de Rock',
-            'date' => '25 de Agosto, 2024',
-            'location' => 'Estadio Nacional'
-        ],
-        [
-            'image' => 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80',
-            'title' => 'Festival de Jazz',
-            'date' => '12 de Septiembre, 2024',
-            'location' => 'Parque Central'
-        ],
-        [
-            'image' => 'https://images.unsplash.com/photo-1515168833906-d2a3b82b3029?auto=format&fit=crop&w=800&q=80',
-            'title' => 'Obra de Teatro',
-            'date' => '05 de Octubre, 2024',
-            'location' => 'Teatro Municipal'
-        ],
-    ];
-    return view('welcome', ['events' => $events]);
-})->name('welcome');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
+
+// Ruta para mostrar todos los eventos públicos
+Route::get('/eventos', [App\Http\Controllers\HomeController::class, 'allEvents'])->name('events.public');
 
 
 
