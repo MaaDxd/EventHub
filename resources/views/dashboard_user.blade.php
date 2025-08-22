@@ -18,35 +18,30 @@
             </div>
         </div>
 
-        <!-- Opciones del Dashboard -->
-        <div class="flex justify-center mb-6">
-            <!-- Perfil -->
-            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-200 max-w-sm w-full">
-                <div class="text-center">
-                    <div class="text-4xl mb-4">👤</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Mi Perfil</h3>
-                    <p class="text-gray-600 mb-4">Actualiza tu información personal y contraseña</p>
-                    <a href="{{ route('profile.show') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                        Ver Perfil
-                    </a>
+        <!-- Información del Usuario -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📋 Mi Información</h2>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ auth()->user()->name }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ auth()->user()->email }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Rol</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ ucfirst(auth()->user()->role) }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Miembro desde</label>
+                    <p class="mt-1 text-sm text-gray-900">{{ auth()->user()->created_at->format('d/m/Y') }}</p>
                 </div>
             </div>
         </div>
 
-        <!-- Información de la cuenta -->
-        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">📊 Resumen de la Cuenta</h2>
-            <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                <div class="text-center p-4 bg-blue-50 rounded-lg">
-                    <div class="text-2xl font-bold text-blue-600">{{ auth()->user()->role }}</div>
-                    <div class="text-sm text-gray-600">Tipo de Usuario</div>
-                </div>
-                <div class="text-center p-4 bg-green-50 rounded-lg">
-                    <div class="text-2xl font-bold text-green-600">{{ auth()->user()->created_at->format('d/m/Y') }}</div>
-                    <div class="text-sm text-gray-600">Miembro desde</div>
-                </div>
-            </div>
-        </div>
+
 
         <!-- Acciones rápidas -->
         <div class="bg-white rounded-lg shadow-md p-6">
@@ -63,12 +58,13 @@
                     <button type="submit" 
                             class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200"
                             onclick="return confirm('¿Estás seguro de que quieres cerrar sesión?')">
-                        🔓 Cerrar Sesión
+                        🚪 Cerrar Sesión
                     </button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 @include('layouts.footer')
 @endsection

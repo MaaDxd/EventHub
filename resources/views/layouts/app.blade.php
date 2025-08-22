@@ -134,11 +134,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Dashboard Links -->
-                                <a href="{{ route('dashboard') }}" class="dropdown-item">
-                                    <span class="mr-2">🏠</span> Dashboard
-                                </a>
-                                
                                 @if(auth()->user()->role === 'user')
                                     <a href="{{ route('dashboard.user') }}" class="dropdown-item">
                                         <span class="mr-2">👤</span> Mi Panel
