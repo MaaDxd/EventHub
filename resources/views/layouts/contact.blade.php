@@ -86,12 +86,6 @@
         left: 100%;
     }
     
-    .contact-item:hover {
-        background: rgba(255,255,255,0.15);
-        border-color: rgba(255,215,0,0.3);
-        transform: translateY(-2px) scale(1.02);
-        box-shadow: 0 10px 25px rgba(255,215,0,0.15);
-    }
     
     
     @keyframes iconPulse {
@@ -147,7 +141,7 @@
                 <h1 class="contact-title text-6xl md:text-7xl font-black mb-8 tracking-wider uppercase drop-shadow-2xl">
                     Contacto
                 </h1>
-                <div class="w-24 h-1 bg-gradient-to-r from-yellow-400 to-orange-400 mx-auto mb-8 rounded-full"></div>
+                <div class="w-24 h-1 bg-gradient-to-r from-white-400 to-orange-400 mx-auto mb-8 rounded-full"></div>
                 <p class="text-xl md:text-2xl mb-4 text-white/90 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
                     ¿Tienes dudas, sugerencias o quieres colaborar?
                 </p>
