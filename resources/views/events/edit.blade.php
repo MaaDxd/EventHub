@@ -31,11 +31,16 @@
                 <!-- Description -->
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                        Descripción *
+                        Descripción * <span class="text-sm text-gray-500">(máximo 150 caracteres)</span>
                     </label>
-                    <textarea id="description" name="description" rows="4" required 
-                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('description') border-red-500 @enderror"
-                              placeholder="Describe tu evento, qué incluye, qué esperar...">{{ old('description', $event->description) }}</textarea>
+                    <div class="relative">
+                        <textarea id="description" name="description" rows="4" required maxlength="150"
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('description') border-red-500 @enderror"
+                                  placeholder="Describe tu evento, qué incluye, qué esperar...">{{ old('description', $event->description) }}</textarea>
+                        <div class="absolute bottom-2 right-2 text-xs text-gray-500">
+                            <span id="char-count">0</span>/150
+                        </div>
+                    </div>
                     @error('description')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -170,6 +175,32 @@
 </div>
 
 <script>
+    // Character counter for description
+    document.addEventListener('DOMContentLoaded', function() {
+        const descriptionTextarea = document.getElementById('description');
+        const charCount = document.getElementById('char-count');
+
+        function updateCharCount() {
+            const currentLength = descriptionTextarea.value.length;
+            charCount.textContent = currentLength;
+
+            // Change color based on character count
+            if (currentLength > 140) {
+                charCount.className = 'text-red-500 font-semibold';
+            } else if (currentLength > 120) {
+                charCount.className = 'text-yellow-500 font-semibold';
+            } else {
+                charCount.className = 'text-gray-500';
+            }
+        }
+
+        // Update count on input
+        descriptionTextarea.addEventListener('input', updateCharCount);
+
+        // Initial count update
+        updateCharCount();
+    });
+
     // Preview image functionality
     document.getElementById('image').addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -179,7 +210,7 @@
                 const preview = document.createElement('img');
                 preview.src = e.target.result;
                 preview.className = 'mx-auto h-12 w-12 object-cover rounded';
-                
+
                 const container = document.querySelector('.space-y-1');
                 const existingPreview = container.querySelector('img');
                 if (existingPreview) {

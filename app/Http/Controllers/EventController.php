@@ -20,7 +20,7 @@ class EventController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|max:150',
             'date' => 'required|date|after:today',
             'time' => 'required',
             'location' => 'required|string|max:255',
@@ -83,7 +83,7 @@ class EventController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
+            'description' => 'required|string|max:150',
             'date' => 'required|date',
             'time' => 'required',
             'location' => 'required|string|max:255',
