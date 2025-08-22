@@ -5,139 +5,157 @@
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 @endphp
+
 <style>
+    /* Gradientes corporativos */
     .gradient-bg {
         background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
-        color: white;
-        font-family: 'Poppins', sans-serif;
     }
-    .hero-section {
-        padding: 120px 0;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
+    
+    .gradient-overlay {
+        background: linear-gradient(45deg, rgba(26, 0, 70, 0.9) 0%, rgba(50, 0, 78, 0.9) 100%);
     }
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(circle at center, rgba(50, 0, 78, 0.3) 0%, rgba(26, 0, 70, 0.6) 100%);
-        z-index: 1;
-    }
-    .hero-section > .container {
-        position: relative;
-        z-index: 2;
-    }
-    .hero-section h1 {
-        font-size: 4.5rem;
-        font-weight: 800;
-        background: linear-gradient(to right, #fff, #e0e0e0);
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        animation: fadeInDown 1.2s ease-out;
-        margin-bottom: 1rem;
-    }
-    .hero-section p {
-        font-size: 1.5rem;
-        margin-bottom: 30px;
-        animation: fadeInUp 1.2s ease-out 0.3s;
-        opacity: 0;
-        animation-fill-mode: forwards;
-        color: rgba(255, 255, 255, 0.9);
-    }
-    .event-slider {
-        padding: 80px 0;
-        position: relative;
-        background: rgba(255, 255, 255, 0.03);
-        backdrop-filter: blur(10px);
-    }
-    .event-slider h2 {
-        color: white;
-        font-weight: 700;
-        margin-bottom: 3rem;
-        text-align: center;
-        font-size: 2.5rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .swiper-container {
-        width: 100%;
-        padding-top: 50px;
-        padding-bottom: 50px;
-        overflow: hidden;
-    }
-    .swiper-slide {
-        background-position: center;
-        background-size: cover;
-        width: 320px;
-        height: 400px;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-        transition: all 0.4s ease;
-        border: 2px solid rgba(255, 255, 255, 0.1);
-    }
-    .swiper-slide:hover {
-        transform: translateY(-10px) scale(1.02);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        border-color: rgba(255, 255, 255, 0.2);
-    }
-    .swiper-slide .event-info {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: linear-gradient(to top, rgba(26, 0, 70, 0.95), rgba(50, 0, 78, 0.8), transparent);
-        color: white;
-        padding: 30px 20px 20px;
-        text-align: left;
-    }
-    .event-info h5 {
-        font-size: 1.4rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .event-info p {
-        font-size: 1rem;
-        margin: 0;
-        opacity: 0.9;
-    }
+    
+    /* Swiper customization */
     .swiper-button-next, .swiper-button-prev {
-        background-color: rgba(255, 255, 255, 0.15);
+        background-color: rgba(255, 255, 255, 0.1);
         width: 50px;
         height: 50px;
         border-radius: 50%;
-        backdrop-filter: blur(4px);
+        backdrop-filter: blur(10px);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    
     .swiper-button-next:hover, .swiper-button-prev:hover {
-        background-color: rgba(255, 255, 255, 0.25);
+        background-color: rgba(255, 255, 255, 0.2);
         transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 0.4);
     }
+    
     .swiper-button-next:after, .swiper-button-prev:after {
-        font-size: 20px;
-        font-weight: bold;
-        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        color: #FFFFFF;
     }
+    
     .swiper-pagination-bullet {
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.5);
         opacity: 0.6;
-        width: 10px;
-        height: 10px;
-        transition: all 0.3s ease;
+        width: 8px;
+        height: 8px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+    
     .swiper-pagination-bullet-active {
         opacity: 1;
-        background: #fff;
-        width: 30px;
-        border-radius: 5px;
+        background: #FFFFFF;
+        width: 24px;
+        border-radius: 4px;
+        transform: scale(1.2);
     }
+    
+    /* Event cards */
+    .event-card {
+        background: #FFFFFF;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px -5px rgba(26, 0, 70, 0.3), 0 10px 10px -5px rgba(26, 0, 70, 0.04);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(50, 0, 78, 0.1);
+    }
+    
+    .event-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px -12px rgba(26, 0, 70, 0.4), 0 10px 10px -5px rgba(26, 0, 70, 0.04);
+    }
+    
+    .event-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+    
+    .event-date-badge {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: linear-gradient(135deg, #1A0046, #32004E);
+        color: #FFFFFF;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(26, 0, 70, 0.3);
+    }
+    
+    .event-content {
+        padding: 24px;
+    }
+    
+    .event-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1A0046;
+        margin-bottom: 12px;
+        line-height: 1.4;
+    }
+    
+    .event-description {
+        color: #32004E;
+        opacity: 0.8;
+        margin-bottom: 16px;
+        line-height: 1.6;
+    }
+    
+    .event-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+    
+    .event-meta span {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #32004E;
+        font-size: 0.875rem;
+        opacity: 0.7;
+    }
+    
+    .event-category {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #FFFFFF;
+        background: linear-gradient(135deg, #1A0046, #32004E);
+    }
+    
+    .view-all-btn {
+        background: linear-gradient(135deg, #1A0046, #32004E);
+        color: #FFFFFF;
+        padding: 16px 32px;
+        border-radius: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 25px rgba(26, 0, 70, 0.3);
+    }
+    
+    .view-all-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(26, 0, 70, 0.4);
+        color: #FFFFFF;
+    }
+    
+    /* Animations */
     @keyframes fadeInDown {
         from {
             opacity: 0;
@@ -148,6 +166,7 @@ use Illuminate\Support\Str;
             transform: translateY(0);
         }
     }
+    
     @keyframes fadeInUp {
         from {
             opacity: 0;
@@ -158,210 +177,102 @@ use Illuminate\Support\Str;
             transform: translateY(0);
         }
     }
-
-    /* Estilos para la sección de eventos destacados */
-    .featured-events {
-        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        padding: 80px 0;
+    
+    .animate-fadeInDown {
+        animation: fadeInDown 1s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .event-card {
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        overflow: hidden;
-        height: 100%;
-    }
-
-    .event-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .event-image {
-        height: 200px;
-        background-size: cover;
-        background-position: center;
-        position: relative;
-    }
-
-    .event-date-badge {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: rgba(139, 92, 246, 0.9);
-        color: white;
-        padding: 8px 12px;
-        border-radius: 8px;
-        font-size: 12px;
-        font-weight: 600;
-    }
-
-    .event-content {
-        padding: 24px;
-    }
-
-    .event-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #1a202c;
-        margin-bottom: 8px;
-        line-height: 1.4;
-    }
-
-    .event-description {
-        color: #64748b;
-        font-size: 14px;
-        line-height: 1.6;
-        margin-bottom: 16px;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .event-meta {
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        margin-bottom: 16px;
-        font-size: 13px;
-        color: #64748b;
-    }
-
-    .event-meta span {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .event-category {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        color: white;
-    }
-
-    .view-all-btn {
-        background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
-        color: white;
-        padding: 16px 32px;
-        border-radius: 12px;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-    }
-
-    .view-all-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
-        color: white;
-        text-decoration: none;
-    }
-
-    /* Responsive Design */
-    @media (max-width: 768px) {
-        .featured-events {
-            padding: 40px 0;
-        }
-
-        .event-card {
-            margin-bottom: 20px;
-        }
-
-        .event-image {
-            height: 160px;
-        }
-
-        .event-content {
-            padding: 16px;
-        }
-
-        .event-title {
-            font-size: 16px;
-        }
-
-        .event-meta {
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-start;
-        }
-
-        .view-all-btn {
-            padding: 12px 24px;
-            font-size: 14px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .hero-section {
-            padding: 60px 0;
-        }
-
-        .hero-section h1 {
-            font-size: 2rem;
-        }
-
-        .event-slider h2 {
-            font-size: 1.5rem;
-        }
-
-        .featured-events h2 {
-            font-size: 2rem;
-        }
+    
+    .animate-fadeInUp {
+        animation: fadeInUp 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both;
     }
 </style>
 
-<div class="gradient-bg">
-    <div class="hero-section">
-        <div class="container">
-            <h1>Bienvenido a EventHub</h1>
-            <p>Tu plataforma definitiva para descubrir y crear eventos.</p>
+<!-- Hero Section -->
+<div class="gradient-bg min-h-screen">
+    <div class="hero-section py-32 text-center relative overflow-hidden">
+        <div class="container mx-auto px-4 relative z-10">
+            <h1 class="text-6xl md:text-8xl font-black text-white mb-6 animate-fadeInDown tracking-tight">
+                Event<span class="text-gray-300">Hub</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-white opacity-90 mb-12 animate-fadeInUp max-w-2xl mx-auto leading-relaxed">
+                Tu plataforma definitiva para descubrir y crear eventos extraordinarios
+            </p>
+            <div class="animate-fadeInUp">
+                <a href="{{ route('events.public') }}" class="inline-flex items-center gap-3 bg-white text-[#1A0046] px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl">
+                    Explorar Eventos
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
         </div>
+        
+        <!-- Decorative elements -->
+        <div class="absolute top-10 left-10 w-20 h-20 bg-white opacity-10 rounded-full blur-xl"></div>
+        <div class="absolute bottom-20 right-10 w-32 h-32 bg-white opacity-5 rounded-full blur-2xl"></div>
+        <div class="absolute top-1/2 left-1/4 w-16 h-16 bg-white opacity-5 rounded-full blur-xl"></div>
     </div>
 
-    <div class="event-slider">
-        <div class="container">
-            <h2 class="text-center mb-5">Proximos Eventos</h2>
+    <!-- Event Slider Section -->
+    <div class="event-slider py-24 relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Próximos Eventos</h2>
+                <p class="text-xl text-white opacity-80">Los mejores eventos te están esperando</p>
+            </div>
+            
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     @if(isset($events) && count($events) > 0)
                         @foreach($events as $event)
-                            <div class="swiper-slide" style="background-image: url('{{ $event['image'] }}')">
-                                <div class="event-info">
-                                    <h5>{{ $event['title'] }}</h5>
-                                    <p>{{ $event['date'] }} - {{ $event['location'] }}</p>
+                            <div class="swiper-slide relative rounded-2xl overflow-hidden shadow-2xl" style="background-image: url('{{ $event['image'] }}'); background-size: cover; background-position: center; width:340px; height:450px;">
+                                <div class="gradient-overlay absolute inset-0"></div>
+                                <div class="event-info absolute bottom-0 left-0 right-0 text-white p-8 text-left relative z-10">
+                                    <h5 class="text-2xl font-bold mb-4 text-white">{{ $event['title'] }}</h5>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center gap-3 text-white opacity-90">
+                                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            <span>{{ $event['location'] }}</span>
+                                        </div>
+                                        <div class="flex items-center gap-3 text-white opacity-90">
+                                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>{{ $event['date'] }}@if(!empty($event['time'])) - {{ $event['time'] }}@endif</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
                     @else
-                        <div class="text-center w-full">No events to display.</div>
+                        <div class="text-center w-full text-white text-xl opacity-80">
+                            No hay eventos para mostrar en este momento.
+                        </div>
                     @endif
                 </div>
-                <!-- Agregar controles de navegación -->
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next" style="color: white;"></div>
-                <div class="swiper-button-prev" style="color: white;"></div>
+                <div class="swiper-pagination mt-12"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Sección de Eventos Destacados -->
-<div class="featured-events">
+<!-- Featured Events Section -->
+<div class="featured-events bg-white py-24">
     <div class="container mx-auto px-4">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold text-gray-800 mb-4">Eventos Destacados</h2>
-            <p class="text-gray-600 text-lg">Descubre los mejores eventos creados por nuestra comunidad</p>
+        <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-[#1A0046] mb-6">Eventos Destacados</h2>
+            <p class="text-xl text-[#32004E] opacity-80 max-w-2xl mx-auto">
+                Descubre los mejores eventos creados por nuestra comunidad
+            </p>
         </div>
 
         @if($featuredEvents && count($featuredEvents) > 0)
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
                 @foreach($featuredEvents as $event)
                     <div class="event-card">
                         @php
@@ -392,7 +303,7 @@ use Illuminate\Support\Str;
                                 </span>
                             </div>
 
-                            <div class="event-category" style="background-color: {{ $event->category ? $event->category->color : '#8B5CF6' }}">
+                            <div class="event-category">
                                 {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
                             </div>
                         </div>
@@ -400,17 +311,20 @@ use Illuminate\Support\Str;
                 @endforeach
             </div>
         @else
-            <div class="text-center py-16">
-                <div class="text-6xl mb-6">🎭</div>
-                <h3 class="text-2xl font-semibold text-gray-700 mb-4">¡Próximamente eventos increíbles!</h3>
-                <p class="text-gray-500 mb-8">Los creadores están preparando eventos fantásticos para ti</p>
+            <div class="text-center py-20">
+                <div class="text-8xl mb-8">🎭</div>
+                <h3 class="text-3xl font-bold text-[#1A0046] mb-4">¡Próximamente eventos increíbles!</h3>
+                <p class="text-xl text-[#32004E] opacity-70 mb-8 max-w-md mx-auto">
+                    Los creadores están preparando eventos fantásticos para ti
+                </p>
+                <div class="w-24 h-1 bg-gradient-to-r from-[#1A0046] to-[#32004E] mx-auto rounded-full"></div>
             </div>
         @endif
 
         <div class="text-center">
             <a href="{{ route('events.public') }}" class="view-all-btn">
                 Ver Todos los Eventos
-                <svg class="w-5 h-5 inline-block ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                 </svg>
             </a>
@@ -434,15 +348,15 @@ use Illuminate\Support\Str;
             loopAdditionalSlides: 3,
             loopedSlides: 5,
             autoplay: {
-                delay: 3000,
+                delay: 4000,
                 disableOnInteraction: false,
                 reverseDirection: false,
             },
             coverflowEffect: {
-                rotate: 30,
+                rotate: 25,
                 stretch: 0,
-                depth: 100,
-                modifier: 1.5,
+                depth: 120,
+                modifier: 1.8,
                 slideShadows: true,
             },
             pagination: {
@@ -461,18 +375,26 @@ use Illuminate\Support\Str;
             mousewheel: {
                 invert: false,
             },
-            speed: 1000,
+            speed: 800,
             direction: 'horizontal',
             allowTouchMove: true,
+            breakpoints: {
+                640: {
+                    slidesPerView: 1,
+                },
+                768: {
+                    slidesPerView: 'auto',
+                },
+            }
         });
 
-        // Botones para cambiar dirección del autoplay con efecto suave
+        // Control de navegación mejorado
         document.querySelector('.swiper-button-next').addEventListener('click', function() {
             swiper.autoplay.stop();
             setTimeout(() => {
                 swiper.params.autoplay.reverseDirection = false;
                 swiper.autoplay.start();
-            }, 300);
+            }, 500);
         });
 
         document.querySelector('.swiper-button-prev').addEventListener('click', function() {
@@ -480,7 +402,17 @@ use Illuminate\Support\Str;
             setTimeout(() => {
                 swiper.params.autoplay.reverseDirection = true;
                 swiper.autoplay.start();
-            }, 300);
+            }, 500);
+        });
+
+        // Pausar autoplay al hover
+        const swiperContainer = document.querySelector('.swiper-container');
+        swiperContainer.addEventListener('mouseenter', () => {
+            swiper.autoplay.stop();
+        });
+        
+        swiperContainer.addEventListener('mouseleave', () => {
+            swiper.autoplay.start();
         });
     });
 </script>
