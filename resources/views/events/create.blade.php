@@ -80,6 +80,9 @@
                     <input id="location" name="location" type="text" required 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('location') border-red-500 @enderror"
                            value="{{ old('location') }}" placeholder="Ej: Estadio Nacional, Calle Principal 123">
+                    <input type="hidden" id="lat" name="lat" value="{{ old('lat') }}">
+                    <input type="hidden" id="lng" name="lng" value="{{ old('lng') }}">
+                    <div id="map" style="width: 100%; height: 300px; margin-top: 1rem; border-radius: 12px;"></div>
                     @error('location')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -200,4 +203,36 @@
         }
     });
 </script>
+
+@section('scripts')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var map = L.map('map').setView([-33.4489, -70.6693], 13); // Santiago, Chile
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+        var marker = L.marker([-33.4489, -70.6693], {draggable:true}).addTo(map);
+        function setLocation(lat, lng) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('location').value = data.display_name || `${lat}, ${lng}`;
+                    document.getElementById('lat').value = lat;
+                    document.getElementById('lng').value = lng;
+                });
+        }
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng);
+            setLocation(e.latlng.lat, e.latlng.lng);
+        });
+        marker.on('dragend', function(e) {
+            var latlng = marker.getLatLng();
+            setLocation(latlng.lat, latlng.lng);
+        });
+    });
+</script>
+@endsection
 @endsection
