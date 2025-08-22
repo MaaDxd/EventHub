@@ -26,19 +26,19 @@ use Illuminate\Support\Str;
         border: 1px solid rgba(255, 255, 255, 0.2);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     .swiper-button-next:hover, .swiper-button-prev:hover {
         background-color: rgba(255, 255, 255, 0.2);
         transform: scale(1.1);
         border-color: rgba(255, 255, 255, 0.4);
     }
-    
+
     .swiper-button-next:after, .swiper-button-prev:after {
         font-size: 18px;
         font-weight: 600;
         color: #FFFFFF;
     }
-    
+
     .swiper-pagination-bullet {
         background: rgba(255, 255, 255, 0.5);
         opacity: 0.6;
@@ -46,7 +46,7 @@ use Illuminate\Support\Str;
         height: 8px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    
+
     .swiper-pagination-bullet-active {
         opacity: 1;
         background: #FFFFFF;
@@ -410,7 +410,7 @@ use Illuminate\Support\Str;
         swiperContainer.addEventListener('mouseenter', () => {
             swiper.autoplay.stop();
         });
-        
+
         swiperContainer.addEventListener('mouseleave', () => {
             swiper.autoplay.start();
         });
