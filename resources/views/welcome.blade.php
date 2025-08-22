@@ -364,7 +364,10 @@ use Illuminate\Support\Str;
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
                 @foreach($featuredEvents as $event)
                     <div class="event-card">
-                        <div class="event-image" style="background-image: url('{{ $event->image ? Storage::url($event->image) : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80' }}')">
+                        @php
+                            $imageUrl = $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80';
+                        @endphp
+                        <div class="event-image" style="background-image: url('{{ $imageUrl }}')">
                             <div class="event-date-badge">
                                 {{ $event->date->format('d M') }}
                             </div>

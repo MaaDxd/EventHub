@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {
@@ -20,7 +18,7 @@ class HomeController extends Controller
             ->get()
             ->map(function ($event) {
                 return [
-                    'image' => $event->image ? Storage::url($event->image) : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
+                    'image' => $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80',
                     'title' => $event->title,
                     'date' => $event->date->format('d \d\e F, Y'),
                     'location' => $event->location
