@@ -231,14 +231,17 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var lat = parseFloat(document.getElementById('lat').value) || -33.4489;
-        var lng = parseFloat(document.getElementById('lng').value) || -70.6693;
-        var map = L.map('map').setView([lat, lng], 13);
+        var lat = parseFloat(document.getElementById('lat').value);
+        var lng = parseFloat(document.getElementById('lng').value);
+        var hasCoords = !isNaN(lat) && !isNaN(lng);
+        var defaultLat = hasCoords ? lat : -33.4489;
+        var defaultLng = hasCoords ? lng : -70.6693;
+        var map = L.map('map').setView([defaultLat, defaultLng], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
-        var marker = L.marker([lat, lng], {draggable:true}).addTo(map);
+        var marker = L.marker([defaultLat, defaultLng], {draggable:true}).addTo(map);
         function setLocation(lat, lng) {
             fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
                 .then(response => response.json())
@@ -247,6 +250,9 @@
                     document.getElementById('lat').value = lat;
                     document.getElementById('lng').value = lng;
                 });
+        }
+        if (hasCoords) {
+            setLocation(lat, lng);
         }
         map.on('click', function(e) {
             marker.setLatLng(e.latlng);
