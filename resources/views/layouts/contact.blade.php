@@ -128,7 +128,7 @@
                 <h2>Información de contacto</h2>
                 <ul>
                     <li><i class="bi bi-envelope-fill"></i> Email: <a href="mailto:eventhub@soporte.com">eventhub@soporte.com</a></li>
-                    <li><i class="bi bi-telephone-fill"></i> Teléfono: <a href="tel:+34123456789">+34 123 456 789</a></li>
+                    <li><i class="bi bi-telephone-fill"></i> Teléfono: <a href="tel:+34123456789">123 456 789</a></li>
                     <li><i class="bi bi-geo-alt-fill"></i> Dirección: Calle Ficticia 123, Ciudad, País</li>
                     <li><i class="bi bi-instagram"></i> Instagram: <a href="https://instagram.com/eventhub" target="_blank">@eventhub</a></li>
                     <li><i class="bi bi-facebook"></i> Facebook: <a href="https://facebook.com/eventhub" target="_blank">/eventhub</a></li>

@@ -320,14 +320,14 @@ use Illuminate\Support\Str;
 <div class="gradient-bg">
     <div class="hero-section">
         <div class="container">
-            <h1>Welcome to EventHub</h1>
-            <p>Your ultimate platform for discovering and creating events.</p>
+            <h1>Bienvenido a EventHub</h1>
+            <p>Tu plataforma definitiva para descubrir y crear eventos.</p>
         </div>
     </div>
 
     <div class="event-slider">
         <div class="container">
-            <h2 class="text-center mb-5">Upcoming Events</h2>
+            <h2 class="text-center mb-5">Proximos Eventos</h2>
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     @if(isset($events) && count($events) > 0)
