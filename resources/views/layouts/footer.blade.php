@@ -14,17 +14,6 @@
                     </a>
                 </li>
                 <li>
-                    @auth
-                        <a href="{{ route('dashboard.creator') }}" class="flex items-center bg-white/10 hover:bg-white/30 hover:text-[#1A0046] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg backdrop-blur-md">
-                            <i class="bi bi-calendar-event-fill mr-2"></i>Eventos
-                        </a>
-                    @else
-                        <a href="#" class="flex items-center bg-white/10 hover:bg-white/30 hover:text-[#1A0046] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg backdrop-blur-md">
-                            <i class="bi bi-calendar-event-fill mr-2"></i>Eventos
-                        </a>
-                    @endauth
-                </li>
-                <li>
                     <a href="{{ route('contact') }}" class="flex items-center bg-white/10 hover:bg-white/30 hover:text-[#1A0046] font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg backdrop-blur-md">
                         <i class="bi bi-envelope-fill mr-2"></i>Contacto
                     </a>
