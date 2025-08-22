@@ -1,175 +1,483 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
-        <div class="bg-white rounded-xl shadow-lg p-8">
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">Editar Evento</h2>
-                <p class="text-gray-600">Modifica la información de tu evento</p>
+<style>
+    /* Gradientes y animaciones con colores corporativos */
+    .form-bg {
+        background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 20s ease infinite;
+    }
+    
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    .form-container {
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 25px 50px rgba(26, 0, 70, 0.4);
+        animation: containerFloat 6s ease-in-out infinite;
+    }
+    
+    @keyframes containerFloat {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .form-title {
+        background: linear-gradient(90deg, #1A0046 0%, #32004E 50%, #000000 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        animation: titleShine 3s ease-in-out infinite;
+    }
+    
+    @keyframes titleShine {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.3); }
+    }
+    
+    .input-group {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .input-group:hover {
+        transform: translateY(-2px);
+    }
+    
+    .form-input {
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid rgba(26, 0, 70, 0.2);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+    }
+    
+    .form-input:focus {
+        background: rgba(255, 255, 255, 1);
+        border-color: #1A0046;
+        box-shadow: 0 0 0 4px rgba(26, 0, 70, 0.1), 0 10px 25px rgba(26, 0, 70, 0.15);
+        transform: scale(1.02);
+    }
+    
+    .form-input:hover {
+        border-color: rgba(26, 0, 70, 0.4);
+        box-shadow: 0 5px 15px rgba(26, 0, 70, 0.1);
+    }
+    
+    .floating-label {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 0 8px;
+        color: #666;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+    }
+    
+    .form-input:focus + .floating-label,
+    .form-input:not(:placeholder-shown) + .floating-label {
+        top: -8px;
+        font-size: 12px;
+        color: #1A0046;
+        font-weight: 600;
+    }
+    
+    .upload-area {
+        border: 2px dashed rgba(26, 0, 70, 0.3);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(26, 0, 70, 0.05));
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .upload-area::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -100%;
+        width: 100%;
+        height: calc(100% + 4px);
+        background: linear-gradient(90deg, transparent, rgba(26, 0, 70, 0.1), transparent);
+        transition: left 0.6s;
+    }
+    
+    .upload-area:hover::before {
+        left: 100%;
+    }
+    
+    .upload-area:hover {
+        border-color: #1A0046;
+        background: linear-gradient(135deg, rgba(26, 0, 70, 0.1), rgba(255, 255, 255, 0.1));
+        transform: scale(1.02);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
+        border: none;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        color: white;
+    }
+    
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.6s;
+    }
+    
+    .btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(26, 0, 70, 0.4);
+    }
+    
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(26, 0, 70, 0.2);
+        color: #1A0046;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-secondary:hover {
+        background: rgba(26, 0, 70, 0.1);
+        border-color: #1A0046;
+        transform: translateY(-2px);
+        color: #1A0046;
+    }
+    
+    .char-counter {
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+    
+    .icon-accent {
+        color: #1A0046;
+        filter: drop-shadow(0 2px 4px rgba(26, 0, 70, 0.3));
+    }
+    
+    .floating-particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    .particle {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        animation: floatUp 15s infinite linear;
+    }
+    
+    @keyframes floatUp {
+        0% {
+            opacity: 0;
+            transform: translateY(100vh) scale(0) rotate(0deg);
+        }
+        10% {
+            opacity: 1;
+        }
+        90% {
+            opacity: 0.8;
+        }
+        100% {
+            opacity: 0;
+            transform: translateY(-100px) scale(1) rotate(360deg);
+        }
+    }
+    
+    #map {
+        border: 2px solid rgba(26, 0, 70, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    #map:hover {
+        border-color: rgba(26, 0, 70, 0.5);
+        box-shadow: 0 10px 25px rgba(26, 0, 70, 0.15);
+    }
+    
+    .gradient-border {
+        background: linear-gradient(90deg, #1A0046 0%, #32004E 100%);
+    }
+    
+    .text-gradient {
+        background: linear-gradient(90deg, #1A0046 0%, #32004E 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+    
+    .category-select {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%231A0046' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 1.5rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5rem 1.5rem;
+    }
+    
+    .current-image-card {
+        background: rgba(26, 0, 70, 0.03);
+        border: 2px solid rgba(26, 0, 70, 0.1);
+        border-radius: 16px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .current-image-card:hover {
+        border-color: rgba(26, 0, 70, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(26, 0, 70, 0.1);
+    }
+    
+    .image-preview {
+        border: 3px solid rgba(26, 0, 70, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .image-preview:hover {
+        border-color: rgba(26, 0, 70, 0.3);
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="form-bg min-h-screen py-12 px-4 sm:px-6 lg:px-8 relative">
+    <!-- Partículas flotantes -->
+    <div class="floating-particles">
+        <div class="particle w-2 h-2" style="left: 10%; animation-delay: 0s; animation-duration: 12s;"></div>
+        <div class="particle w-1 h-1" style="left: 20%; animation-delay: 2s; animation-duration: 15s;"></div>
+        <div class="particle w-3 h-3" style="left: 30%; animation-delay: 4s; animation-duration: 10s;"></div>
+        <div class="particle w-1 h-1" style="left: 50%; animation-delay: 8s; animation-duration: 14s;"></div>
+        <div class="particle w-2 h-2" style="left: 70%; animation-delay: 12s; animation-duration: 11s;"></div>
+        <div class="particle w-1 h-1" style="left: 90%; animation-delay: 16s; animation-duration: 17s;"></div>
+    </div>
+
+    <div class="max-w-5xl mx-auto relative z-10">
+        <div class="form-container rounded-3xl shadow-2xl p-8 md:p-12">
+            <!-- Header Mejorado -->
+            <div class="text-center mb-12">
+                <div class="inline-flex items-center justify-center w-20 h-20 gradient-border rounded-2xl mb-6 shadow-lg">
+                    <i class="bi bi-pencil-square text-3xl text-white"></i>
+                </div>
+                <h2 class="form-title text-4xl md:text-5xl font-black mb-4">Editar Evento</h2>
+                <div class="w-24 h-1 gradient-border mx-auto mb-4 rounded-full"></div>
+                <p class="text-gray-600 text-lg">Modifica la información de tu evento y mantén todo actualizado</p>
             </div>
 
             <!-- Form -->
-            <form method="POST" action="{{ route('events.update', $event) }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('events.update', $event) }}" enctype="multipart/form-data" class="space-y-8">
                 @csrf
                 @method('PUT')
 
-                <!-- Title -->
-                <div>
-                    <label for="title" class="block text-sm font-medium text-gray-700 mb-2">
+                <!-- Título -->
+                <div class="input-group">
+                    <label for="title" class="block text-sm font-bold text-gray-700 mb-3 flex items-center">
+                        <i class="bi bi-type icon-accent mr-2"></i>
                         Título del Evento *
                     </label>
-                    <input id="title" name="title" type="text" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('title') border-red-500 @enderror"
-                           value="{{ old('title', $event->title) }}" placeholder="Ej: Concierto de Rock en Vivo">
+                    <input id="title" name="title" type="text" required placeholder=" "
+                           class="form-input w-full px-6 py-4 rounded-xl text-lg font-medium @error('title') border-red-500 @enderror"
+                           value="{{ old('title', $event->title) }}">
+                    <label for="title" class="floating-label">Ej: Concierto de Rock en Vivo</label>
                     @error('title')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="bi bi-exclamation-circle mr-1"></i>{{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <!-- Description -->
-                <div>
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                        Descripción * <span class="text-sm text-gray-500">(máximo 150 caracteres)</span>
+                <!-- Descripción -->
+                <div class="input-group">
+                    <label for="description" class="block text-sm font-bold text-gray-700 mb-3 flex items-center justify-between">
+                        <span class="flex items-center">
+                            <i class="bi bi-card-text icon-accent mr-2"></i>
+                            Descripción *
+                        </span>
+                        <span class="text-xs text-gray-500">(máximo 150 caracteres)</span>
                     </label>
                     <div class="relative">
-                        <textarea id="description" name="description" rows="4" required maxlength="150"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('description') border-red-500 @enderror"
-                                  placeholder="Describe tu evento, qué incluye, qué esperar...">{{ old('description', $event->description) }}</textarea>
-                        <div class="absolute bottom-2 right-2 text-xs text-gray-500">
+                        <textarea id="description" name="description" rows="4" required maxlength="150" placeholder=" "
+                                  class="form-input w-full px-6 py-4 rounded-xl text-lg resize-none @error('description') border-red-500 @enderror">{{ old('description', $event->description) }}</textarea>
+                        <label for="description" class="floating-label">Describe tu evento, qué incluye, qué esperar...</label>
+                        <div class="absolute bottom-3 right-3 char-counter text-sm">
                             <span id="char-count">0</span>/150
                         </div>
                     </div>
                     @error('description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="bi bi-exclamation-circle mr-1"></i>{{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <!-- Date and Time -->
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="date" class="block text-sm font-medium text-gray-700 mb-2">
+                <!-- Fecha y Hora -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="input-group">
+                        <label for="date" class="block text-sm font-bold text-gray-700 mb-3 flex items-center">
+                            <i class="bi bi-calendar-event icon-accent mr-2"></i>
                             Fecha *
                         </label>
-                        <input id="date" name="date" type="date" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('date') border-red-500 @enderror"
+                        <input id="date" name="date" type="date" required
+                               class="form-input w-full px-6 py-4 rounded-xl text-lg @error('date') border-red-500 @enderror"
                                value="{{ old('date', $event->date->format('Y-m-d')) }}">
                         @error('date')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                <i class="bi bi-exclamation-circle mr-1"></i>{{ $message }}
+                            </p>
                         @enderror
                     </div>
 
-                    <div>
-                        <label for="time" class="block text-sm font-medium text-gray-700 mb-2">
+                    <div class="input-group">
+                        <label for="time" class="block text-sm font-bold text-gray-700 mb-3 flex items-center">
+                            <i class="bi bi-clock icon-accent mr-2"></i>
                             Hora *
                         </label>
-                        <input id="time" name="time" type="time" required 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('time') border-red-500 @enderror"
+                        <input id="time" name="time" type="time" required
+                               class="form-input w-full px-6 py-4 rounded-xl text-lg @error('time') border-red-500 @enderror"
                                value="{{ old('time', $event->time) }}">
                         @error('time')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                <i class="bi bi-exclamation-circle mr-1"></i>{{ $message }}
+                            </p>
                         @enderror
                     </div>
                 </div>
 
-                <!-- Location -->
-                <div>
-                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
+                <!-- Ubicación y Mapa -->
+                <div class="input-group">
+                    <label for="location" class="block text-sm font-bold text-gray-700 mb-3 flex items-center">
+                        <i class="bi bi-geo-alt icon-accent mr-2"></i>
                         Ubicación *
                     </label>
-                    <input id="location" name="location" type="text" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors @error('location') border-red-500 @enderror"
-                           value="{{ old('location', $event->location) }}" placeholder="Ej: Estadio Nacional, Calle Principal 123">
+                    <input id="location" name="location" type="text" required placeholder=" "
+                           class="form-input w-full px-6 py-4 rounded-xl text-lg mb-4 @error('location') border-red-500 @enderror"
+                           value="{{ old('location', $event->location) }}">
+                    <label for="location" class="floating-label">Ej: Estadio Nacional, Calle Principal 123</label>
                     <input type="hidden" id="lat" name="lat" value="{{ old('lat', $event->lat ?? '') }}">
                     <input type="hidden" id="lng" name="lng" value="{{ old('lng', $event->lng ?? '') }}">
-                    <div id="map" style="width: 100%; height: 300px; margin-top: 1rem; border-radius: 12px;"></div>
+                    <div id="map" style="width: 100%; height: 350px;" class="rounded-xl shadow-lg"></div>
                     @error('location')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="bi bi-exclamation-circle mr-1"></i>{{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <!-- Category -->
-                <div>
-                    <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">
+                <!-- Categoría -->
+                <div class="input-group">
+                    <label for="category_id" class="block text-sm font-bold text-gray-700 mb-3 flex items-center">
+                        <i class="bi bi-tags icon-accent mr-2"></i>
                         Categoría *
                     </label>
                     <div class="relative">
-                        <select id="category_id" name="category_id" required 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors bg-white shadow-sm appearance-none @error('category_id') border-red-500 @enderror">
+                        <select id="category_id" name="category_id" required
+                            class="form-input category-select w-full px-6 py-4 rounded-xl text-lg appearance-none cursor-pointer @error('category_id') border-red-500 @enderror">
                             <option value="" disabled>Selecciona una categoría</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}" {{ old('category_id', $event->category_type ? null : $event->category_id) == $category->id ? 'selected' : '' }}>
-                                    🗂 {{ $category->name }}
+                                    {{ $category->name }}
                                 </option>
                             @endforeach
                             @if($event->category_type)
                                 <option value="{{ $event->category_type }}" {{ old('category_id', $event->category_type) == $event->category_type ? 'selected' : '' }}>
-                                    🗂 {{ ucfirst($event->category_type) }}
+                                    {{ ucfirst($event->category_type) }}
                                 </option>
                             @endif
                         </select>
-                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                            <svg class="h-5 w-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                            </svg>
-                        </span>
                     </div>
                     @error('category_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="bi bi-exclamation-circle mr-1"></i>{{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <!-- Current Image -->
+                <!-- Imagen Actual -->
                 @if($event->image)
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                <div class="input-group">
+                    <label class="block text-sm font-bold text-gray-700 mb-3 flex items-center">
+                        <i class="bi bi-image icon-accent mr-2"></i>
                         Imagen Actual
                     </label>
-                    <div class="flex items-center space-x-4">
-                        <img src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}" class="w-32 h-32 object-cover rounded-lg">
-                        <div>
-                            <p class="text-sm text-gray-600">Imagen actual del evento</p>
-                            <p class="text-xs text-gray-500">Sube una nueva imagen para reemplazarla</p>
+                    <div class="current-image-card">
+                        <div class="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-6">
+                            <img src="{{ Storage::url($event->image) }}" 
+                                 alt="{{ $event->title }}" 
+                                 class="image-preview w-full md:w-40 h-40 object-cover rounded-xl shadow-lg">
+                            <div class="flex-1">
+                                <h4 class="text-lg font-semibold text-gray-800 mb-2">{{ $event->title }}</h4>
+                                <p class="text-sm text-gray-600 mb-1 flex items-center">
+                                    <i class="bi bi-check-circle text-green-500 mr-2"></i>
+                                    Imagen actual del evento
+                                </p>
+                                <p class="text-xs text-gray-500">
+                                    Sube una nueva imagen abajo para reemplazarla
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
                 @endif
 
-                <!-- Image -->
-                <div>
-                    <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
+                <!-- Nueva Imagen -->
+                <div class="input-group">
+                    <label class="block text-sm font-bold text-gray-700 mb-3 flex items-center">
+                        <i class="bi bi-camera icon-accent mr-2"></i>
                         {{ $event->image ? 'Nueva Imagen del Evento' : 'Imagen del Evento' }}
                     </label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-purple-400 transition-colors">
-                        <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600">
-                                <label for="image" class="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500">
-                                    <span>Subir una imagen</span>
+                    <div class="upload-area flex justify-center px-8 pt-8 pb-8 rounded-xl cursor-pointer">
+                        <div class="space-y-4 text-center relative z-10">
+                            <div class="mx-auto flex items-center justify-center w-16 h-16 gradient-border rounded-xl shadow-lg">
+                                <i class="bi bi-cloud-upload text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <label for="image" class="cursor-pointer">
+                                    <span class="text-lg font-semibold text-gradient hover:opacity-80 transition-opacity">
+                                        {{ $event->image ? 'Cambiar imagen' : 'Subir una imagen' }}
+                                    </span>
                                     <input id="image" name="image" type="file" class="sr-only" accept="image/*">
                                 </label>
-                                <p class="pl-1">o arrastra y suelta</p>
+                                <p class="text-gray-600 mt-2">o arrastra y suelta aquí</p>
                             </div>
-                            <p class="text-xs text-gray-500">PNG, JPG, GIF hasta 2MB</p>
+                            <p class="text-sm text-gray-500 bg-white/80 px-3 py-1 rounded-full border border-gray-200">
+                                PNG, JPG, GIF hasta 2MB
+                            </p>
                         </div>
                     </div>
                     @error('image')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="bi bi-exclamation-circle mr-1"></i>{{ $message }}
+                        </p>
                     @enderror
                 </div>
 
-                <!-- Submit Buttons -->
-                <div class="flex justify-end space-x-4 pt-6">
-                    <a href="{{ route('dashboard.creator') }}" 
-                       class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition duration-200">
-                        Cancelar
+                <!-- Botones -->
+                <div class="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-6 pt-8 border-t border-gray-200">
+                    <a href="{{ route('dashboard.creator') }}"
+                       class="btn-secondary px-8 py-4 text-center font-semibold rounded-xl transition-all duration-300 hover:scale-105">
+                        <i class="bi bi-arrow-left mr-2"></i>Cancelar
                     </a>
-                    <button type="submit" 
-                            class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
-                        Actualizar Evento
+                    <button type="submit"
+                            class="btn-primary px-8 py-4 font-bold rounded-xl transition-all duration-300 hover:scale-105 flex items-center justify-center">
+                        <i class="bi bi-check-circle mr-2"></i>Actualizar Evento
                     </button>
                 </div>
             </form>
@@ -189,11 +497,11 @@
 
             // Change color based on character count
             if (currentLength > 140) {
-                charCount.className = 'text-red-500 font-semibold';
+                charCount.className = 'char-counter text-red-500';
             } else if (currentLength > 120) {
-                charCount.className = 'text-yellow-500 font-semibold';
+                charCount.className = 'char-counter text-orange-500';
             } else {
-                charCount.className = 'text-gray-500';
+                charCount.className = 'char-counter text-gray-500';
             }
         }
 
@@ -210,19 +518,35 @@
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                const preview = document.createElement('img');
-                preview.src = e.target.result;
-                preview.className = 'mx-auto h-12 w-12 object-cover rounded';
+                const preview = document.createElement('div');
+                preview.className = 'mt-4';
+                preview.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview" class="mx-auto h-32 w-48 object-cover rounded-lg shadow-lg border-2 border-purple-900/20">
+                    <p class="text-center text-sm text-gray-600 mt-2 font-medium">${file.name}</p>
+                `;
 
-                const container = document.querySelector('.space-y-1');
-                const existingPreview = container.querySelector('img');
+                const container = document.querySelector('.upload-area .space-y-4');
+                const existingPreview = container.querySelector('.mt-4');
                 if (existingPreview) {
                     existingPreview.remove();
                 }
-                container.insertBefore(preview, container.firstChild);
+                container.appendChild(preview);
             }
             reader.readAsDataURL(file);
         }
+    });
+
+    // Floating labels
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim() === '') {
+                this.setAttribute('placeholder', ' ');
+            }
+        });
+        
+        input.addEventListener('focus', function() {
+            this.removeAttribute('placeholder');
+        });
     });
 </script>
 
@@ -234,15 +558,19 @@
         var lat = parseFloat(document.getElementById('lat').value);
         var lng = parseFloat(document.getElementById('lng').value);
         var hasCoords = !isNaN(lat) && !isNaN(lng);
+        
         // Coordenadas por defecto: Bogotá, Colombia
         var defaultLat = hasCoords ? lat : 4.7110;
         var defaultLng = hasCoords ? lng : -74.0721;
+        
         var map = L.map('map').setView([defaultLat, defaultLng], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
+        
         var marker = L.marker([defaultLat, defaultLng], {draggable:true}).addTo(map);
+        
         function setLocation(lat, lng) {
             fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
                 .then(response => response.json())
@@ -250,15 +578,23 @@
                     document.getElementById('location').value = data.display_name || `${lat}, ${lng}`;
                     document.getElementById('lat').value = lat;
                     document.getElementById('lng').value = lng;
+                })
+                .catch(() => {
+                    document.getElementById('location').value = `${lat}, ${lng}`;
+                    document.getElementById('lat').value = lat;
+                    document.getElementById('lng').value = lng;
                 });
         }
+        
         if (hasCoords) {
             setLocation(lat, lng);
         }
+        
         map.on('click', function(e) {
             marker.setLatLng(e.latlng);
             setLocation(e.latlng.lat, e.latlng.lng);
         });
+        
         marker.on('dragend', function(e) {
             var latlng = marker.getLatLng();
             setLocation(latlng.lat, latlng.lng);
