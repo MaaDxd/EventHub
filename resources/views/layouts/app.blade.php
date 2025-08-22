@@ -33,6 +33,9 @@
     @auth
         <link rel="stylesheet" href="{{ asset('css/session-timer.css') }}">
     @endauth
+
+    <!-- Password Toggle Styles -->
+    <link rel="stylesheet" href="{{ asset('css/password-toggle.css') }}">
     <style>
         .swiper-container {
             overflow: hidden;
@@ -253,6 +256,9 @@
     @auth
         <script src="{{ asset('js/session-timer.js') }}"></script>
     @endauth
+
+    <!-- Password Toggle Script -->
+    <script src="{{ asset('js/password-toggle.js') }}"></script>
 
     @yield('scripts')
 </body>

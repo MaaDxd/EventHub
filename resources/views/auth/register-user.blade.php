@@ -58,9 +58,11 @@
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
                         Contraseña
                     </label>
-                    <input id="password" name="password" type="password" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1A0046] focus:border-transparent transition-colors @error('password') border-red-500 @enderror"
-                           placeholder="Mínimo 8 caracteres">
+                    <div class="password-field-wrapper relative">
+                        <input id="password" name="password" type="password" required
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1A0046] focus:border-transparent transition-colors @error('password') border-red-500 @enderror"
+                               placeholder="Mínimo 8 caracteres">
+                    </div>
                     @error('password')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -71,9 +73,11 @@
                     <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
                         Confirmar contraseña
                     </label>
-                    <input id="password_confirmation" name="password_confirmation" type="password" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1A0046] focus:border-transparent transition-colors"
-                           placeholder="Repite tu contraseña">
+                    <div class="password-field-wrapper relative">
+                        <input id="password_confirmation" name="password_confirmation" type="password" required
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1A0046] focus:border-transparent transition-colors"
+                               placeholder="Repite tu contraseña">
+                    </div>
                 </div>
 
                 <!-- Submit Button -->

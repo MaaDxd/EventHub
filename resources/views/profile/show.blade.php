@@ -77,35 +77,41 @@
                     
                     <div class="mb-4">
                         <label for="current_password" class="block text-sm font-medium text-gray-700 mb-2">Contraseña Actual</label>
-                        <input type="password" 
-                               id="current_password" 
-                               name="current_password"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               required>
+                        <div class="password-field-wrapper relative">
+                            <input type="password"
+                                   id="current_password"
+                                   name="current_password"
+                                   class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   required>
+                        </div>
                         @error('current_password')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-4">
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Nueva Contraseña</label>
-                        <input type="password" 
-                               id="password" 
-                               name="password"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               required>
+                        <div class="password-field-wrapper relative">
+                            <input type="password"
+                                   id="password"
+                                   name="password"
+                                   class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   required>
+                        </div>
                         @error('password')
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
-                    
+
                     <div class="mb-6">
                         <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Confirmar Nueva Contraseña</label>
-                        <input type="password" 
-                               id="password_confirmation" 
-                               name="password_confirmation"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                               required>
+                        <div class="password-field-wrapper relative">
+                            <input type="password"
+                                   id="password_confirmation"
+                                   name="password_confirmation"
+                                   class="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   required>
+                        </div>
                     </div>
                     
                     <button type="submit" 
