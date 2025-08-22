@@ -47,6 +47,7 @@
                                 </div>
                             </div>
                         </div>
+                        <br>
 
                         <!-- Filtro por categoría -->
                         <div class="space-y-2">
@@ -145,6 +146,7 @@
 
             <!-- Resultados -->
             @if($events->count() > 0)
+                <br>
                 <!-- Información de resultados -->
                 <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 mb-8">
                     <div class="flex items-center justify-between text-white">
@@ -168,39 +170,36 @@
                     </div>
                 </div>
 
-                <!-- Grid de eventos -->
+                <!-- Mejoras visuales en cards de eventos -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     @foreach($events as $event)
-                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 transform group">
+                        <div class="bg-white rounded-3xl shadow-2xl overflow-hidden group transform transition-all duration-300 hover:-translate-y-2 hover:scale-105 border border-[#32004E]/10">
                             <!-- Imagen del evento -->
-                            <div class="h-56 bg-gray-200 relative overflow-hidden">
+                            <div class="h-56 relative overflow-hidden">
                                 @if($event->image)
-                                    <img src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}" 
-                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                    <img src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300 rounded-t-3xl">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center"
                                          style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
                                         <span class="text-6xl text-white opacity-90">🎭</span>
                                     </div>
                                 @endif
-                                
                                 <!-- Badge de fecha -->
                                 <div class="absolute top-4 right-4 px-3 py-2 rounded-xl text-white text-sm font-bold shadow-lg backdrop-blur-sm"
-                                     style="background: linear-gradient(135deg, rgba(26, 0, 70, 0.9) 0%, rgba(50, 0, 78, 0.9) 100%);">
+                                     style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%); border: 1px solid #fff2;">
                                     <div class="text-center">
                                         <div class="text-lg leading-tight">{{ $event->date->format('d') }}</div>
-                                        <div class="text-xs uppercase">{{ $event->date->format('M') }}</div>
+                                        <div class="text-xs uppercase tracking-widest">{{ $event->date->format('M') }}</div>
                                     </div>
                                 </div>
-                                
                                 <!-- Overlay gradient -->
-                                <div class="absolute inset-0 bg-gradient-to-t from-black from-0% via-transparent to-transparent opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-300 rounded-t-3xl"></div>
                             </div>
-
                             <!-- Contenido del evento -->
                             <div class="p-6">
                                 <div class="flex items-start justify-between mb-3">
-                                    <h3 class="text-xl font-bold line-clamp-2 flex-1" style="color: #1A0046;">{{ $event->title }}</h3>
+                                    <h3 class="text-xl font-bold line-clamp-2 flex-1 text-[#1A0046]">{{ $event->title }}</h3>
                                     <div class="ml-3 flex-shrink-0">
                                         <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full shadow-sm"
                                               @if($event->category && $event->category->color && Str::startsWith($event->category->color, 'linear-gradient'))
@@ -210,51 +209,44 @@
                                               @else
                                                   style="background-image: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);"
                                               @endif>
-                                           
+                                            {{ $event->category ? $event->category->name : 'Sin categoría' }}
                                         </span>
                                     </div>
                                 </div>
-                                
-                                <p class="text-gray-600 text-sm mb-6 line-clamp-3 leading-relaxed">{{ $event->description }}</p>
-
+                                <p class="text-[#32004E] text-sm mb-6 line-clamp-3 leading-relaxed opacity-90">{{ $event->description }}</p>
                                 <!-- Información del evento -->
                                 <div class="space-y-3 mb-6">
-                                    <div class="flex items-center text-sm" style="color: #32004E;">
-                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3"
-                                             style="background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);">
+                                    <div class="flex items-center text-sm text-[#32004E]">
+                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 bg-gradient-to-br from-[#E0E7FF] to-[#C7D2FE]">
                                             📅
                                         </div>
                                         <span class="font-medium">{{ $event->date->format('d/m/Y') }} a las {{ $event->time }}</span>
                                     </div>
-                                    <div class="flex items-center text-sm" style="color: #32004E;">
-                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3"
-                                             style="background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);">
+                                    <div class="flex items-center text-sm text-[#32004E]">
+                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 bg-gradient-to-br from-[#FEE2E2] to-[#FECACA]">
                                             📍
                                         </div>
                                         <span class="font-medium truncate">{{ $event->location }}</span>
                                     </div>
-                                    <div class="flex items-center text-sm" style="color: #32004E;">
-                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3"
-                                             style="background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);">
+                                    <div class="flex items-center text-sm text-[#32004E]">
+                                        <div class="w-8 h-8 rounded-lg flex items-center justify-center mr-3 bg-gradient-to-br from-[#D1FAE5] to-[#A7F3D0]">
                                             👤
                                         </div>
                                         <span class="font-medium">Por {{ $event->creator->name }}</span>
                                     </div>
                                 </div>
-
                                 <!-- Footer del card -->
                                 <div class="flex justify-between items-center pt-4 border-t border-gray-100">
                                     <span class="text-xs text-gray-500 flex items-center">
                                         <i class="fas fa-clock mr-1"></i>
                                         {{ $event->created_at->diffForHumans() }}
                                     </span>
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs"
-                                             style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%); color: white;">
+                                    <a href="{{ route('events.show', $event) }}" class="flex items-center space-x-2 group-hover:text-[#32004E] transition-colors">
+                                        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs bg-gradient-to-r from-[#1A0046] to-[#32004E] text-white">
                                             <i class="fas fa-eye"></i>
                                         </div>
-                                        <span class="text-xs font-medium" style="color: #32004E;">Ver detalles</span>
-                                    </div>
+                                        <span class="text-xs font-medium text-[#32004E]">Ver detalles</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>

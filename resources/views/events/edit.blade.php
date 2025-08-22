@@ -234,8 +234,9 @@
         var lat = parseFloat(document.getElementById('lat').value);
         var lng = parseFloat(document.getElementById('lng').value);
         var hasCoords = !isNaN(lat) && !isNaN(lng);
-        var defaultLat = hasCoords ? lat : -33.4489;
-        var defaultLng = hasCoords ? lng : -70.6693;
+        // Coordenadas por defecto: Bogotá, Colombia
+        var defaultLat = hasCoords ? lat : 4.7110;
+        var defaultLng = hasCoords ? lng : -74.0721;
         var map = L.map('map').setView([defaultLat, defaultLng], 13);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,

@@ -209,12 +209,13 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var map = L.map('map').setView([-33.4489, -70.6693], 13); // Santiago, Chile
+        // Centrar el mapa en Colombia (Bogotá)
+        var map = L.map('map').setView([4.7110, -74.0721], 13); // Bogotá, Colombia
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '© OpenStreetMap'
         }).addTo(map);
-        var marker = L.marker([-33.4489, -70.6693], {draggable:true}).addTo(map);
+        var marker = L.marker([4.7110, -74.0721], {draggable:true}).addTo(map);
         function setLocation(lat, lng) {
             fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
                 .then(response => response.json())
