@@ -39,11 +39,12 @@ class EventController extends Controller
 
         $data = $request->all();
         $data['creator_id'] = Auth::id();
+        $data['status'] = 'published'; // Marcar como publicado por defecto
 
-        // Si la categoría es 'concierto' o 'evento', guarda 0 en category_id y el tipo en category_type
+        // Si la categoría es 'concierto' o 'evento', guarda null en category_id y el tipo en category_type
         if (in_array($data['category_id'], ['concierto', 'evento'])) {
             $data['category_type'] = $data['category_id'];
-            $data['category_id'] = 0;
+            $data['category_id'] = null;
         }
 
         // Handle image upload
@@ -102,10 +103,10 @@ class EventController extends Controller
 
         $data = $request->all();
 
-        // Si la categoría es 'concierto' o 'evento', guarda 0 en category_id y el tipo en category_type
+        // Si la categoría es 'concierto' o 'evento', guarda null en category_id y el tipo en category_type
         if (in_array($data['category_id'], ['concierto', 'evento'])) {
             $data['category_type'] = $data['category_id'];
-            $data['category_id'] = 0;
+            $data['category_id'] = null;
         }
 
         // Handle image upload

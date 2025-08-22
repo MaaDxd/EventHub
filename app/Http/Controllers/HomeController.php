@@ -10,9 +10,10 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Obtener eventos para el slider (los primeros 5 eventos más recientes)
+        // Obtener eventos para el slider (los primeros 5 eventos más recientes publicados)
         $sliderEvents = Event::with(['category', 'creator'])
             ->where('date', '>=', now())
+            ->where('status', 'published')
             ->orderBy('date', 'asc')
             ->take(5)
             ->get()
@@ -49,9 +50,10 @@ class HomeController extends Controller
             ]);
         }
 
-        // Obtener eventos para la sección principal (máximo 12)
+        // Obtener eventos para la sección principal (máximo 12 eventos publicados)
         $featuredEvents = Event::with(['category', 'creator'])
             ->where('date', '>=', now())
+            ->where('status', 'published')
             ->orderBy('date', 'asc')
             ->take(12)
             ->get();
