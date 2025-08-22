@@ -19,9 +19,9 @@
         </div>
 
         <!-- Opciones del Dashboard -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div class="flex justify-center mb-6">
             <!-- Perfil -->
-            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-200">
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-200 max-w-sm w-full">
                 <div class="text-center">
                     <div class="text-4xl mb-4">👤</div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Mi Perfil</h3>
@@ -31,36 +31,12 @@
                     </a>
                 </div>
             </div>
-
-            <!-- Eventos -->
-            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-200">
-                <div class="text-center">
-                    <div class="text-4xl mb-4">🎫</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Mis Eventos</h3>
-                    <p class="text-gray-600 mb-4">Ve los eventos a los que te has registrado</p>
-                    <button class="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed" disabled>
-                        Próximamente
-                    </button>
-                </div>
-            </div>
-
-            <!-- Configuración -->
-            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition duration-200">
-                <div class="text-center">
-                    <div class="text-4xl mb-4">⚙️</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Configuración</h3>
-                    <p class="text-gray-600 mb-4">Ajusta las preferencias de tu cuenta</p>
-                    <button class="bg-gray-400 text-white px-4 py-2 rounded-lg cursor-not-allowed" disabled>
-                        Próximamente
-                    </button>
-                </div>
-            </div>
         </div>
 
         <!-- Información de la cuenta -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">📊 Resumen de la Cuenta</h2>
-            <div class="grid md:grid-cols-3 gap-4">
+            <div class="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
                 <div class="text-center p-4 bg-blue-50 rounded-lg">
                     <div class="text-2xl font-bold text-blue-600">{{ auth()->user()->role }}</div>
                     <div class="text-sm text-gray-600">Tipo de Usuario</div>
@@ -68,10 +44,6 @@
                 <div class="text-center p-4 bg-green-50 rounded-lg">
                     <div class="text-2xl font-bold text-green-600">{{ auth()->user()->created_at->format('d/m/Y') }}</div>
                     <div class="text-sm text-gray-600">Miembro desde</div>
-                </div>
-                <div class="text-center p-4 bg-purple-50 rounded-lg">
-                    <div class="text-2xl font-bold text-purple-600">0</div>
-                    <div class="text-sm text-gray-600">Eventos Registrados</div>
                 </div>
             </div>
         </div>
