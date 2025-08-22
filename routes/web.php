@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\AdminController;
 
 
 
@@ -35,9 +36,21 @@ Route::post('register/creator', [RegisterController::class, 'registerCreator']);
 // Rutas protegidas para dashboards según roles
 Route::middleware('auth')->group(function () {
     // Rutas para administradores
-    Route::get('/dashboard/admin', function () {
-        return view('dashboard_admin');
-    })->middleware('role:admin')->name('dashboard.admin');
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/dashboard/admin', [AdminController::class, 'dashboard'])->name('dashboard.admin');
+        Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+        Route::get('/admin/events', [AdminController::class, 'events'])->name('admin.events');
+
+        // User management routes
+        Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+        Route::post('/admin/users/{id}/restore', [AdminController::class, 'restoreUser'])->name('admin.users.restore');
+        Route::delete('/admin/users/{id}/force', [AdminController::class, 'forceDeleteUser'])->name('admin.users.force-delete');
+
+        // Event management routes
+        Route::delete('/admin/events/{id}', [AdminController::class, 'deleteEvent'])->name('admin.events.delete');
+        Route::post('/admin/events/{id}/restore', [AdminController::class, 'restoreEvent'])->name('admin.events.restore');
+        Route::delete('/admin/events/{id}/force', [AdminController::class, 'forceDeleteEvent'])->name('admin.events.force-delete');
+    });
 
     // Rutas para creadores de eventos
     Route::get('/dashboard/creator', function () {
