@@ -225,23 +225,40 @@ use Illuminate\Support\Str;
                 <div class="swiper-wrapper">
                     @if(isset($events) && count($events) > 0)
                         @foreach($events as $event)
-                            <div class="swiper-slide relative rounded-2xl overflow-hidden shadow-2xl" style="background-image: url('{{ $event['image'] }}'); background-size: cover; background-position: center; width:340px; height:450px;">
+                            @php
+                                // Mitigación de errores de imagen y diseño para arrays
+                                if (!empty($event['image']) && (Str::startsWith($event['image'], 'http://') || Str::startsWith($event['image'], 'https://'))) {
+                                    $imageUrl = $event['image'];
+                                } elseif (!empty($event['image'])) {
+                                    $imageUrl = asset('storage/' . ltrim($event['image'], '/'));
+                                } else {
+                                    $imageUrl = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80';
+                                }
+                            @endphp
+                            <div class="swiper-slide relative rounded-2xl overflow-hidden shadow-2xl" style="background-image: url('{{ $imageUrl }}'); background-size: cover; background-position: center; width:340px; height:450px;">
                                 <div class="gradient-overlay absolute inset-0"></div>
                                 <div class="event-info absolute bottom-0 left-0 right-0 text-white p-8 text-left relative z-10">
-                                    <h5 class="text-2xl font-bold mb-4 text-white">{{ $event['title'] }}</h5>
+                                    <h5 class="text-2xl font-bold mb-4 text-white">{{ $event['title'] ?? '' }}</h5>
                                     <div class="space-y-3">
                                         <div class="flex items-center gap-3 text-white opacity-90">
                                             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             </svg>
-                                            <span>{{ $event['location'] }}</span>
+                                            <span>{{ $event['location'] ?? '' }}</span>
                                         </div>
                                         <div class="flex items-center gap-3 text-white opacity-90">
                                             <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                             </svg>
-                                            <span>{{ $event['date'] }}@if(!empty($event['time'])) - {{ $event['time'] }}@endif</span>
+                                            <span>
+                                                @if(isset($event['date']) && $event['date'] instanceof \Carbon\Carbon)
+                                                    {{ $event['date']->format('d M Y') }}
+                                                @else
+                                                    {{ $event['date'] ?? '' }}
+                                                @endif
+                                                @if(!empty($event['time'])) - {{ $event['time'] }}@endif
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -274,37 +291,53 @@ use Illuminate\Support\Str;
         @if($featuredEvents && count($featuredEvents) > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
                 @foreach($featuredEvents as $event)
-                    <div class="event-card">
-                        @php
-                            $imageUrl = $event->image ? asset('storage/' . $event->image) : 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80';
-                        @endphp
-                        <div class="event-image" style="background-image: url('{{ $imageUrl }}')">
+                    @php
+                        // Mitigación de errores de imagen y diseño para arrays
+                        if (!empty($event['image']) && (Str::startsWith($event['image'], 'http://') || Str::startsWith($event['image'], 'https://'))) {
+                            $imageUrl = $event['image'];
+                        } elseif (!empty($event['image'])) {
+                            $imageUrl = asset('storage/' . ltrim($event['image'], '/'));
+                        } else {
+                            $imageUrl = 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80';
+                        }
+                    @endphp
+                    <!-- Depuración: {{ $imageUrl }} -->
+                    <div class="event-card shadow-lg transition-transform duration-300 hover:-translate-y-2">
+                        <div class="event-image relative" style="background-image: url('{{ $imageUrl }}'); min-height:200px; background-size:cover; background-position:center;">
                             <div class="event-date-badge">
-                                {{ $event->date->format('d M') }}
+                                @if(isset($event['date']) && $event['date'] instanceof \Carbon\Carbon)
+                                    {{ $event['date']->format('d M') }}
+                                @else
+                                    {{ $event['date'] ?? '' }}
+                                @endif
                             </div>
                         </div>
-                        <div class="event-content">
-                            <h3 class="event-title">{{ $event->title }}</h3>
-                            <p class="event-description">{{ Str::limit($event->description, 100) }}</p>
-
-                            <div class="event-meta">
-                                <span>
+                        <div class="event-content p-6">
+                            <h3 class="event-title text-xl font-bold text-[#1A0046] mb-2">{{ $event['title'] ?? '' }}</h3>
+                            <p class="event-description text-[#32004E] opacity-80 mb-4">{{ Str::limit($event['description'] ?? '', 100) }}</p>
+                            <div class="event-meta flex flex-col gap-2 mb-4">
+                                <span class="flex items-center gap-2 text-[#32004E] text-sm opacity-70">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
-                                    {{ $event->location }}
+                                    {{ $event['location'] ?? '' }}
                                 </span>
-                                <span>
+                                <span class="flex items-center gap-2 text-[#32004E] text-sm opacity-70">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    {{ $event->time }}
+                                    {{ $event['time'] ?? '' }}
                                 </span>
                             </div>
-
-                            <div class="event-category">
-                                {{ $event->category ? $event->category->name : ($event->category_type ? ucfirst($event->category_type) : 'Sin categoría') }}
+                            <div class="event-category inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-[#1A0046] to-[#32004E]">
+                                @if(isset($event['category']) && is_array($event['category']) && isset($event['category']['name']))
+                                    {{ $event['category']['name'] }}
+                                @elseif(isset($event['category_type']))
+                                    {{ ucfirst($event['category_type']) }}
+                                @else
+                                    Sin categoría
+                                @endif
                             </div>
                         </div>
                     </div>
