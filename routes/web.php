@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SessionController;
 
 
 
@@ -34,7 +35,7 @@ Route::get('register/creator', [RegisterController::class, 'showCreatorRegistrat
 Route::post('register/creator', [RegisterController::class, 'registerCreator']);
 
 // Rutas protegidas para dashboards según roles
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'session.timeout'])->group(function () {
     // Rutas para administradores
     Route::middleware('role:admin')->group(function () {
         Route::get('/dashboard/admin', [AdminController::class, 'dashboard'])->name('dashboard.admin');
@@ -76,6 +77,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
         Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
     });
+
+    // Session management routes
+    Route::get('/session/status', [SessionController::class, 'checkStatus'])->name('session.status');
+    Route::post('/session/extend', [SessionController::class, 'extend'])->name('session.extend');
+    Route::post('/session/logout', [SessionController::class, 'logout'])->name('session.logout');
 
     // Ruta por defecto que redirige según rol
     Route::get('/dashboard', function () {

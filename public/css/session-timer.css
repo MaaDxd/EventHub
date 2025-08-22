@@ -1,0 +1,163 @@
+/* Session Timer Styles */
+
+/* Modal overlay */
+#session-warning-modal {
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Modal content */
+#session-warning-modal .relative {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Countdown animation */
+.animate-pulse {
+    animation: pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .5;
+    }
+}
+
+/* Button hover effects */
+#session-warning-modal button {
+    transition: all 0.2s ease-in-out;
+    transform: translateY(0);
+}
+
+#session-warning-modal button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#session-warning-modal button:active {
+    transform: translateY(0);
+}
+
+/* Notification styles */
+#session-notification {
+    animation: slideInRight 0.3s ease-out;
+    max-width: 400px;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Warning icon animation */
+#session-warning-modal .h-12.w-12 {
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0,0,0);
+    }
+    40%, 43% {
+        transform: translate3d(0, -8px, 0);
+    }
+    70% {
+        transform: translate3d(0, -4px, 0);
+    }
+    90% {
+        transform: translate3d(0, -2px, 0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    #session-warning-modal .w-96 {
+        width: 90%;
+        margin: 0 auto;
+    }
+    
+    #session-warning-modal .top-20 {
+        top: 10%;
+    }
+    
+    #session-notification {
+        right: 1rem;
+        left: 1rem;
+        max-width: none;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    #session-warning-modal .bg-white {
+        background-color: #1f2937;
+        color: #f9fafb;
+    }
+    
+    #session-warning-modal .text-gray-900 {
+        color: #f9fafb;
+    }
+    
+    #session-warning-modal .text-gray-500 {
+        color: #9ca3af;
+    }
+}
+
+/* Focus styles for accessibility */
+#session-warning-modal button:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Loading state */
+.session-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.session-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

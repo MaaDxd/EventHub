@@ -15,10 +15,24 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon.svg') }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <meta name="theme-color" content="#8B5CF6">
-    
+
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- User Authentication Status -->
+    @auth
+        <meta name="user-authenticated" content="true">
+        <meta name="user-role" content="{{ auth()->user()->role }}">
+    @endauth
+
     <title>EventHub - Tu plataforma de eventos</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+
+    <!-- Session Timer Styles -->
+    @auth
+        <link rel="stylesheet" href="{{ asset('css/session-timer.css') }}">
+    @endauth
     <style>
         .swiper-container {
             overflow: hidden;
@@ -234,7 +248,12 @@
             });
         });
     </script>
-    
+
+    <!-- Session Timer Script -->
+    @auth
+        <script src="{{ asset('js/session-timer.js') }}"></script>
+    @endauth
+
     @yield('scripts')
 </body>
 
