@@ -304,7 +304,7 @@ use Illuminate\Support\Str;
                             </div>
 
                             <div class="event-category">
-                                {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
+                                {{ $event->category ? $event->category->name : ($event->category_type ? ucfirst($event->category_type) : 'Sin categoría') }}
                             </div>
                         </div>
                     </div>

@@ -41,7 +41,7 @@
                                        value="{{ request('search') }}"
                                        placeholder="Título, descripción o ubicación..."
                                        class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300"
-                                       style="focus:border-color: #32004E;">
+                                       style="focus:border-color: #32004E; ">
                                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                     <i class="fas fa-search"></i>
                                 </div>
@@ -285,6 +285,7 @@
         </div>
     </div>
 </div>
+@include('layouts.footer')
 
 <!-- Estilos adicionales -->
 <style>
