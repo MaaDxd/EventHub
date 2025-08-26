@@ -331,11 +331,7 @@ use Illuminate\Support\Str;
                                 </span>
                             </div>
                             <div class="event-category inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-[#1A0046] to-[#32004E]">
-                                @if(isset($event['category']) && is_array($event['category']) && isset($event['category']['name']))
-                                    {{ $event['category']['name'] }}
-                                @else
-                                    Sin categoría
-                                @endif
+                                {{ $event->category ? $event->category->name : 'Sin categoría' }}
                             </div>
                         </div>
                     </div>

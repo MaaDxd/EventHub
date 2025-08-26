@@ -206,7 +206,7 @@
                                               @else
                                                   style="background-image: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);"
                                               @endif>
-                                           
+
                                         </span>
                                     </div>
                                 </div>
