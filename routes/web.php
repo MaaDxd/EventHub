@@ -17,6 +17,9 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('we
 // Ruta para mostrar todos los eventos públicos
 Route::get('/eventos', [App\Http\Controllers\HomeController::class, 'allEvents'])->name('events.public');
 
+// Ruta para mostrar detalles de un evento específico (pública)
+Route::get('/evento/{event}', [EventController::class, 'show'])->name('events.show');
+
 
 
 // Rutas para autenticación

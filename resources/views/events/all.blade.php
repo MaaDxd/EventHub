@@ -167,7 +167,8 @@
                 <!-- Grid de eventos -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     @foreach($events as $event)
-                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 transform group">
+                        <a href="{{ route('events.show', $event) }}" class="block">
+                            <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 transform group cursor-pointer">
                             <!-- Imagen del evento -->
                             <div class="h-56 bg-gray-200 relative overflow-hidden">
                                 @if($event->image)
@@ -254,6 +255,7 @@
                                 </div>
                             </div>
                         </div>
+                        </a>
                     @endforeach
                 </div>
 

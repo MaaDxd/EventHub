@@ -49,6 +49,14 @@ class EventController extends Controller
         return view('events.index', compact('events'));
     }
 
+    public function show(Event $event)
+    {
+        // Load relationships
+        $event->load(['category', 'creator']);
+
+        return view('events.show', compact('event'));
+    }
+
     public function edit(Event $event)
     {
         // Check if user owns this event

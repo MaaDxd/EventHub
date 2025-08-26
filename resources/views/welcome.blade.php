@@ -302,39 +302,41 @@ use Illuminate\Support\Str;
                         }
                     @endphp
                     <!-- Depuración: {{ $imageUrl }} -->
-                    <div class="event-card shadow-lg transition-transform duration-300 hover:-translate-y-2">
-                        <div class="event-image relative" style="background-image: url('{{ $imageUrl }}'); min-height:200px; background-size:cover; background-position:center;">
-                            <div class="event-date-badge">
-                                @if(isset($event['date']) && $event['date'] instanceof \Carbon\Carbon)
-                                    {{ $event['date']->format('d M') }}
-                                @else
-                                    {{ $event['date'] ?? '' }}
-                                @endif
+                    <a href="{{ route('events.show', $event) }}" class="block">
+                        <div class="event-card shadow-lg transition-transform duration-300 hover:-translate-y-2 cursor-pointer">
+                            <div class="event-image relative" style="background-image: url('{{ $imageUrl }}'); min-height:200px; background-size:cover; background-position:center;">
+                                <div class="event-date-badge">
+                                    @if(isset($event['date']) && $event['date'] instanceof \Carbon\Carbon)
+                                        {{ $event['date']->format('d M') }}
+                                    @else
+                                        {{ $event['date'] ?? '' }}
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="event-content p-6">
+                                <h3 class="event-title text-xl font-bold text-[#1A0046] mb-2">{{ $event['title'] ?? '' }}</h3>
+                                <p class="event-description text-[#32004E] opacity-80 mb-4">{{ Str::limit($event['description'] ?? '', 100) }}</p>
+                                <div class="event-meta flex flex-col gap-2 mb-4">
+                                    <span class="flex items-center gap-2 text-[#32004E] text-sm opacity-70">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        {{ $event['location'] ?? '' }}
+                                    </span>
+                                    <span class="flex items-center gap-2 text-[#32004E] text-sm opacity-70">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ $event['time'] ?? '' }}
+                                    </span>
+                                </div>
+                                <div class="event-category inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-[#1A0046] to-[#32004E]">
+                                    {{ $event->category ? $event->category->name : 'Sin categoría' }}
+                                </div>
                             </div>
                         </div>
-                        <div class="event-content p-6">
-                            <h3 class="event-title text-xl font-bold text-[#1A0046] mb-2">{{ $event['title'] ?? '' }}</h3>
-                            <p class="event-description text-[#32004E] opacity-80 mb-4">{{ Str::limit($event['description'] ?? '', 100) }}</p>
-                            <div class="event-meta flex flex-col gap-2 mb-4">
-                                <span class="flex items-center gap-2 text-[#32004E] text-sm opacity-70">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    {{ $event['location'] ?? '' }}
-                                </span>
-                                <span class="flex items-center gap-2 text-[#32004E] text-sm opacity-70">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    {{ $event['time'] ?? '' }}
-                                </span>
-                            </div>
-                            <div class="event-category inline-block px-3 py-1 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-[#1A0046] to-[#32004E]">
-                                {{ $event->category ? $event->category->name : 'Sin categoría' }}
-                            </div>
-                        </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         @else
