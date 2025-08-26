@@ -41,12 +41,13 @@
                                        value="{{ request('search') }}"
                                        placeholder="Título, descripción o ubicación..."
                                        class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300"
-                                       style="focus:border-color: #32004E;">
+                                       >
                                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                     <i class="fas fa-search"></i>
                                 </div>
                             </div>
                         </div>
+                        <br>
 
                         <!-- Filtro por categoría -->
                         <div class="space-y-2">
@@ -57,7 +58,7 @@
                                 <select id="category" 
                                         name="category" 
                                         class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300 appearance-none"
-                                        style="focus:border-color: #32004E;">
+                                           >
                                     <option value="">Todas las categorías</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -91,7 +92,6 @@
                                        name="date_from" 
                                        value="{{ request('date_from') }}"
                                        class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300"
-                                       style="focus:border-color: #32004E;">
                                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                     <i class="fas fa-calendar-alt"></i>
                                 </div>
@@ -108,8 +108,7 @@
                                        id="date_to" 
                                        name="date_to" 
                                        value="{{ request('date_to') }}"
-                                       class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300"
-                                       style="focus:border-color: #32004E;">
+                                       class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300">
                                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                     <i class="fas fa-calendar-check"></i>
                                 </div>
@@ -147,6 +146,7 @@
 
             <!-- Resultados -->
             @if($events->count() > 0)
+                <br>
                 <!-- Información de resultados -->
                 <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-2xl p-6 mb-8">
                     <div class="flex items-center justify-between text-white">
@@ -204,9 +204,15 @@
                                 <div class="flex items-start justify-between mb-3">
                                     <h3 class="text-xl font-bold line-clamp-2 flex-1" style="color: #1A0046;">{{ $event->title }}</h3>
                                     <div class="ml-3 flex-shrink-0">
-                                        <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full shadow-sm" 
-                                              style="background: {{ $event->category && $event->category->color ? $event->category->color : 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)' }};">
-                                            {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
+                                        <span class="inline-block px-3 py-1 text-xs font-bold text-white rounded-full shadow-sm"
+                                              @if($event->category && $event->category->color && Str::startsWith($event->category->color, 'linear-gradient'))
+                                                  style="background-image: {{ $event->category->color }};"
+                                              @elseif($event->category && $event->category->color)
+                                                  style="background: {{ $event->category->color }};"
+                                              @else
+                                                  style="background-image: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);"
+                                              @endif>
+                                           
                                         </span>
                                     </div>
                                 </div>
@@ -285,12 +291,15 @@
         </div>
     </div>
 </div>
+@include('layouts.footer')
+
 
 <!-- Estilos adicionales -->
 <style>
     .line-clamp-2 {
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -298,6 +307,7 @@
     .line-clamp-3 {
         display: -webkit-box;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -313,11 +323,21 @@
 
     /* Mejoras para los botones de paginación */
     .pagination {
-        @apply flex space-x-3 justify-center;
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem; /* space-x-3 in Tailwind is 0.75rem */
     }
     
     .pagination a, .pagination span {
-        @apply px-4 py-3 text-sm font-medium rounded-xl transition-all duration-300;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border-radius: 0.75rem;
+        transition-property: all;
+        transition-duration: 300ms;
     }
     
     .pagination a {
