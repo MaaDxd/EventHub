@@ -281,7 +281,7 @@
                                     <div class="text-white/70 text-sm font-medium mb-1">Teléfono</div>
                                     <a href="tel:+34123456789" 
                                        class="text-white text-lg font-semibold hover:text-yellow-300 transition-colors duration-300">
-                                        +34 123 456 789
+                                        123 456 789
                                     </a>
                                 </div>
                             </div>

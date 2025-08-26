@@ -61,8 +61,12 @@
                                 </div>
                                 <div class="flex items-center text-sm text-gray-600">
                                     <span class="mr-2">🗂</span>
-                                    <span class="inline-block px-2 py-1 text-xs font-semibold text-white rounded-full" 
-                                          style="background-color: {{ $event->category ? $event->category->color : '#6366f1' }}">
+                                    <span class="inline-block px-2 py-1 text-xs font-semibold text-white rounded-full"
+                                          @if($event->category?->color)
+                                              style="background-color: {{ $event->category->color }}"
+                                          @else
+                                              style="background-color: #6366f1"
+                                          @endif>
                                         {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
                                     </span>
                                 </div>
@@ -113,12 +117,14 @@
     .line-clamp-2 {
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
     .line-clamp-3 {
         display: -webkit-box;
         -webkit-line-clamp: 3;
+        line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
