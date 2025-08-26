@@ -80,11 +80,7 @@ class HomeController extends Controller
         }
 
         if ($request->filled('category')) {
-            if (in_array($request->category, ['concierto', 'evento'])) {
-                $query->where('category_type', $request->category);
-            } else {
-                $query->where('category_id', $request->category);
-            }
+            $query->where('category_id', $request->category);
         }
 
         if ($request->filled('date_from')) {

@@ -24,28 +24,13 @@ class EventController extends Controller
             'date' => 'required|date|after:today',
             'time' => 'required',
             'location' => 'required|string|max:255',
-            'category_id' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    if (!in_array($value, ['concierto', 'evento'])) {
-                        if (!Category::where('id', $value)->exists()) {
-                            $fail('La categoría seleccionada no es válida.');
-                        }
-                    }
-                },
-            ],
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->all();
         $data['creator_id'] = Auth::id();
         $data['status'] = 'published'; // Marcar como publicado por defecto
-
-        // Si la categoría es 'concierto' o 'evento', guarda null en category_id y el tipo en category_type
-        if (in_array($data['category_id'], ['concierto', 'evento'])) {
-            $data['category_type'] = $data['category_id'];
-            $data['category_id'] = null;
-        }
 
         // Handle image upload
         if ($request->hasFile('image')) {
@@ -88,26 +73,11 @@ class EventController extends Controller
             'date' => 'required|date',
             'time' => 'required',
             'location' => 'required|string|max:255',
-            'category_id' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    if (!in_array($value, ['concierto', 'evento'])) {
-                        if (!Category::where('id', $value)->exists()) {
-                            $fail('La categoría seleccionada no es válida.');
-                        }
-                    }
-                },
-            ],
+            'category_id' => 'required|exists:categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->all();
-
-        // Si la categoría es 'concierto' o 'evento', guarda null en category_id y el tipo en category_type
-        if (in_array($data['category_id'], ['concierto', 'evento'])) {
-            $data['category_type'] = $data['category_id'];
-            $data['category_id'] = null;
-        }
 
         // Handle image upload
         if ($request->hasFile('image')) {

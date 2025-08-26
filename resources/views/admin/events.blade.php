@@ -98,10 +98,6 @@
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-2">
                                                     {{ $event->category->name }}
                                                 </span>
-                                            @elseif($event->category_type)
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 mt-2">
-                                                    {{ ucfirst($event->category_type) }}
-                                                </span>
                                             @endif
                                         </div>
                                     </div>

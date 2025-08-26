@@ -392,15 +392,10 @@
                             class="form-input category-select w-full px-6 py-4 rounded-xl text-lg appearance-none cursor-pointer @error('category_id') border-red-500 @enderror">
                             <option value="" disabled>Selecciona una categoría</option>
                             @foreach($categories as $category)
-                                <option value="{{ $category->id }}" {{ old('category_id', $event->category_type ? null : $event->category_id) == $category->id ? 'selected' : '' }}>
+                                <option value="{{ $category->id }}" {{ old('category_id', $event->category_id) == $category->id ? 'selected' : '' }}>
                                     {{ $category->name }}
                                 </option>
                             @endforeach
-                            @if($event->category_type)
-                                <option value="{{ $event->category_type }}" {{ old('category_id', $event->category_type) == $event->category_type ? 'selected' : '' }}>
-                                    {{ ucfirst($event->category_type) }}
-                                </option>
-                            @endif
                         </select>
                     </div>
                     @error('category_id')
