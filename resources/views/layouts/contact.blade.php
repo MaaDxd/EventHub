@@ -7,6 +7,20 @@
         background: linear-gradient(135deg, #1A0046 0%, #2D1B69 50%, #32004E 100%);
         background-size: 400% 400%;
         animation: gradientShift 15s ease infinite;
+        position: relative;
+    }
+    
+    /* Patrón SVG de fondo */
+    .contact-bg::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,0.05)' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.5;
+        z-index: 0;
     }
     
     @keyframes gradientShift {
@@ -37,6 +51,23 @@
         border: 1px solid rgba(255,255,255,0.2);
         box-shadow: 0 25px 50px rgba(26,0,70,0.3), 0 0 0 1px rgba(255,215,0,0.1);
         animation: boxGlow 4s ease-in-out infinite;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    /* Efecto de glassmorfismo mejorado */
+    .contact-info-box::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -50%;
+        width: 200%;
+        height: 100%;
+        background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+        opacity: 0.4;
+        z-index: -1;
+        transform: translateY(-50%) rotate(30deg);
+        pointer-events: none;
     }
     
     @keyframes boxGlow {
@@ -69,6 +100,13 @@
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
+        transform: translateY(0);
+    }
+    
+    .contact-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(26,0,70,0.2);
+        background: rgba(255,255,255,0.12);
     }
     
     .contact-item::before {
@@ -93,12 +131,65 @@
         50% { transform: scale(1.1); }
     }
     
+    /* Animación para los iconos */
+    .icon-glow {
+        animation: iconPulse 2s ease-in-out infinite;
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+    }
+    
+    /* Animaciones adicionales */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translate3d(0, 40px, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translate3d(0, -40px, 0);
+        }
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+    
     .floating-particles {
         position: absolute;
         width: 100%;
         height: 100%;
         overflow: hidden;
         z-index: 1;
+    }
+    
+    /* Estilo para las partículas */
+    .particle {
+        position: absolute;
+        background: radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,215,0,0) 70%);
+        border-radius: 50%;
+        animation: floatUp 15s linear infinite;
+        opacity: 0;
+    }
+    
+    /* Elemento decorativo adicional */
+    .decorative-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, rgba(255,215,0,0) 70%);
+        filter: blur(20px);
+        z-index: 0;
+        animation: pulse 8s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); opacity: 0.5; }
+        50% { transform: scale(1.2); opacity: 0.8; }
     }
     
     
@@ -121,6 +212,10 @@
 </style>
 
 <div class="contact-bg text-white font-['Poppins'] min-h-screen relative overflow-hidden">
+    <!-- Elementos decorativos -->    
+    <div class="decorative-circle w-96 h-96 top-[-10%] right-[-10%] animate-pulse"></div>
+    <div class="decorative-circle w-64 h-64 bottom-[-5%] left-[-5%]"></div>
+    
     <!-- Partículas flotantes -->
     <div class="floating-particles">
         <div class="particle w-2 h-2" style="left: 10%; animation-delay: 0s; animation-duration: 12s;"></div>
@@ -138,21 +233,21 @@
         <div class="container mx-auto relative z-20 px-6 max-w-6xl">
             <!-- Título principal mejorado -->
             <div class="mb-16">
-                <h1 class="contact-title text-6xl md:text-7xl font-black mb-8 tracking-wider uppercase drop-shadow-2xl">
+                <h1 class="contact-title text-6xl md:text-7xl font-black mb-8 tracking-wider uppercase drop-shadow-2xl" style="animation: fadeInDown 1s ease-out;">
                     Contacto
                 </h1>
                 <div class="w-24 h-1 bg-gradient-to-r from-white-400 to-orange-400 mx-auto mb-8 rounded-full"></div>
-                <p class="text-xl md:text-2xl mb-4 text-white/90 drop-shadow-lg max-w-3xl mx-auto leading-relaxed">
+                <p class="text-xl md:text-2xl mb-4 text-white/90 drop-shadow-lg max-w-3xl mx-auto leading-relaxed" style="animation: fadeInUp 1s ease-out 0.3s both;">
                     ¿Tienes dudas, sugerencias o quieres colaborar?
                 </p>
-                <p class="text-lg text-white/75 max-w-2xl mx-auto">
+                <p class="text-lg text-white/75 max-w-2xl mx-auto" style="animation: fadeInUp 1s ease-out 0.6s both;">
                     ¡Contáctanos a través de los siguientes medios y te responderemos lo antes posible!
                 </p>
             </div>
             
             <!-- Información de contacto rediseñada -->
             <div class="max-w-2xl mx-auto">
-                <div class="contact-info-box rounded-3xl p-10 md:p-12 text-white relative z-10">
+                <div class="contact-info-box rounded-3xl p-10 md:p-12 text-white relative z-10" style="animation: fadeInUp 1s ease-out 0.9s both;">
                     <h2 class="text-3xl md:text-4xl font-bold mb-10 text-white tracking-wide drop-shadow-lg">
                         <span class="bg-gradient-to-r from-white to-yellow-300 bg-clip-text text-transparent">
                             Información de contacto
