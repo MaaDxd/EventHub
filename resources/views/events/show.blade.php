@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 @php
     use Illuminate\Support\Facades\Storage;
 @endphp
@@ -230,16 +232,8 @@
                             </svg>
                             Ubicación
                         </h3>
-                        <div class="map-placeholder rounded-xl h-64 flex items-center justify-center">
-                            <div class="text-center">
-                                <svg class="w-16 h-16 mx-auto text-[#1A0046] opacity-50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                <p class="text-[#1A0046] font-semibold">{{ $event->location }}</p>
-                                <p class="text-gray-600 text-sm mt-2">Mapa interactivo próximamente</p>
-                            </div>
-                        </div>
+                        <div id="map" class="rounded-xl h-64 overflow-hidden"></div>
+                        <p class="text-[#1A0046] font-semibold mt-3 text-center">{{ $event->location }}</p>
                     </div>
 
                     <!-- Recommendations Section -->
@@ -266,3 +260,128 @@
     </div>
 </div>
 @endsection
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mostrar un indicador de carga mientras se inicializa el mapa
+        document.getElementById('map').innerHTML = `
+            <div class="h-full flex items-center justify-center bg-gray-50">
+                <div class="text-center p-4">
+                    <div class="w-12 h-12 mx-auto border-4 border-[#1A0046] border-t-transparent rounded-full animate-spin mb-2"></div>
+                    <p class="text-[#1A0046] font-medium">Cargando mapa...</p>
+                </div>
+            </div>
+        `;
+        
+        // Inicializar el mapa después de un breve retraso para mostrar la animación de carga
+        setTimeout(function() {
+            // Inicializar el mapa
+            var map = L.map('map', {
+                zoomControl: false,  // Desactivar controles de zoom
+                dragging: false,    // Desactivar arrastre
+                touchZoom: false,   // Desactivar zoom táctil
+                scrollWheelZoom: false, // Desactivar zoom con rueda del ratón
+                doubleClickZoom: false, // Desactivar zoom con doble clic
+                boxZoom: false,     // Desactivar zoom con caja
+                keyboard: false,    // Desactivar teclado
+                tap: false          // Desactivar tap
+            }).setView([0, 0], 15); // Vista inicial temporal
+            
+            // Añadir capa de OpenStreetMap con estilo personalizado
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                className: 'map-tiles' // Clase para aplicar filtros CSS
+            }).addTo(map);
+            
+            // Obtener la dirección del evento
+            var eventLocation = "{{ $event->location }}";
+            
+            // Geocodificar la dirección usando Nominatim
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(eventLocation)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        // Obtener las coordenadas
+                        var lat = parseFloat(data[0].lat);
+                        var lon = parseFloat(data[0].lon);
+                        
+                        // Centrar el mapa en la ubicación
+                        map.setView([lat, lon], 15);
+                        
+                        // Crear un icono personalizado para el marcador
+                        var customIcon = L.divIcon({
+                            className: 'custom-div-icon',
+                            html: `<div class="marker-pin" style="background-color: #1A0046; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(26, 0, 70, 0.5), 0 0 20px rgba(26, 0, 70, 0.3);"><svg style="width: 16px; height: 16px; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>`,
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 15]
+                        });
+                        
+                        // Añadir marcador con el icono personalizado
+                        var marker = L.marker([lat, lon], {icon: customIcon}).addTo(map);
+                        
+                        // Añadir un círculo pulsante para destacar la ubicación
+                        var circle = L.circle([lat, lon], {
+                            color: '#1A0046',
+                            fillColor: '#32004E',
+                            fillOpacity: 0.2,
+                            radius: 200,
+                            className: 'pulse-circle'
+                        }).addTo(map);
+                        
+                        // Añadir un segundo círculo más pequeño para efecto visual
+                        L.circle([lat, lon], {
+                            color: '#1A0046',
+                            fillColor: '#32004E',
+                            fillOpacity: 0.4,
+                            radius: 50
+                        }).addTo(map);
+                        
+                        // Añadir estilo CSS para el efecto pulsante
+                        var style = document.createElement('style');
+                        style.innerHTML = `
+                            @keyframes pulse {
+                                0% { opacity: 0.6; transform: scale(0.8); }
+                                50% { opacity: 0.3; transform: scale(1.2); }
+                                100% { opacity: 0.6; transform: scale(0.8); }
+                            }
+                            .pulse-circle {
+                                animation: pulse 2s infinite ease-in-out;
+                            }
+                            .map-tiles {
+                                filter: saturate(0.8) contrast(1.1) brightness(1.05);
+                            }
+                        `;
+                        document.head.appendChild(style);
+                    } else {
+                        // Si no se encuentra la ubicación, mostrar un mensaje
+                        document.getElementById('map').innerHTML = `
+                            <div class="h-full flex items-center justify-center bg-gray-100">
+                                <div class="text-center p-4">
+                                    <svg class="w-12 h-12 mx-auto text-[#1A0046] opacity-50 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                    </svg>
+                                    <p class="text-[#1A0046] font-medium">No se pudo cargar el mapa para esta ubicación</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al geocodificar la dirección:', error);
+                    document.getElementById('map').innerHTML = `
+                        <div class="h-full flex items-center justify-center bg-gray-100">
+                            <div class="text-center p-4">
+                                <svg class="w-12 h-12 mx-auto text-[#1A0046] opacity-50 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                </svg>
+                                <p class="text-[#1A0046] font-medium">Error al cargar el mapa</p>
+                            </div>
+                        </div>
+                    `;
+                });
+        }, 500); // Retraso de 500ms para mostrar la animación de carga
+    });
+</script>
