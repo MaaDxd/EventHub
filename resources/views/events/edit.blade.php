@@ -209,11 +209,77 @@
     #map {
         border: 2px solid rgba(26, 0, 70, 0.2);
         transition: all 0.3s ease;
+        overflow: hidden;
     }
     
     #map:hover {
         border-color: rgba(26, 0, 70, 0.5);
         box-shadow: 0 10px 25px rgba(26, 0, 70, 0.15);
+    }
+    
+    /* Estilos para el mapa interactivo */
+    .map-tiles {
+        filter: saturate(1.1) contrast(1.1) brightness(0.98);
+    }
+    
+    .custom-div-icon {
+        background: transparent;
+        border: none;
+    }
+    
+    .marker-pin {
+        width: 40px;
+        height: 40px;
+        position: relative;
+        transform-origin: center bottom;
+        animation: bounce 1s ease-in-out infinite alternate;
+    }
+    
+    @keyframes bounce {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-5px); }
+    }
+    
+    .pulse {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        left: 8px;
+        top: 8px;
+        background: rgba(26, 0, 70, 0.2);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+        z-index: -1;
+    }
+    
+    @keyframes pulse {
+        0% {
+            transform: scale(0.5);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(3);
+            opacity: 0;
+        }
+    }
+    
+    .pulsating-circle {
+        animation: circle-pulse 3s infinite;
+    }
+    
+    @keyframes circle-pulse {
+        0% {
+            opacity: 0.6;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.3;
+            transform: scale(1.05);
+        }
+        100% {
+            opacity: 0.6;
+            transform: scale(1);
+        }
     }
     
     .gradient-border {
@@ -558,33 +624,100 @@
         var defaultLat = hasCoords ? lat : 4.7110;
         var defaultLng = hasCoords ? lng : -74.0721;
         
-        var map = L.map('map').setView([defaultLat, defaultLng], 13);
+        // Crear el contenedor de carga
+        var mapContainer = document.getElementById('map');
+        var loadingOverlay = document.createElement('div');
+        loadingOverlay.className = 'absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50 rounded-xl';
+        loadingOverlay.innerHTML = `
+            <div class="text-center">
+                <div class="w-12 h-12 border-4 border-[#1A0046] border-t-transparent rounded-full animate-spin mx-auto mb-3"></div>
+                <p class="text-[#1A0046] font-medium">Cargando mapa...</p>
+            </div>
+        `;
+        mapContainer.style.position = 'relative';
+        mapContainer.appendChild(loadingOverlay);
+        
+        // Inicializar el mapa con opciones mejoradas
+        var map = L.map('map', {
+            zoomControl: true,
+            scrollWheelZoom: true,
+            doubleClickZoom: true,
+            dragging: true,
+            zoomAnimation: true,
+            fadeAnimation: true,
+            markerZoomAnimation: true
+        }).setView([defaultLat, defaultLng], 13);
+        
+        // Añadir capa de mapa con estilo personalizado
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
-            attribution: '© OpenStreetMap'
+            attribution: '© OpenStreetMap',
+            className: 'map-tiles' // Para aplicar filtros CSS
         }).addTo(map);
         
-        var marker = L.marker([defaultLat, defaultLng], {draggable:true}).addTo(map);
+        // Crear icono personalizado para el marcador
+        var customIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: `
+                <div class="marker-pin">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1A0046" class="w-8 h-8">
+                        <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="pulse"></div>
+            `,
+            iconSize: [40, 40],
+            iconAnchor: [20, 40]
+        });
         
+        // Añadir marcador con el icono personalizado
+        var marker = L.marker([defaultLat, defaultLng], {
+            draggable: true,
+            icon: customIcon
+        }).addTo(map);
+        
+        // Añadir círculo pulsante alrededor del marcador
+        var circle = L.circle([defaultLat, defaultLng], {
+            color: '#1A0046',
+            fillColor: '#1A0046',
+            fillOpacity: 0.2,
+            radius: 100,
+            className: 'pulsating-circle'
+        }).addTo(map);
+        
+        // Función para actualizar la ubicación
         function setLocation(lat, lng) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`)
+            // Actualizar círculo
+            circle.setLatLng([lat, lng]);
+            
+            // Mostrar indicador de carga en el campo de ubicación
+            var locationInput = document.getElementById('location');
+            locationInput.value = 'Obteniendo dirección...';
+            locationInput.classList.add('animate-pulse');
+            
+            // Obtener dirección desde las coordenadas
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&accept-language=es`)
                 .then(response => response.json())
                 .then(data => {
                     document.getElementById('location').value = data.display_name || `${lat}, ${lng}`;
                     document.getElementById('lat').value = lat;
                     document.getElementById('lng').value = lng;
+                    locationInput.classList.remove('animate-pulse');
                 })
                 .catch(() => {
                     document.getElementById('location').value = `${lat}, ${lng}`;
                     document.getElementById('lat').value = lat;
                     document.getElementById('lng').value = lng;
+                    locationInput.classList.remove('animate-pulse');
                 });
         }
         
+        // Si ya tenemos coordenadas, actualizar la ubicación
         if (hasCoords) {
             setLocation(lat, lng);
         }
         
+        // Eventos para actualizar la ubicación
         map.on('click', function(e) {
             marker.setLatLng(e.latlng);
             setLocation(e.latlng.lat, e.latlng.lng);
@@ -593,6 +726,54 @@
         marker.on('dragend', function(e) {
             var latlng = marker.getLatLng();
             setLocation(latlng.lat, latlng.lng);
+        });
+        
+        // Evento para actualizar el círculo cuando se mueve el marcador
+        marker.on('drag', function(e) {
+            var latlng = marker.getLatLng();
+            circle.setLatLng(latlng);
+        });
+        
+        // Buscar ubicación cuando se cambia el campo de texto
+        document.getElementById('location').addEventListener('blur', function() {
+            var locationText = this.value.trim();
+            if (locationText.length > 3) {
+                // Mostrar indicador de carga
+                this.classList.add('animate-pulse');
+                
+                // Geocodificar la dirección
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationText)}&limit=1&accept-language=es`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            var lat = parseFloat(data[0].lat);
+                            var lng = parseFloat(data[0].lon);
+                            
+                            // Actualizar mapa y marcador
+                            map.setView([lat, lng], 15);
+                            marker.setLatLng([lat, lng]);
+                            circle.setLatLng([lat, lng]);
+                            
+                            // Actualizar campos ocultos
+                            document.getElementById('lat').value = lat;
+                            document.getElementById('lng').value = lng;
+                        }
+                        this.classList.remove('animate-pulse');
+                    })
+                    .catch(() => {
+                        this.classList.remove('animate-pulse');
+                    });
+            }
+        });
+        
+        // Quitar el overlay de carga cuando el mapa esté listo
+        map.whenReady(function() {
+            setTimeout(function() {
+                loadingOverlay.classList.add('animate__animated', 'animate__fadeOut');
+                setTimeout(function() {
+                    mapContainer.removeChild(loadingOverlay);
+                }, 500);
+            }, 800);
         });
     });
 </script>
