@@ -104,3 +104,11 @@ Route::get('/contact', function () {
     return view('layouts.contact');
 })->name('contact');
 
+// Rutas de ayuda
+Route::get('/ayuda', [App\Http\Controllers\HelpController::class, 'index'])->name('help.index');
+Route::get('/ayuda/usuario', [App\Http\Controllers\HelpController::class, 'userGuide'])->name('help.user-guide');
+Route::get('/ayuda/creador', [App\Http\Controllers\HelpController::class, 'creatorGuide'])->name('help.creator-guide');
+Route::get('/ayuda/admin', [App\Http\Controllers\HelpController::class, 'adminGuide'])->name('help.admin-guide');
+Route::get('/ayuda/faq', [App\Http\Controllers\HelpController::class, 'faq'])->name('help.faq');
+Route::get('/ayuda/contacto', [App\Http\Controllers\HelpController::class, 'contact'])->name('help.contact');
+
