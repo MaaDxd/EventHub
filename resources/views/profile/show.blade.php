@@ -222,7 +222,7 @@
                 @endif
             </div>
             
-            <p class="text-sm text-gray-500 mt-2">🕐 El código expira en 5 minutos - Al escanearlo iniciarás sesión automáticamente</p>
+            <p class="text-sm text-gray-500 mt-2">🕐 El código expira en 60 segundos - Al escanearlo iniciarás sesión automáticamente</p>
         </div>
     @else
         {{-- MOSTRAR CUANDO NO HAY QR --}}
@@ -268,6 +268,14 @@
         </div>
     </div>
 </div>
+
+@if(isset($qrCode))
+<script>
+    setInterval(function() {
+        window.location.href = '{{ route("profile.show") }}?generate_qr=1';
+    }, 60000); // 60 segundos
+</script>
+@endif
 
 <style>
     /* Gradientes corporativos */
