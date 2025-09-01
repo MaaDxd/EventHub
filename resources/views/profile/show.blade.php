@@ -190,51 +190,61 @@
                     </div>
                 </div>
             </div>
-         {{-- Reemplaza la sección QR en tu profile/show.blade.php --}}
+            <!-- Sección QR Login -->
+            <div class="event-card mt-8">
+                <div class="event-content">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
+                            <span class="text-2xl text-white">🔐</span>
+                        </div>
+                        <h2 class="event-title text-2xl">Login con Código QR</h2>
+                    </div>
 
-<div class="mt-6 p-6 bg-white rounded-lg shadow">
-    <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">🔐 Login con Código QR</h3>
-        
-        @if(!isset($qrCode))
-            <a href="{{ route('profile.show') }}?generate_qr=1" 
-               class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
-                <i class="fas fa-qrcode mr-2"></i> Generar QR de Login
-            </a>
-        @else
-            <a href="{{ route('profile.show') }}" 
-               class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
-                <i class="fas fa-eye-slash mr-2"></i> Ocultar QR
-            </a>
-        @endif
-    </div>
-    
-    @if(isset($qrCode) && isset($token))
-        {{-- MOSTRAR QR CUANDO EXISTE --}}
-        <div class="qr-container text-center">
-            <p class="text-gray-600 mb-4">Escanea este código QR con otro dispositivo para iniciar sesión</p>
-            
-            <div class="qr-code inline-block p-4 bg-white rounded-lg shadow-md" style="min-width: 320px; min-height: 320px;">
-                @if(isset($qrCode) && !empty($qrCode))
-                    {!! $qrCode !!}
-                @else
-                    <p class="text-red-500">Error al generar el código QR</p>
-                @endif
+                    @if(!isset($qrCode))
+                        <div class="text-center p-8 bg-gray-50 rounded-xl border border-gray-100">
+                            <div class="text-6xl mb-6">📱</div>
+                            <h4 class="text-xl font-semibold text-black mb-4">Acceso Rápido con QR</h4>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                Genera un código QR para iniciar sesión desde otro dispositivo de forma rápida y segura.
+                            </p>
+                            <a href="{{ route('profile.show') }}?generate_qr=1"
+                               class="view-all-btn inline-flex items-center gap-3 px-8 py-4">
+                                <span class="text-xl">📱</span>
+                                <span>Generar Código QR</span>
+                            </a>
+                        </div>
+                    @else
+                        <div class="text-center">
+                            <p class="text-gray-600 mb-6 text-lg">Escanea este código QR con otro dispositivo para iniciar sesión</p>
+
+                            <div class="qr-code inline-block p-6 bg-white rounded-xl shadow-lg border border-gray-200" style="min-width: 320px; min-height: 320px;">
+                                @if(isset($qrCode) && !empty($qrCode))
+                                    {!! $qrCode !!}
+                                @else
+                                    <p class="text-red-500 font-semibold">Error al generar el código QR</p>
+                                @endif
+                            </div>
+
+                            <div class="mt-6 space-y-4">
+                                <p id="countdown" class="text-sm font-medium text-gray-700 bg-blue-50 px-4 py-2 rounded-lg inline-block">
+                                    ⏰ Próxima actualización en: <span id="time-left" class="font-bold text-blue-600">60</span> segundos
+                                </p>
+                                <p class="text-sm text-gray-500">
+                                    🔄 El código se actualiza automáticamente cada 60 segundos para mayor seguridad
+                                </p>
+                            </div>
+
+                            <div class="mt-6">
+                                <a href="{{ route('profile.show') }}"
+                                   class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg inline-flex items-center gap-3 font-semibold">
+                                    <span class="text-lg">🙈</span>
+                                    <span>Ocultar Código QR</span>
+                                </a>
+                            </div>
+                        </div>
+                    @endif
+                </div>
             </div>
-            
-            <p class="text-sm text-gray-500 mt-2">🕐 El código expira en 60 segundos - Al escanearlo iniciarás sesión automáticamente</p>
-        </div>
-    @else
-        {{-- MOSTRAR CUANDO NO HAY QR --}}
-        <div class="text-center p-6 bg-gray-50 rounded-lg">
-            <div class="text-6xl mb-4">📱</div>
-            <h4 class="text-lg font-medium text-gray-900 mb-2">QR Login</h4>
-            <p class="text-gray-600">
-                Genera un código QR para iniciar sesión desde otro dispositivo de forma rápida y segura.
-            </p>
-        </div>
-    @endif
-</div>
 
             <!-- Botón de logout -->
             <div class="event-card mt-8">
@@ -271,9 +281,18 @@
 
 @if(isset($qrCode))
 <script>
-    setInterval(function() {
-        window.location.href = '{{ route("profile.show") }}?generate_qr=1';
-    }, 60000); // 60 segundos
+    let timeLeft = 60;
+    const countdownElement = document.getElementById('time-left');
+
+    const interval = setInterval(function() {
+        timeLeft--;
+        countdownElement.textContent = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            window.location.href = '{{ route("profile.show") }}?generate_qr=1';
+        }
+    }, 1000); // Actualizar cada segundo
 </script>
 @endif
 
