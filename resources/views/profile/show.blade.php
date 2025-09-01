@@ -190,6 +190,51 @@
                     </div>
                 </div>
             </div>
+         {{-- Reemplaza la sección QR en tu profile/show.blade.php --}}
+
+<div class="mt-6 p-6 bg-white rounded-lg shadow">
+    <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900">🔐 Login con Código QR</h3>
+        
+        @if(!isset($qrCode))
+            <a href="{{ route('profile.show') }}?generate_qr=1" 
+               class="bg-purple-600 hover:bg-purple-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
+                <i class="fas fa-qrcode mr-2"></i> Generar QR de Login
+            </a>
+        @else
+            <a href="{{ route('profile.show') }}" 
+               class="bg-gray-600 hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1">
+                <i class="fas fa-eye-slash mr-2"></i> Ocultar QR
+            </a>
+        @endif
+    </div>
+    
+    @if(isset($qrCode) && isset($token))
+        {{-- MOSTRAR QR CUANDO EXISTE --}}
+        <div class="qr-container text-center">
+            <p class="text-gray-600 mb-4">Escanea este código QR con otro dispositivo para iniciar sesión</p>
+            
+            <div class="qr-code inline-block p-4 bg-white rounded-lg shadow-md" style="min-width: 320px; min-height: 320px;">
+                @if(isset($qrCode) && !empty($qrCode))
+                    {!! $qrCode !!}
+                @else
+                    <p class="text-red-500">Error al generar el código QR</p>
+                @endif
+            </div>
+            
+            <p class="text-sm text-gray-500 mt-2">🕐 El código expira en 5 minutos - Al escanearlo iniciarás sesión automáticamente</p>
+        </div>
+    @else
+        {{-- MOSTRAR CUANDO NO HAY QR --}}
+        <div class="text-center p-6 bg-gray-50 rounded-lg">
+            <div class="text-6xl mb-4">📱</div>
+            <h4 class="text-lg font-medium text-gray-900 mb-2">QR Login</h4>
+            <p class="text-gray-600">
+                Genera un código QR para iniciar sesión desde otro dispositivo de forma rápida y segura.
+            </p>
+        </div>
+    @endif
+</div>
 
             <!-- Botón de logout -->
             <div class="event-card mt-8">
@@ -321,6 +366,21 @@
         color: #1A0046;
         font-weight: 600;
     }
+    .qr-container {
+        text-align: center;
+        padding: 20px;
+        max-width: 400px;
+        margin: 20px auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+    .qr-code {
+        margin: 20px 0;
+        display: inline-block;
+    }
+    .status-pending { background-color: #fff3cd; color: #856404; }
+    .status-success { background-color: #d4edda; color: #155724; }
+    .status-error { background-color: #f8d7da; color: #721c24; }
 </style>
 
 @include('layouts.footer')

@@ -8,9 +8,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\QrLoginController;
 
-
-
+ // Rutas para inicio de sesión con código QR
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [QrLoginController::class, 'show'])->name('profile.show');
+});
+// Ruta para verificar QR (pública, no requiere auth)
+Route::get('/qr-verify/{token}', [QrLoginController::class, 'verifyQr'])->name('qr.verify');
 // Ruta raíz para evitar error 404
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
 
@@ -67,7 +72,7 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
     })->middleware('role:user')->name('dashboard.user');
 
     // Rutas para perfil de usuario
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile', [QrLoginController::class, 'show'])->name('profile.show');
     Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
