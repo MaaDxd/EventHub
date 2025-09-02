@@ -286,14 +286,14 @@
                             <i class="bi bi-card-text icon-accent mr-2"></i>
                             Descripción *
                         </span>
-                        <span class="text-xs text-gray-500">(máximo 150 caracteres)</span>
+                        <span class="text-xs text-gray-500">(máximo 500 caracteres)</span>
                     </label>
                     <div class="relative">
-                        <textarea id="description" name="description" rows="4" required maxlength="150" placeholder=" "
+                        <textarea id="description" name="description" rows="4" required maxlength="500" placeholder=" "
                                   class="form-input w-full px-6 py-4 rounded-xl text-lg resize-none @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
                         <label for="description" class="floating-label">Describe tu evento, qué incluye, qué esperar...</label>
                         <div class="absolute bottom-3 right-3 char-counter text-sm">
-                            <span id="char-count">0</span>/150
+                            <span id="char-count">0</span>/500
                         </div>
                     </div>
                     @error('description')
@@ -439,9 +439,9 @@
             charCount.textContent = currentLength;
 
             // Change color based on character count
-            if (currentLength > 140) {
+            if (currentLength > 450) {
                 charCount.className = 'char-counter text-red-500';
-            } else if (currentLength > 120) {
+            } else if (currentLength > 400) {
                 charCount.className = 'char-counter text-orange-500';
             } else {
                 charCount.className = 'char-counter text-gray-500';

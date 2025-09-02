@@ -20,7 +20,7 @@ class EventController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:150',
+            'description' => 'required|string|max:500',
             'date' => 'required|date|after:today',
             'time' => 'required',
             'location' => 'required|string|max:255',
@@ -51,8 +51,8 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        // Load relationships including comments
-        $event->load(['category', 'creator', 'mainComments']);
+        // Load relationships
+        $event->load(['category', 'creator']);
 
         return view('events.show', compact('event'));
     }
@@ -77,7 +77,7 @@ class EventController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:150',
+            'description' => 'required|string|max:500',
             'date' => 'required|date',
             'time' => 'required',
             'location' => 'required|string|max:255',
