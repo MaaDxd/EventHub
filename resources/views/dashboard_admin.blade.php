@@ -235,9 +235,6 @@
             </div>
     </div>
 </div>
-
-@include('layouts.footer')
-
 <!-- Estilos adicionales -->
 <style>
     /* Animaciones principales */
