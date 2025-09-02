@@ -9,6 +9,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\QrLoginController;
+use App\Http\Controllers\EventCommentController;
 
  // Rutas para inicio de sesión con código QR
 Route::middleware(['auth'])->group(function () {
@@ -85,6 +86,10 @@ Route::middleware(['auth', 'session.timeout'])->group(function () {
         Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
         Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
     });
+
+    // Comment routes for events
+    Route::post('/events/{event}/comments', [EventCommentController::class, 'store'])->name('events.comments.store');
+    Route::delete('/comments/{comment}', [EventCommentController::class, 'destroy'])->name('comments.destroy');
 
     // Session management routes
     Route::get('/session/status', [SessionController::class, 'checkStatus'])->name('session.status');

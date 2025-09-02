@@ -37,4 +37,14 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'creator_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(EventComment::class)->orderBy('created_at', 'desc');
+    }
+
+    public function mainComments()
+    {
+        return $this->hasMany(EventComment::class)->mainComments()->with(['user', 'replies.user'])->orderBy('created_at', 'desc');
+    }
 }

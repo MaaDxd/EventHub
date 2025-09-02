@@ -257,6 +257,183 @@
                 </div>
             </div>
         </div>
+
+        <!-- Sección de Comentarios -->
+        <div class="mt-8">
+            <div class="event-card rounded-2xl p-8">
+                <h3 class="text-2xl font-bold text-[#1A0046] mb-6 flex items-center">
+                    <svg class="w-6 h-6 mr-3 icon-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    Comentarios y Preguntas
+                </h3>
+
+                @auth
+                    <!-- Formulario para nuevo comentario -->
+                    <div class="mb-8 bg-gradient-to-r from-[#1A0046]/5 to-[#32004E]/5 rounded-xl p-6 border border-[#1A0046]/10">
+                        <form id="comment-form" action="{{ route('events.comments.store', $event) }}" method="POST">
+                            @csrf
+                            <div class="mb-4">
+                                <label for="content" class="block text-sm font-medium text-[#1A0046] mb-2">
+                                    Deja tu comentario o pregunta sobre el evento
+                                </label>
+                                <textarea 
+                                    name="content" 
+                                    id="content" 
+                                    rows="4" 
+                                    maxlength="500"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1A0046] focus:border-transparent resize-none"
+                                    placeholder="Escribe tu comentario aquí... (máximo 500 caracteres)"
+                                    required
+                                ></textarea>
+                                <div class="text-right mt-2">
+                                    <span id="char-count" class="text-sm text-gray-500">0/500</span>
+                                </div>
+                            </div>
+                            <button 
+                                type="submit" 
+                                class="inline-flex items-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 focus:ring-4 focus:ring-purple-300"
+                            >
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                                Enviar Comentario
+                            </button>
+                        </form>
+                    </div>
+                @else
+                    <div class="mb-8 bg-gray-50 rounded-xl p-6 text-center">
+                        <p class="text-gray-600 mb-4">Inicia sesión para dejar un comentario o hacer una pregunta</p>
+                        <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-3 bg-[#1A0046] hover:bg-[#32004E] text-white font-semibold rounded-xl transition-all duration-300">
+                            Iniciar Sesión
+                        </a>
+                    </div>
+                @endauth
+
+                <!-- Lista de comentarios -->
+                <div id="comments-list" class="space-y-6">
+                    @forelse($event->mainComments as $comment)
+                        <div class="comment-item border border-gray-200 rounded-xl p-6 bg-white">
+                            <!-- Comentario principal -->
+                            <div class="flex items-start space-x-4">
+                                <div class="w-10 h-10 bg-gradient-to-br from-[#1A0046] to-[#32004E] rounded-full flex items-center justify-center text-white font-bold">
+                                    {{ strtoupper(substr($comment->user->name, 0, 1)) }}
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <div>
+                                            <h4 class="font-semibold text-[#1A0046]">{{ $comment->user->name }}</h4>
+                                            <p class="text-sm text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
+                                        </div>
+                                        @auth
+                                            @if($comment->user_id === Auth::id() || $event->creator_id === Auth::id())
+                                                <button 
+                                                    onclick="deleteComment({{ $comment->id }})" 
+                                                    class="text-red-500 hover:text-red-700 text-sm"
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            @endif
+                                        @endauth
+                                    </div>
+                                    <p class="text-gray-700 leading-relaxed">{{ $comment->content }}</p>
+                                    
+                                    @auth
+                                        @if($event->creator_id === Auth::id() && !$comment->replies->count())
+                                            <button 
+                                                onclick="showReplyForm({{ $comment->id }})" 
+                                                class="mt-3 text-purple-600 hover:text-purple-800 text-sm font-medium"
+                                            >
+                                                Responder
+                                            </button>
+                                        @endif
+                                    @endauth
+                                </div>
+                            </div>
+
+                            <!-- Formulario de respuesta (oculto por defecto) -->
+                            @auth
+                                @if($event->creator_id === Auth::id())
+                                    <div id="reply-form-{{ $comment->id }}" class="mt-4 ml-14 hidden">
+                                        <form class="reply-form" data-comment-id="{{ $comment->id }}">
+                                            @csrf
+                                            <input type="hidden" name="parent_id" value="{{ $comment->id }}">
+                                            <div class="mb-4">
+                                                <textarea 
+                                                    name="content" 
+                                                    rows="3" 
+                                                    maxlength="500"
+                                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                                                    placeholder="Escribe tu respuesta... (máximo 500 caracteres)"
+                                                    required
+                                                ></textarea>
+                                            </div>
+                                            <div class="flex space-x-3">
+                                                <button 
+                                                    type="submit" 
+                                                    class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-lg transition-all duration-300"
+                                                >
+                                                    Responder
+                                                </button>
+                                                <button 
+                                                    type="button" 
+                                                    onclick="hideReplyForm({{ $comment->id }})" 
+                                                    class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 text-sm font-semibold rounded-lg transition-all duration-300"
+                                                >
+                                                    Cancelar
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @endif
+                            @endauth
+
+                            <!-- Respuestas del creador -->
+                            @if($comment->replies->count())
+                                <div class="mt-4 ml-14 space-y-4">
+                                    @foreach($comment->replies as $reply)
+                                        <div class="border-l-4 border-purple-500 pl-4 bg-purple-50 rounded-r-xl p-4">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                                    {{ strtoupper(substr($reply->user->name, 0, 1)) }}
+                                                </div>
+                                                <div class="flex-1">
+                                                    <div class="flex items-center justify-between mb-1">
+                                                        <div>
+                                                            <h5 class="font-semibold text-purple-700">{{ $reply->user->name }} <span class="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">Organizador</span></h5>
+                                                            <p class="text-xs text-purple-500">{{ $reply->created_at->diffForHumans() }}</p>
+                                                        </div>
+                                                        @auth
+                                                            @if($reply->user_id === Auth::id())
+                                                                <button 
+                                                                    onclick="deleteComment({{ $reply->id }})" 
+                                                                    class="text-red-500 hover:text-red-700 text-xs"
+                                                                >
+                                                                    Eliminar
+                                                                </button>
+                                                            @endif
+                                                        @endauth
+                                                    </div>
+                                                    <p class="text-purple-800 text-sm leading-relaxed">{{ $reply->content }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                    @empty
+                        <div class="text-center py-8 text-gray-500">
+                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <p class="text-lg">Aún no hay comentarios</p>
+                            <p class="text-sm">¡Sé el primero en comentar sobre este evento!</p>
+                        </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -384,4 +561,149 @@
                 });
         }, 500); // Retraso de 500ms para mostrar la animación de carga
     });
+
+    // Funciones para los comentarios
+    document.addEventListener('DOMContentLoaded', function() {
+        // Contador de caracteres
+        const contentTextarea = document.getElementById('content');
+        const charCount = document.getElementById('char-count');
+        
+        if (contentTextarea && charCount) {
+            contentTextarea.addEventListener('input', function() {
+                const currentLength = this.value.length;
+                charCount.textContent = currentLength + '/500';
+                
+                if (currentLength > 450) {
+                    charCount.style.color = '#ef4444'; // text-red-500
+                } else if (currentLength > 400) {
+                    charCount.style.color = '#f59e0b'; // text-amber-500
+                } else {
+                    charCount.style.color = '#6b7280'; // text-gray-500
+                }
+            });
+        }
+
+        // Manejo del formulario de comentarios principal
+        const commentForm = document.getElementById('comment-form');
+        if (commentForm) {
+            commentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<svg class="animate-spin w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>Enviando...';
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Recargar la página para mostrar el nuevo comentario
+                        location.reload();
+                    } else {
+                        alert('Error al enviar el comentario. Por favor intenta de nuevo.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al enviar el comentario. Por favor intenta de nuevo.');
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalText;
+                });
+            });
+        }
+
+        // Manejo de formularios de respuesta
+        document.querySelectorAll('.reply-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const submitButton = this.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+                
+                submitButton.disabled = true;
+                submitButton.innerHTML = 'Enviando...';
+                
+                fetch('{{ route("events.comments.store", $event) }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Recargar la página para mostrar la nueva respuesta
+                        location.reload();
+                    } else {
+                        alert('Error al enviar la respuesta. Por favor intenta de nuevo.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al enviar la respuesta. Por favor intenta de nuevo.');
+                })
+                .finally(() => {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = originalText;
+                });
+            });
+        });
+    });
+
+    // Función para mostrar formulario de respuesta
+    function showReplyForm(commentId) {
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        if (replyForm) {
+            replyForm.classList.remove('hidden');
+        }
+    }
+
+    // Función para ocultar formulario de respuesta
+    function hideReplyForm(commentId) {
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        if (replyForm) {
+            replyForm.classList.add('hidden');
+        }
+    }
+
+    // Función para eliminar comentario
+    function deleteComment(commentId) {
+        if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
+            fetch(`/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Recargar la página para actualizar los comentarios
+                    location.reload();
+                } else {
+                    alert('Error al eliminar el comentario.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar el comentario.');
+            });
+        }
+    }
 </script>

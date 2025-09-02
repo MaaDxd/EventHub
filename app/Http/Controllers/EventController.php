@@ -51,8 +51,8 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        // Load relationships
-        $event->load(['category', 'creator']);
+        // Load relationships including comments
+        $event->load(['category', 'creator', 'mainComments']);
 
         return view('events.show', compact('event'));
     }
