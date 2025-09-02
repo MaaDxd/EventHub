@@ -7,12 +7,12 @@
         <div class="max-w-7xl mx-auto">
             <!-- Header con diseño mejorado -->
             <div class="text-center mb-12">
-                <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl shadow-2xl mb-6"
+                <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl shadow-2xl mb-6 animate-float"
                      style="background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);">
                     <span class="text-5xl">🎭</span>
                 </div>
-                <h1 class="text-5xl font-bold text-white mb-4 tracking-tight">Todos los Eventos</h1>
-                <p class="text-white text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
+                <h1 class="text-5xl font-bold text-white mb-4 tracking-tight animate-slide-up">Todos los Eventos</h1>
+                <p class="text-white text-xl opacity-90 max-w-3xl mx-auto leading-relaxed animate-slide-up-delay">
                     Descubre eventos increíbles creados por nuestra comunidad y vive experiencias únicas
                 </p>
             </div>
@@ -112,13 +112,13 @@
 
                     <!-- Botones de acción -->
                     <div class="flex flex-wrap gap-4 pt-6 border-t border-gray-100">
-                        <button type="submit" 
-                                class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
+                        <button type="submit"
+                                class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform animate-pulse-gentle"
                                 style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
                             <i class="fas fa-search mr-2"></i>
                             <span>Buscar Eventos</span>
                         </button>
-                        <a href="{{ route('events.public') }}" 
+                        <a href="{{ route('events.public') }}"
                            class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
                            style="background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);">
                             <i class="fas fa-sync-alt mr-2"></i>
@@ -168,7 +168,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                     @foreach($events as $event)
                         <a href="{{ route('events.show', $event) }}" class="block">
-                            <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 transform group cursor-pointer">
+                            <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-300 hover:scale-105 transform group cursor-pointer animate-stagger">
                             <!-- Imagen del evento -->
                             <div class="h-56 bg-gray-200 relative overflow-hidden">
                                 @if($event->image)
@@ -399,6 +399,100 @@
             transform: translateY(0);
         }
     }
+
+    /* Nuevas animaciones */
+    .animate-slide-up {
+        animation: slideUp 0.8s ease-out;
+    }
+
+    .animate-slide-up-delay {
+        animation: slideUp 0.8s ease-out 0.2s both;
+    }
+
+    .animate-float {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .animate-pulse-gentle {
+        animation: pulseGentle 2s ease-in-out infinite;
+    }
+
+    .animate-bounce-in {
+        animation: bounceIn 0.6s ease-out;
+    }
+
+    .animate-stagger {
+        animation: fadeInUp 0.6s ease-out both;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @keyframes pulseGentle {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+
+    @keyframes bounceIn {
+        0% {
+            opacity: 0;
+            transform: scale(0.3);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        70% {
+            transform: scale(0.9);
+        }
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Stagger delays for cards */
+    .animate-stagger:nth-child(1) { animation-delay: 0.1s; }
+    .animate-stagger:nth-child(2) { animation-delay: 0.2s; }
+    .animate-stagger:nth-child(3) { animation-delay: 0.3s; }
+    .animate-stagger:nth-child(4) { animation-delay: 0.4s; }
+    .animate-stagger:nth-child(5) { animation-delay: 0.5s; }
+    .animate-stagger:nth-child(6) { animation-delay: 0.6s; }
+    .animate-stagger:nth-child(7) { animation-delay: 0.7s; }
+    .animate-stagger:nth-child(8) { animation-delay: 0.8s; }
+    .animate-stagger:nth-child(9) { animation-delay: 0.9s; }
 
     /* Mejorar el spinner */
     .animate-spin {
