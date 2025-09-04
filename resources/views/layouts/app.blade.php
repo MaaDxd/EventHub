@@ -156,6 +156,14 @@
                                     <span class="mr-2">👤</span> Mi Perfil
                                 </a>
                                 
+                                <a href="{{ route('favorites.index') }}" class="dropdown-item">
+                                    <span class="mr-2">💜</span> Mis Favoritos
+                                </a>
+                                
+                                <a href="{{ route('events.public') }}" class="dropdown-item">
+                                    <span class="mr-2">🎭</span> Explorar Eventos
+                                </a>
+                                
                                 <a href="{{ route('welcome') }}" class="dropdown-item">
                                     <span class="mr-2">🏠</span> Ir al Inicio
                                 </a>

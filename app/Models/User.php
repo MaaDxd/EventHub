@@ -53,4 +53,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(Event::class, 'creator_id');
     }
+
+    // Relación con favoritos
+    public function favorites()
+    {
+        return $this->hasMany(UserFavorite::class);
+    }
+
+    // Relación many-to-many con eventos favoritos
+    public function favoriteEvents()
+    {
+        return $this->belongsToMany(Event::class, 'user_favorites')->withTimestamps();
+    }
+
+    // Método para verificar si un evento es favorito del usuario
+    public function hasFavorite($eventId)
+    {
+        return $this->favoriteEvents()->where('event_id', $eventId)->exists();
+    }
 }

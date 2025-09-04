@@ -47,4 +47,22 @@ class Event extends Model
     {
         return $this->hasMany(EventComment::class)->mainComments()->with(['user', 'replies.user'])->orderBy('created_at', 'desc');
     }
+
+    // Relación con favoritos
+    public function favorites()
+    {
+        return $this->hasMany(UserFavorite::class);
+    }
+
+    // Relación many-to-many con usuarios que marcaron como favorito
+    public function favoritedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_favorites')->withTimestamps();
+    }
+
+    // Método para obtener el conteo de favoritos
+    public function favoritesCount()
+    {
+        return $this->favorites()->count();
+    }
 }

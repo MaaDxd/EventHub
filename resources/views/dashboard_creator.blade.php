@@ -280,7 +280,7 @@
             </div>
 
             <!-- Quick Actions -->
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-8">
                 <!-- Create Event -->
                 <div class="action-card animate-fadeInLeft delay-100">
                     <div class="icon-container">
@@ -323,8 +323,29 @@
                     </div>
                 </div>
 
-                <!-- Profile -->
+                <!-- Favorites -->
                 <div class="action-card animate-fadeInLeft delay-300">
+                    <div class="icon-container">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-[#1A0046] mb-3 text-center">Mis Favoritos</h3>
+                    <p class="text-[#32004E] opacity-80 mb-6 text-center leading-relaxed">
+                        Explora tus eventos favoritos guardados
+                    </p>
+                    <div class="text-center">
+                        <a href="{{ route('favorites.index') }}" class="btn-primary">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            Ver Favoritos
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Profile -->
+                <div class="action-card animate-fadeInLeft delay-400">
                     <div class="icon-container">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>

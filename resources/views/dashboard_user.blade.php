@@ -47,8 +47,11 @@
         <div class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-4">🚀 Acciones Rápidas</h2>
             <div class="flex flex-wrap gap-4">
-                <a href="{{ route('welcome') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
-                    🏠 Explorar Eventos
+                <a href="{{ route('events.public') }}" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                    🎭 Explorar Eventos
+                </a>
+                <a href="{{ route('favorites.index') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition duration-200">
+                    💜 Mis Favoritos
                 </a>
                 <a href="{{ route('profile.show') }}" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition duration-200">
                     ✏️ Editar Perfil

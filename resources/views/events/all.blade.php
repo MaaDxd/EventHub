@@ -245,12 +245,24 @@
                                         <i class="fas fa-clock mr-1"></i>
                                         {{ $event->created_at->diffForHumans() }}
                                     </span>
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs"
-                                             style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%); color: white;">
-                                            <i class="fas fa-eye"></i>
+                                    <div class="flex items-center space-x-3">
+                                        @auth
+                                            <!-- Botón de favoritos -->
+                                            <button onclick="toggleFavorite({{ $event->id }}, this)" 
+                                                    class="favorite-btn w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 hover:scale-110 transform"
+                                                    data-event-id="{{ $event->id }}"
+                                                    data-is-favorite="{{ Auth::user()->hasFavorite($event->id) ? 'true' : 'false' }}"
+                                                    style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); color: white;">
+                                                <i class="fas fa-heart {{ Auth::user()->hasFavorite($event->id) ? 'text-white' : 'text-white opacity-50' }}"></i>
+                                            </button>
+                                        @endauth
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs"
+                                                 style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%); color: white;">
+                                                <i class="fas fa-eye"></i>
+                                            </div>
+                                            <span class="text-xs font-medium" style="color: #32004E;">Ver detalles</span>
                                         </div>
-                                        <span class="text-xs font-medium" style="color: #32004E;">Ver detalles</span>
                                     </div>
                                 </div>
                             </div>
@@ -612,6 +624,101 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('beforeunload', function() {
         clearTimeout(searchTimeout);
     });
+
+    // Función para manejar favoritos
+    window.toggleFavorite = function(eventId, button) {
+        event.stopPropagation(); // Evitar que se active el enlace del card
+        
+        const isFavorite = button.getAttribute('data-is-favorite') === 'true';
+        const icon = button.querySelector('i');
+        const originalColor = button.style.background;
+        
+        // Deshabilitar botón mientras se procesa
+        button.disabled = true;
+        button.style.opacity = '0.7';
+        
+        const url = `/events/${eventId}/favorite`;
+        const method = isFavorite ? 'DELETE' : 'POST';
+        
+        fetch(url, {
+            method: method,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Actualizar estado del botón
+                button.setAttribute('data-is-favorite', data.is_favorite ? 'true' : 'false');
+                
+                if (data.is_favorite) {
+                    // Agregar a favoritos - corazón lleno
+                    icon.className = 'fas fa-heart text-white';
+                    button.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+                    
+                    // Efecto de animación
+                    button.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        button.style.transform = 'scale(1)';
+                    }, 200);
+                } else {
+                    // Quitar de favoritos - corazón vacío
+                    icon.className = 'fas fa-heart text-white opacity-50';
+                    button.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+                }
+                
+                // Mostrar mensaje temporal
+                showToast(data.message, data.is_favorite ? 'success' : 'info');
+            } else {
+                showToast(data.message || 'Error al procesar la solicitud', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('Error al procesar la solicitud', 'error');
+        })
+        .finally(() => {
+            // Rehabilitar botón
+            button.disabled = false;
+            button.style.opacity = '1';
+        });
+    };
+
+    // Función para mostrar mensajes toast
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
+        
+        switch(type) {
+            case 'success':
+                toast.style.background = 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
+                break;
+            case 'error':
+                toast.style.background = 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
+                break;
+            default:
+                toast.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+        }
+        
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        // Animar entrada
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Animar salida
+        setTimeout(() => {
+            toast.style.transform = 'translateX(full)';
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 300);
+        }, 3000);
+    }
 });
 </script>
 @endsection
