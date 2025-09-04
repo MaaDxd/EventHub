@@ -29,7 +29,7 @@ class SessionTimeout
                     return response()->json(['message' => 'Sesión expirada'], 401);
                 }
 
-                return redirect()->route('login')->with('message', 'Tu sesión ha expirado por inactividad.');
+                return redirect()->route('session.expired');
             }
 
             // Update last activity time
