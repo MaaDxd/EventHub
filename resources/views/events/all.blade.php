@@ -247,13 +247,33 @@
                                     </span>
                                     <div class="flex items-center space-x-3">
                                         @auth
-                                            <!-- Botón de favoritos -->
+                                            <!-- Botón de favoritos mejorado -->
                                             <button onclick="toggleFavorite({{ $event->id }}, this)" 
-                                                    class="favorite-btn w-8 h-8 rounded-full flex items-center justify-center text-sm transition-all duration-300 hover:scale-110 transform"
+                                                    class="favorite-btn group relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 transform shadow-lg border-2 border-white/30 backdrop-blur-sm"
                                                     data-event-id="{{ $event->id }}"
                                                     data-is-favorite="{{ Auth::user()->hasFavorite($event->id) ? 'true' : 'false' }}"
-                                                    style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); color: white;">
-                                                <i class="fas fa-heart {{ Auth::user()->hasFavorite($event->id) ? 'text-white' : 'text-white opacity-50' }}"></i>
+                                                    style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);">
+                                                
+                                                <!-- Corazón SVG -->
+                                                <svg class="w-4 h-4 transition-all duration-300 {{ Auth::user()->hasFavorite($event->id) ? 'text-red-500 scale-110' : 'text-gray-600 group-hover:text-red-500' }}" 
+                                                     fill="{{ Auth::user()->hasFavorite($event->id) ? 'currentColor' : 'none' }}" 
+                                                     stroke="currentColor" 
+                                                     viewBox="0 0 24 24" 
+                                                     stroke-width="2.5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                                </svg>
+                                                
+                                                <!-- Efecto de pulso cuando está en favoritos -->
+                                                @if(Auth::user()->hasFavorite($event->id))
+                                                    <div class="absolute inset-0 rounded-full bg-red-500/40 animate-ping"></div>
+                                                @endif
+                                                
+                                                <!-- Tooltip -->
+                                                <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+                                                    <div class="bg-gray-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg border border-gray-700">
+                                                        {{ Auth::user()->hasFavorite($event->id) ? 'Quitar de favoritos' : 'Agregar a favoritos' }}
+                                                    </div>
+                                                </div>
                                             </button>
                                         @endauth
                                         <div class="flex items-center space-x-2">
@@ -630,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event.stopPropagation(); // Evitar que se active el enlace del card
         
         const isFavorite = button.getAttribute('data-is-favorite') === 'true';
-        const icon = button.querySelector('i');
+        const icon = button.querySelector('svg');
         const originalColor = button.style.background;
         
         // Deshabilitar botón mientras se procesa
@@ -656,18 +676,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (data.is_favorite) {
                     // Agregar a favoritos - corazón lleno
-                    icon.className = 'fas fa-heart text-white';
-                    button.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+                    icon.className = 'w-4 h-4 transition-all duration-300 text-red-500 scale-110';
+                    icon.setAttribute('fill', 'currentColor');
+                    
+                    // Agregar efecto de pulso
+                    const pulseEffect = document.createElement('div');
+                    pulseEffect.className = 'absolute inset-0 rounded-full bg-red-500/40 animate-ping';
+                    button.appendChild(pulseEffect);
                     
                     // Efecto de animación
-                    button.style.transform = 'scale(1.3)';
+                    button.style.transform = 'scale(1.2)';
                     setTimeout(() => {
                         button.style.transform = 'scale(1)';
                     }, 200);
                 } else {
                     // Quitar de favoritos - corazón vacío
-                    icon.className = 'fas fa-heart text-white opacity-50';
-                    button.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+                    icon.className = 'w-4 h-4 transition-all duration-300 text-gray-600 group-hover:text-red-500';
+                    icon.setAttribute('fill', 'none');
+                    
+                    // Remover efecto de pulso
+                    const pulseEffect = button.querySelector('.animate-ping');
+                    if (pulseEffect) {
+                        pulseEffect.remove();
+                    }
                 }
                 
                 // Mostrar mensaje temporal

@@ -77,26 +77,82 @@
         </div>
 
         <!-- Event Header -->
-        <div class="text-center mb-8">
-            <div class="flex justify-center items-center mb-4">
-                <h1 class="text-4xl md:text-5xl font-bold text-white mr-6">{{ $event->title }}</h1>
-                @auth
-                    <!-- Botón de favoritos en el header -->
+        <div class="text-center mb-8 relative">
+            <!-- Botón de favoritos en esquina superior derecha -->
+            @auth
+                <div class="absolute -top-2 -right-2 z-20">
                     <button onclick="toggleFavorite({{ $event->id }}, this)" 
-                            class="favorite-btn flex items-center justify-center w-16 h-16 rounded-full text-2xl transition-all duration-300 hover:scale-110 transform shadow-2xl"
+                            class="favorite-btn group relative flex items-center justify-center w-20 h-20 rounded-full transition-all duration-500 hover:scale-110 transform shadow-2xl border-3 border-white/60 backdrop-blur-lg overflow-hidden"
                             data-event-id="{{ $event->id }}"
                             data-is-favorite="{{ Auth::user()->hasFavorite($event->id) ? 'true' : 'false' }}"
-                            style="background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); color: white;">
-                        <i class="fas fa-heart {{ Auth::user()->hasFavorite($event->id) ? 'text-white' : 'text-white opacity-50' }}"></i>
+                            style="background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #e0f2fe 100%);">
+                        
+                        <!-- Fondo con gradiente sutil -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-pink-100/20 via-white/10 to-red-100/20 rounded-full"></div>
+                        
+                        <!-- Corazón principal con diseño mejorado -->
+                        <svg class="w-10 h-10 transition-all duration-500 relative z-10 {{ Auth::user()->hasFavorite($event->id) ? 'text-red-500 scale-110 drop-shadow-lg' : 'text-gray-700 group-hover:text-red-500 group-hover:scale-105' }}" 
+                             fill="{{ Auth::user()->hasFavorite($event->id) ? 'currentColor' : 'none' }}" 
+                             stroke="currentColor" 
+                             viewBox="0 0 24 24" 
+                             stroke-width="2.5"
+                             style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        
+                        <!-- Efectos de animación mejorados -->
+                        @if(Auth::user()->hasFavorite($event->id))
+                            <!-- Pulso principal -->
+                            <div class="absolute inset-0 rounded-full bg-red-500/40 animate-ping"></div>
+                            <!-- Pulso secundario -->
+                            <div class="absolute inset-0 rounded-full bg-red-400/30 animate-pulse"></div>
+                            <!-- Brillo giratorio -->
+                            <div class="absolute inset-0 rounded-full bg-gradient-to-r from-red-400/30 via-pink-400/30 to-red-400/30 animate-spin" style="animation-duration: 4s;"></div>
+                            <!-- Efecto de resplandor -->
+                            <div class="absolute inset-0 rounded-full bg-red-400/20 blur-sm"></div>
+                        @endif
+                        
+                        <!-- Efecto de hover mejorado -->
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-red-400/0 via-pink-400/0 to-red-400/0 group-hover:from-red-400/15 group-hover:via-pink-400/15 group-hover:to-red-400/15 transition-all duration-300"></div>
+                        
+                        <!-- Borde brillante en hover -->
+                        <div class="absolute inset-0 rounded-full border-2 border-transparent group-hover:border-red-300/50 transition-all duration-300"></div>
+                        
+                        <!-- Tooltip mejorado -->
+                        <div class="absolute -bottom-20 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-30">
+                            <div class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-sm px-4 py-3 rounded-xl whitespace-nowrap shadow-2xl border border-gray-600 backdrop-blur-sm">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-red-400 text-lg">❤️</span>
+                                    <span class="font-medium">{{ Auth::user()->hasFavorite($event->id) ? 'Eliminar evento de favoritos' : 'Agregar evento a favoritos' }}</span>
+                                </div>
+                            </div>
+                        </div>
                     </button>
-                @endauth
+                </div>
+            @endauth
+            
+            <div class="flex justify-center items-center mb-4">
+                <h1 class="text-4xl md:text-5xl font-bold text-white">{{ $event->title }}</h1>
             </div>
             <p class="text-xl text-white opacity-90 max-w-3xl mx-auto">{{ $event->description }}</p>
             @auth
-                <p class="text-sm text-white opacity-75 mt-2">
-                    <i class="fas fa-heart mr-1"></i>
-                    Haz clic en el corazón morado para guardar este evento en tus favoritos
-                </p>
+                <div class="mt-6 flex flex-col items-center space-y-4">
+                    <!-- Primer cuadro - Mensaje principal -->
+                    <div class="bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-sm border border-white/20 rounded-2xl px-6 py-4 shadow-xl">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
+                            <span class="text-white font-medium text-sm drop-shadow-lg">💖 Guarda este evento en tus favoritos</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Segundo cuadro - Instrucciones -->
+                    <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-blue-400/30 rounded-2xl px-6 py-4 shadow-xl">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-blue-400 animate-pulse"></div>
+                            <span class="text-white text-sm drop-shadow-md font-medium">📍 Haz clic en el corazón de la esquina superior derecha</span>
+                        </div>
+                    </div>
+                </div>
             @endauth
         </div>
 
@@ -728,7 +784,7 @@
     // Función para manejar favoritos
     window.toggleFavorite = function(eventId, button) {
         const isFavorite = button.getAttribute('data-is-favorite') === 'true';
-        const icon = button.querySelector('i');
+        const icon = button.querySelector('svg');
         
         // Deshabilitar botón mientras se procesa
         button.disabled = true;
@@ -752,19 +808,52 @@
                 button.setAttribute('data-is-favorite', data.is_favorite ? 'true' : 'false');
                 
                 if (data.is_favorite) {
-                    // Agregar a favoritos - corazón lleno
-                    icon.className = 'fas fa-heart text-white';
-                    button.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+                    // Agregar a favoritos - corazón lleno con animaciones mejoradas
+                    icon.className = 'w-10 h-10 transition-all duration-500 relative z-10 text-red-500 scale-110 drop-shadow-lg';
+                    icon.setAttribute('fill', 'currentColor');
                     
-                    // Efecto de animación
-                    button.style.transform = 'scale(1.3)';
+                    // Agregar efectos de animación múltiples
+                    const pulseEffect1 = document.createElement('div');
+                    pulseEffect1.className = 'absolute inset-0 rounded-full bg-red-500/40 animate-ping';
+                    button.appendChild(pulseEffect1);
+                    
+                    const pulseEffect2 = document.createElement('div');
+                    pulseEffect2.className = 'absolute inset-0 rounded-full bg-red-400/30 animate-pulse';
+                    button.appendChild(pulseEffect2);
+                    
+                    const glowEffect = document.createElement('div');
+                    glowEffect.className = 'absolute inset-0 rounded-full bg-gradient-to-r from-red-400/30 via-pink-400/30 to-red-400/30 animate-spin';
+                    glowEffect.style.animationDuration = '4s';
+                    button.appendChild(glowEffect);
+                    
+                    const blurEffect = document.createElement('div');
+                    blurEffect.className = 'absolute inset-0 rounded-full bg-red-400/20 blur-sm';
+                    button.appendChild(blurEffect);
+                    
+                    // Efecto de animación mejorado
+                    button.style.transform = 'scale(1.3) rotate(5deg)';
                     setTimeout(() => {
-                        button.style.transform = 'scale(1)';
-                    }, 200);
+                        button.style.transform = 'scale(1) rotate(0deg)';
+                    }, 300);
+                    
+                    // Efecto de partículas (simulado con múltiples pulsos)
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            const particle = document.createElement('div');
+                            particle.className = 'absolute inset-0 rounded-full bg-red-400/50 animate-ping';
+                            particle.style.animationDelay = `${i * 0.2}s`;
+                            button.appendChild(particle);
+                            setTimeout(() => particle.remove(), 1000);
+                        }, i * 100);
+                    }
                 } else {
                     // Quitar de favoritos - corazón vacío
-                    icon.className = 'fas fa-heart text-white opacity-50';
-                    button.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+                    icon.className = 'w-10 h-10 transition-all duration-500 relative z-10 text-gray-700 group-hover:text-red-500 group-hover:scale-105';
+                    icon.setAttribute('fill', 'none');
+                    
+                    // Remover todos los efectos de animación
+                    const effects = button.querySelectorAll('.animate-ping, .animate-pulse, .animate-spin, .blur-sm');
+                    effects.forEach(effect => effect.remove());
                 }
                 
                 // Mostrar mensaje temporal
