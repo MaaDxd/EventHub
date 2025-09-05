@@ -319,7 +319,7 @@
     const baseUrl = '{{ url("/") }}';
     function removeFavorite(eventId) {
         if (confirm('¿Estás seguro de que quieres quitar este evento de tus favoritos?')) {
-            fetch(baseUrl + `events/${eventId}/favorite`, {
+            fetch(baseUrl + `/events/${eventId}/favorite`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -327,20 +327,74 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
-                    // Recargar la página para actualizar la lista
-                    location.reload();
+                    // Mostrar mensaje de éxito
+                    showToast(data.message || 'Evento removido de favoritos exitosamente!', 'success');
+                    
+                    // Recargar la página después de un breve delay
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1500);
                 } else {
-                    alert('Error al quitar el evento de favoritos: ' + data.message);
+                    alert('Error al quitar el evento de favoritos: ' + (data.message || 'Error desconocido'));
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error al quitar el evento de favoritos');
+                
+                // Manejo de errores específicos
+                if (error.message.includes('Failed to fetch')) {
+                    alert('Error de conexión. Verifica tu conexión a internet e intenta de nuevo.');
+                } else if (error.message.includes('401')) {
+                    alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                    window.location.href = baseUrl + '/login';
+                } else if (error.message.includes('404')) {
+                    alert('El evento no fue encontrado.');
+                } else {
+                    alert('Error al quitar el evento de favoritos. Por favor intenta de nuevo.');
+                }
             });
         }
+    }
+
+    // Toast notification function
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
+        
+        switch(type) {
+            case 'success':
+                toast.style.background = 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
+                break;
+            case 'error':
+                toast.style.background = 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
+                break;
+            default:
+                toast.style.background = 'linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%)';
+        }
+        
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)';
+        }, 100);
+        
+        setTimeout(() => {
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (document.body.contains(toast)) {
+                    document.body.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
     }
 
     // Agregar efectos hover a las cards

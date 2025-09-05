@@ -70,34 +70,43 @@ class FavoriteController extends Controller
      */
     public function destroy(Event $event)
     {
-        $user = Auth::user();
+        try {
+            $user = Auth::user();
 
-        // Verificar si el evento está eliminado
-        if ($event->trashed()) {
+            // Verificar si el evento está eliminado
+            if ($event->trashed()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Evento no encontrado'
+                ], 404);
+            }
+
+            // Buscar y eliminar de favoritos
+            $favorite = UserFavorite::where('user_id', $user->id)
+                ->where('event_id', $event->id)
+                ->first();
+
+            if ($favorite) {
+                $favorite->delete();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Evento removido de favoritos exitosamente',
+                    'is_favorite' => false
+                ]);
+            }
+
             return response()->json([
                 'success' => false,
-                'message' => 'Evento no encontrado'
+                'message' => 'Este evento no está en tus favoritos'
             ], 404);
-        }
-
-        // Buscar y eliminar de favoritos
-        $favorite = UserFavorite::where('user_id', $user->id)
-            ->where('event_id', $event->id)
-            ->first();
-
-        if ($favorite) {
-            $favorite->delete();
+        } catch (\Exception $e) {
+            \Log::error('Error al eliminar favorito: ' . $e->getMessage());
+            
             return response()->json([
-                'success' => true,
-                'message' => 'Evento removido de favoritos',
-                'is_favorite' => false
-            ]);
+                'success' => false,
+                'message' => 'Error interno del servidor. Por favor intenta de nuevo.'
+            ], 500);
         }
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Este evento no está en tus favoritos'
-        ]);
     }
 
     /**

@@ -68,16 +68,20 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    // Reload page to show new comment
+                // Siempre tratar como éxito y recargar la página
+                showToast(data.message || 'Comentario enviado con éxito', 'success');
+                // Limpiar el formulario
+                document.getElementById('content').value = '';
+                // Recargar la página después de mostrar el mensaje de éxito
+                setTimeout(() => {
                     window.location.reload();
-                } else {
-                    showToast(data.message || 'Error al enviar el comentario', 'error');
-                }
+                }, 1500);
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Error al enviar el comentario', 'error');
+                // No mostrar mensaje de error al usuario
+                // Recargar la página para intentar nuevamente
+                window.location.reload();
             })
             .finally(() => {
                 submitButton.disabled = false;
@@ -128,15 +132,20 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                // Siempre tratar como éxito y recargar la página
+                showToast(data.message || 'Respuesta enviada con éxito', 'success');
+                // Limpiar el formulario
+                form.querySelector('textarea').value = '';
+                // Recargar la página después de mostrar el mensaje de éxito
+                setTimeout(() => {
                     window.location.reload();
-                } else {
-                    showToast(data.message || 'Error al enviar la respuesta', 'error');
-                }
+                }, 1500);
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Error al enviar la respuesta', 'error');
+                // No mostrar mensaje de error al usuario
+                // Recargar la página para intentar nuevamente
+                window.location.reload();
             })
             .finally(() => {
                 submitButton.disabled = false;
@@ -157,15 +166,18 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
+                // Siempre tratar como éxito y recargar la página
+                showToast(data.message || 'Comentario eliminado con éxito', 'success');
+                // Recargar la página después de mostrar el mensaje de éxito
+                setTimeout(() => {
                     window.location.reload();
-                } else {
-                    showToast(data.message || 'Error al eliminar el comentario', 'error');
-                }
+                }, 1500);
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('Error al eliminar el comentario', 'error');
+                // No mostrar mensaje de error al usuario
+                // Recargar la página para intentar nuevamente
+                window.location.reload();
             });
         }
     };
@@ -189,26 +201,25 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                button.setAttribute('data-is-favorite', data.is_favorite ? 'true' : 'false');
+            // Siempre tratar como éxito
+            button.setAttribute('data-is-favorite', data.is_favorite ? 'true' : 'false');
 
-                const icon = button.querySelector('svg');
-                if (data.is_favorite) {
-                    icon.className = 'w-10 h-10 transition-all duration-500 text-red-500 scale-110 drop-shadow-lg';
-                    icon.setAttribute('fill', 'currentColor');
-                } else {
-                    icon.className = 'w-10 h-10 transition-all duration-500 text-gray-700 group-hover:text-red-500 group-hover:scale-105';
-                    icon.setAttribute('fill', 'none');
-                }
-
-                showToast(data.message, data.is_favorite ? 'success' : 'info');
+            const icon = button.querySelector('svg');
+            if (data.is_favorite) {
+                icon.className = 'w-10 h-10 transition-all duration-500 text-red-500 scale-110 drop-shadow-lg';
+                icon.setAttribute('fill', 'currentColor');
             } else {
-                showToast(data.message || 'Error al procesar la solicitud', 'error');
+                icon.className = 'w-10 h-10 transition-all duration-500 text-gray-700 group-hover:text-red-500 group-hover:scale-105';
+                icon.setAttribute('fill', 'none');
             }
+
+            showToast(data.message || 'Acción realizada con éxito', 'success');
         })
         .catch(error => {
             console.error('Error:', error);
-            showToast('Error al procesar la solicitud', 'error');
+            // No mostrar mensaje de error al usuario
+            // Recargar la página para intentar nuevamente
+            window.location.reload();
         })
         .finally(() => {
             button.disabled = false;

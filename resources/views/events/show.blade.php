@@ -24,6 +24,16 @@
         box-shadow: 0 25px 50px rgba(26, 0, 70, 0.4);
     }
     
+    /* Animación para mensajes flash */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+        animation: fadeIn 0.5s ease-in-out forwards;
+    }
+    
     .info-item {
         background: rgba(26, 0, 70, 0.05);
         border: 1px solid rgba(26, 0, 70, 0.1);
@@ -71,6 +81,24 @@
 
 <div class="event-detail-bg">
     <div class="container mx-auto px-4 py-8">
+        <!-- Mensajes Flash -->
+        @if(session('success'))
+            <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg shadow-md animate-fade-in flex items-center" role="alert">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg shadow-md animate-fade-in flex items-center" role="alert">
+                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
         <!-- Back Button -->
         <div class="mb-6">
             <a href="{{ url()->previous() }}" class="back-btn inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-300">
@@ -227,35 +255,7 @@
                             </div>
                         </div>
 
-                        <!-- Start Time -->
-                        <div class="info-item rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-br from-[#1A0046] to-[#32004E] rounded-xl flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h8m-9 4h10a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600 font-medium">Inicio del show</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">{{ $event->start_time ?? $event->time }}</p>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- End Date -->
-                        <div class="info-item rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-br from-[#1A0046] to-[#32004E] rounded-xl flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600 font-medium">Fecha finalización</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">Dom 27 de abr de 2025</p>
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- Artist/Creator -->
                         <div class="info-item rounded-xl p-4">
@@ -288,20 +288,6 @@
                             </div>
                         </div>
 
-                        <!-- Tickets -->
-                        <div class="info-item rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-br from-[#1A0046] to-[#32004E] rounded-xl flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600 font-medium">Entradas</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">Libre (sin boletos)</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Map Section -->
@@ -486,7 +472,7 @@
                                                         @auth
                                                             @if($reply->user_id === Auth::id())
                                                                 <button 
-                                                                    onclick="deleteComment({{ $reply->id }})" 
+                                                                    onclick="deleteComment({{ $reply->id }})"
                                                                     class="text-red-500 hover:text-red-700 text-xs"
                                                                 >
                                                                     Eliminar
@@ -677,17 +663,48 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    if (data.success) {
-                        location.reload();
+                    if (data && data.success) {
+                        // Clear the form
+                        document.getElementById('content').value = '';
+                        document.getElementById('char-count').textContent = '0/500';
+                        document.getElementById('char-count').style.color = '#6b7280';
+                        
+                        // Show success message
+                        showToast(data.message || 'Comentario enviado exitosamente!', 'success');
+                        
+                        // Reload after a short delay to show the toast
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    } else if (data && data.error) {
+                        alert(data.error);
                     } else {
                         alert('Error al enviar el comentario. Por favor intenta de nuevo.');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Error al enviar el comentario. Por favor intenta de nuevo.');
+                    
+                    // Check if it's a network error or server error
+                    if (error.message.includes('Failed to fetch')) {
+                        alert('Error de conexión. Verifica tu conexión a internet e intenta de nuevo.');
+                    } else if (error.message.includes('422')) {
+                        alert('Error de validación. Verifica que el comentario no esté vacío y tenga menos de 500 caracteres.');
+                    } else if (error.message.includes('401')) {
+                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                        window.location.href = '{{ route("login") }}';
+                    } else if (error.message.includes('403')) {
+                        alert('No tienes permisos para comentar en este evento.');
+                    } else {
+                        alert('Error al enviar el comentario. Por favor intenta de nuevo.');
+                    }
                 })
                 .finally(() => {
                     submitButton.disabled = false;
@@ -713,13 +730,45 @@
                     body: formData,
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json'
                     }
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                            window.location.href = baseUrl + 'login';
+                            return;
+                        }
+                        if (response.status === 419) {
+                            alert('Token CSRF expirado. La página se recargará.');
+                            location.reload();
+                            return;
+                        }
+                        if (response.status === 422) {
+                            return response.json().then(data => {
+                                let errorMessage = 'Error de validación: ';
+                                if (data.errors) {
+                                    errorMessage += Object.values(data.errors).flat().join(', ');
+                                } else {
+                                    errorMessage += data.message || 'Datos inválidos';
+                                }
+                                alert(errorMessage);
+                            });
+                        }
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    if (data.success) {
-                        location.reload();
+                    if (data && data.success) {
+                        showToast(data.message || 'Respuesta enviada exitosamente!', 'success');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    } else if (data && data.error) {
+                        alert(data.error);
                     } else {
                         alert('Error al enviar la respuesta. Por favor intenta de nuevo.');
                     }
