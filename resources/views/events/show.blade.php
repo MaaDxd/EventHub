@@ -252,9 +252,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600 font-medium">Fecha finalización</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">
-                                        {{ $event->end_date ? $event->end_date->format('D d \d\e M \d\e Y') : 'Dom 27 de abr de 2025' }}
-                                    </p>
+                                    <p class="text-lg font-bold text-[#1A0046]">Dom 27 de abr de 2025</p>
                                 </div>
                             </div>
                         </div>
@@ -300,7 +298,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600 font-medium">Entradas</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">{{ $event->ticket_info ?? 'Libre (sin boletos)' }}</p>
+                                    <p class="text-lg font-bold text-[#1A0046]">Libre (sin boletos)</p>
                                 </div>
                             </div>
                         </div>
@@ -756,7 +754,7 @@
     // Delete comment function
     function deleteComment(commentId) {
         if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
-            fetch(baseUrl + `/comments/${commentId}`, {
+        fetch(baseUrl + `comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
