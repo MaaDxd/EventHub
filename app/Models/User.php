@@ -63,7 +63,7 @@ class User extends Authenticatable
     // Relación many-to-many con eventos favoritos
     public function favoriteEvents()
     {
-        return $this->belongsToMany(Event::class, 'user_favorites')->withTimestamps();
+        return $this->belongsToMany(Event::class, 'user_favorites')->withTimestamps()->whereNull('events.deleted_at');
     }
 
     // Método para verificar si un evento es favorito del usuario

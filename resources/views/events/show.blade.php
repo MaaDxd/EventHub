@@ -81,10 +81,11 @@
             <!-- Botón de favoritos en esquina superior derecha -->
             @auth
                 <div class="absolute -top-2 -right-2 z-20">
-                    <button onclick="toggleFavorite({{ $event->id }}, this)" 
+                    <button onclick="toggleFavorite({{ $event->id }}, this)"
                             class="favorite-btn group relative flex items-center justify-center w-20 h-20 rounded-full transition-all duration-500 hover:scale-110 transform shadow-2xl border-3 border-white/60 backdrop-blur-lg overflow-hidden"
                             data-event-id="{{ $event->id }}"
                             data-is-favorite="{{ Auth::user()->hasFavorite($event->id) ? 'true' : 'false' }}"
+                            data-url="{{ route('favorites.store', $event) }}"
                             style="background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #e0f2fe 100%);">
                         
                         <!-- Fondo con gradiente sutil -->
@@ -758,7 +759,7 @@
     // Función para eliminar comentario
     function deleteComment(commentId) {
         if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
-            fetch(`/comments/${commentId}`, {
+        fetch(baseUrl + `comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
@@ -782,6 +783,7 @@
     }
 
     // Función para manejar favoritos
+    const baseUrl = '{{ url("/") }}';
     window.toggleFavorite = function(eventId, button) {
         const isFavorite = button.getAttribute('data-is-favorite') === 'true';
         const icon = button.querySelector('svg');
@@ -790,7 +792,7 @@
         button.disabled = true;
         button.style.opacity = '0.7';
         
-        const url = `/events/${eventId}/favorite`;
+        const url = button.getAttribute('data-url');
         const method = isFavorite ? 'DELETE' : 'POST';
         
         fetch(url, {

@@ -15,6 +15,9 @@ class FavoriteController extends Controller
     public function index()
     {
         $user = Auth::user();
+        if (!$user) {
+            return redirect()->route('login');
+        }
         $favoriteEvents = $user->favoriteEvents()
             ->with(['category', 'creator'])
             ->where('date', '>=', now())
@@ -30,6 +33,14 @@ class FavoriteController extends Controller
     public function store(Request $request, Event $event)
     {
         $user = Auth::user();
+
+        // Verificar si el evento está eliminado
+        if ($event->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Evento no encontrado'
+            ], 404);
+        }
 
         // Verificar si ya está en favoritos
         if ($user->hasFavorite($event->id)) {
@@ -59,6 +70,14 @@ class FavoriteController extends Controller
     {
         $user = Auth::user();
 
+        // Verificar si el evento está eliminado
+        if ($event->trashed()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Evento no encontrado'
+            ], 404);
+        }
+
         // Buscar y eliminar de favoritos
         $favorite = UserFavorite::where('user_id', $user->id)
             ->where('event_id', $event->id)
@@ -85,7 +104,15 @@ class FavoriteController extends Controller
     public function check(Event $event)
     {
         $user = Auth::user();
-        $isFavorite = $user ? $user->hasFavorite($event->id) : false;
+
+        // Verificar si el evento está eliminado
+        if ($event->trashed()) {
+            return response()->json([
+                'is_favorite' => false
+            ]);
+        }
+
+        $isFavorite = $user->hasFavorite($event->id);
 
         return response()->json([
             'is_favorite' => $isFavorite
