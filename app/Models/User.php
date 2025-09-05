@@ -69,6 +69,6 @@ class User extends Authenticatable
     // Método para verificar si un evento es favorito del usuario
     public function hasFavorite($eventId)
     {
-        return $this->favoriteEvents()->where('events.id', $eventId)->exists();
+        return $this->favoriteEvents()->where('event_id', $eventId)->exists();
     }
 }
