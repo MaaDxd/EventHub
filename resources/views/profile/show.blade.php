@@ -207,7 +207,7 @@
                             <p class="text-gray-600 mb-6 leading-relaxed">
                                 Genera un código QR para iniciar sesión desde otro dispositivo de forma rápida y segura.
                             </p>
-                            <a href="{{ route('profile.show') }}?generate_qr=1"
+                            <a href="{{ route('qr.login.show') }}"
                                class="view-all-btn inline-flex items-center gap-3 px-8 py-4">
                                 <span class="text-xl">📱</span>
                                 <span>Generar Código QR</span>
@@ -290,7 +290,7 @@
 
         if (timeLeft <= 0) {
             clearInterval(interval);
-            window.location.href = '{{ route("profile.show") }}?generate_qr=1';
+            window.location.href = '{{ route("qr.login.show") }}';
         }
     }, 1000); // Actualizar cada segundo
 </script>

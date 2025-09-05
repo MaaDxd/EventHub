@@ -18,7 +18,9 @@ class FavoriteController extends Controller
         if (!$user) {
             return redirect()->route('login');
         }
-        $favoriteEvents = $user->favoriteEvents()
+        $favoriteEvents = Event::whereHas('favorites', function($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })
             ->with(['category', 'creator'])
             ->where('date', '>=', now())
             ->orderBy('date', 'asc')
@@ -43,7 +45,7 @@ class FavoriteController extends Controller
         }
 
         // Verificar si ya está en favoritos
-        if ($user->hasFavorite($event->id)) {
+        if (UserFavorite::where('user_id', $user->id)->where('event_id', $event->id)->exists()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Este evento ya está en tus favoritos'
@@ -112,7 +114,9 @@ class FavoriteController extends Controller
             ]);
         }
 
-        $isFavorite = $user->hasFavorite($event->id);
+        $isFavorite = UserFavorite::where('user_id', $user->id)
+            ->where('event_id', $event->id)
+            ->exists();
 
         return response()->json([
             'is_favorite' => $isFavorite

@@ -30,9 +30,10 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->save();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
 
         return redirect()->back()->with('success', 'Perfil actualizado correctamente.');
     }
@@ -54,8 +55,9 @@ class ProfileController extends Controller
         }
 
         $user = Auth::user();
-        $user->password = Hash::make($request->password);
-        $user->save();
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
 
         return redirect()->back()->with('success', 'Contraseña actualizada correctamente.');
     }
