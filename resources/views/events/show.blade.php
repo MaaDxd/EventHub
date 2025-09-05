@@ -522,7 +522,7 @@
 
 <script>
     // Set base URL for JavaScript
-    const baseUrl = '{{ url("/") }}';
+    const baseUrl = '{{ request()->root() }}/';
     
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize map
