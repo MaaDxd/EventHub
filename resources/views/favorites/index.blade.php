@@ -319,7 +319,7 @@
     const baseUrl = '{{ url("/") }}';
     function removeFavorite(eventId) {
         if (confirm('¿Estás seguro de que quieres quitar este evento de tus favoritos?')) {
-            fetch(baseUrl + `events/${eventId}/favorite`, {
+            fetch(`/events/${eventId}/favorite`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
