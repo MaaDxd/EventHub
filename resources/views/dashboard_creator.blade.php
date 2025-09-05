@@ -393,7 +393,7 @@
                             <div class="event-card p-6">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-6">
-                                        @if($event->image)
+                                        @if($event->image && Storage::exists($event->image))
                                             <div class="relative">
                                                 <img src="{{ Storage::url($event->image) }}" 
                                                      alt="{{ $event->title }}" 
