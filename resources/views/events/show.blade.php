@@ -237,20 +237,6 @@
                             </div>
                         </div>
 
-                        <!-- End Date -->
-                        <div class="info-item rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-br from-[#1A0046] to-[#32004E] rounded-xl flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v6a2 2 0 002 2h6a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600 font-medium">Fecha finalización</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">Dom 27 de abr de 2025</p>
-                                </div>
-                            </div>
-                        </div>
 
                         <!-- Artist/Creator -->
                         <div class="info-item rounded-xl p-4">
@@ -283,20 +269,6 @@
                             </div>
                         </div>
 
-                        <!-- Tickets -->
-                        <div class="info-item rounded-xl p-4">
-                            <div class="flex items-center">
-                                <div class="w-12 h-12 bg-gradient-to-br from-[#1A0046] to-[#32004E] rounded-xl flex items-center justify-center mr-4">
-                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-600 font-medium">Entradas</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">Libre (sin boletos)</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Map Section -->
@@ -759,7 +731,7 @@
     // Función para eliminar comentario
     function deleteComment(commentId) {
         if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
-        fetch(baseUrl + `comments/${commentId}`, {
+        fetch(`/comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
