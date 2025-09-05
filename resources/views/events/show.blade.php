@@ -3,9 +3,14 @@
 @section('content')
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+<!-- Add CSRF token meta tag -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 @php
     use Illuminate\Support\Facades\Storage;
 @endphp
+
 <style>
     .event-detail-bg {
         background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
@@ -232,7 +237,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600 font-medium">Inicio del show</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">{{ $event->time }}</p>
+                                    <p class="text-lg font-bold text-[#1A0046]">{{ $event->start_time ?? $event->time }}</p>
                                 </div>
                             </div>
                         </div>
@@ -247,7 +252,9 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600 font-medium">Fecha finalización</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">Dom 27 de abr de 2025</p>
+                                    <p class="text-lg font-bold text-[#1A0046]">
+                                        {{ $event->end_date ? $event->end_date->format('D d \d\e M \d\e Y') : 'Dom 27 de abr de 2025' }}
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -262,7 +269,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600 font-medium">Artista</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">{{ $event->creator->name }}</p>
+                                    <p class="text-lg font-bold text-[#1A0046]">{{ $event->creator->name ?? 'No especificado' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -293,7 +300,7 @@
                                 </div>
                                 <div>
                                     <p class="text-sm text-gray-600 font-medium">Entradas</p>
-                                    <p class="text-lg font-bold text-[#1A0046]">Libre (sin boletos)</p>
+                                    <p class="text-lg font-bold text-[#1A0046]">{{ $event->ticket_info ?? 'Libre (sin boletos)' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -321,7 +328,7 @@
                             </p>
                             <p class="flex items-start">
                                 <span class="w-2 h-2 bg-[#1A0046] rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                                Cursos limitados.
+                                Cupos limitados.
                             </p>
                             <p class="flex items-start">
                                 <span class="w-2 h-2 bg-[#1A0046] rounded-full mt-2 mr-3 flex-shrink-0"></span>
@@ -511,14 +518,24 @@
         </div>
     </div>
 </div>
-@endsection
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 <script>
+    // Set base URL for JavaScript
+    const baseUrl = '{{ url("/") }}';
+    
     document.addEventListener('DOMContentLoaded', function() {
-        // Mostrar un indicador de carga mientras se inicializa el mapa
+        // Initialize map
+        initializeMap();
+        
+        // Initialize comment functionality
+        initializeComments();
+    });
+
+    function initializeMap() {
+        // Show loading indicator
         document.getElementById('map').innerHTML = `
             <div class="h-full flex items-center justify-center bg-gray-50">
                 <div class="text-center p-4">
@@ -528,42 +545,35 @@
             </div>
         `;
         
-        // Inicializar el mapa después de un breve retraso para mostrar la animación de carga
+        // Initialize map after brief delay
         setTimeout(function() {
-            // Inicializar el mapa
             var map = L.map('map', {
-                zoomControl: false,  // Desactivar controles de zoom
-                dragging: false,    // Desactivar arrastre
-                touchZoom: false,   // Desactivar zoom táctil
-                scrollWheelZoom: false, // Desactivar zoom con rueda del ratón
-                doubleClickZoom: false, // Desactivar zoom con doble clic
-                boxZoom: false,     // Desactivar zoom con caja
-                keyboard: false,    // Desactivar teclado
-                tap: false          // Desactivar tap
-            }).setView([0, 0], 15); // Vista inicial temporal
+                zoomControl: false,
+                dragging: false,
+                touchZoom: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
+                boxZoom: false,
+                keyboard: false,
+                tap: false
+            }).setView([0, 0], 15);
             
-            // Añadir capa de OpenStreetMap con estilo personalizado
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                className: 'map-tiles' // Clase para aplicar filtros CSS
+                className: 'map-tiles'
             }).addTo(map);
             
-            // Obtener la dirección del evento
             var eventLocation = "{{ $event->location }}";
             
-            // Geocodificar la dirección usando Nominatim
             fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(eventLocation)}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.length > 0) {
-                        // Obtener las coordenadas
                         var lat = parseFloat(data[0].lat);
                         var lon = parseFloat(data[0].lon);
                         
-                        // Centrar el mapa en la ubicación
                         map.setView([lat, lon], 15);
                         
-                        // Crear un icono personalizado para el marcador
                         var customIcon = L.divIcon({
                             className: 'custom-div-icon',
                             html: `<div class="marker-pin" style="background-color: #1A0046; width: 30px; height: 30px; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 0 10px rgba(26, 0, 70, 0.5), 0 0 20px rgba(26, 0, 70, 0.3);"><svg style="width: 16px; height: 16px; color: white;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg></div>`,
@@ -571,11 +581,9 @@
                             iconAnchor: [15, 15]
                         });
                         
-                        // Añadir marcador con el icono personalizado
-                        var marker = L.marker([lat, lon], {icon: customIcon}).addTo(map);
+                        L.marker([lat, lon], {icon: customIcon}).addTo(map);
                         
-                        // Añadir un círculo pulsante para destacar la ubicación
-                        var circle = L.circle([lat, lon], {
+                        L.circle([lat, lon], {
                             color: '#1A0046',
                             fillColor: '#32004E',
                             fillOpacity: 0.2,
@@ -583,7 +591,6 @@
                             className: 'pulse-circle'
                         }).addTo(map);
                         
-                        // Añadir un segundo círculo más pequeño para efecto visual
                         L.circle([lat, lon], {
                             color: '#1A0046',
                             fillColor: '#32004E',
@@ -591,7 +598,7 @@
                             radius: 50
                         }).addTo(map);
                         
-                        // Añadir estilo CSS para el efecto pulsante
+                        // Add CSS for animations
                         var style = document.createElement('style');
                         style.innerHTML = `
                             @keyframes pulse {
@@ -608,38 +615,31 @@
                         `;
                         document.head.appendChild(style);
                     } else {
-                        // Si no se encuentra la ubicación, mostrar un mensaje
-                        document.getElementById('map').innerHTML = `
-                            <div class="h-full flex items-center justify-center bg-gray-100">
-                                <div class="text-center p-4">
-                                    <svg class="w-12 h-12 mx-auto text-[#1A0046] opacity-50 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                    </svg>
-                                    <p class="text-[#1A0046] font-medium">No se pudo cargar el mapa para esta ubicación</p>
-                                </div>
-                            </div>
-                        `;
+                        showMapError('No se pudo cargar el mapa para esta ubicación');
                     }
                 })
                 .catch(error => {
                     console.error('Error al geocodificar la dirección:', error);
-                    document.getElementById('map').innerHTML = `
-                        <div class="h-full flex items-center justify-center bg-gray-100">
-                            <div class="text-center p-4">
-                                <svg class="w-12 h-12 mx-auto text-[#1A0046] opacity-50 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                </svg>
-                                <p class="text-[#1A0046] font-medium">Error al cargar el mapa</p>
-                            </div>
-                        </div>
-                    `;
+                    showMapError('Error al cargar el mapa');
                 });
-        }, 500); // Retraso de 500ms para mostrar la animación de carga
-    });
+        }, 500);
+    }
 
-    // Funciones para los comentarios
-    document.addEventListener('DOMContentLoaded', function() {
-        // Contador de caracteres
+    function showMapError(message) {
+        document.getElementById('map').innerHTML = `
+            <div class="h-full flex items-center justify-center bg-gray-100">
+                <div class="text-center p-4">
+                    <svg class="w-12 h-12 mx-auto text-[#1A0046] opacity-50 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <p class="text-[#1A0046] font-medium">${message}</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function initializeComments() {
+        // Character counter
         const contentTextarea = document.getElementById('content');
         const charCount = document.getElementById('char-count');
         
@@ -649,16 +649,16 @@
                 charCount.textContent = currentLength + '/500';
                 
                 if (currentLength > 450) {
-                    charCount.style.color = '#ef4444'; // text-red-500
+                    charCount.style.color = '#ef4444';
                 } else if (currentLength > 400) {
-                    charCount.style.color = '#f59e0b'; // text-amber-500
+                    charCount.style.color = '#f59e0b';
                 } else {
-                    charCount.style.color = '#6b7280'; // text-gray-500
+                    charCount.style.color = '#6b7280';
                 }
             });
         }
 
-        // Manejo del formulario de comentarios principal
+        // Main comment form
         const commentForm = document.getElementById('comment-form');
         if (commentForm) {
             commentForm.addEventListener('submit', function(e) {
@@ -682,7 +682,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Recargar la página para mostrar el nuevo comentario
                         location.reload();
                     } else {
                         alert('Error al enviar el comentario. Por favor intenta de nuevo.');
@@ -699,7 +698,7 @@
             });
         }
 
-        // Manejo de formularios de respuesta
+        // Reply forms
         document.querySelectorAll('.reply-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -722,7 +721,6 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Recargar la página para mostrar la nueva respuesta
                         location.reload();
                     } else {
                         alert('Error al enviar la respuesta. Por favor intenta de nuevo.');
@@ -738,9 +736,9 @@
                 });
             });
         });
-    });
+    }
 
-    // Función para mostrar formulario de respuesta
+    // Reply form functions
     function showReplyForm(commentId) {
         const replyForm = document.getElementById(`reply-form-${commentId}`);
         if (replyForm) {
@@ -748,7 +746,6 @@
         }
     }
 
-    // Función para ocultar formulario de respuesta
     function hideReplyForm(commentId) {
         const replyForm = document.getElementById(`reply-form-${commentId}`);
         if (replyForm) {
@@ -756,39 +753,55 @@
         }
     }
 
-    // Función para eliminar comentario
+    // Delete comment function
     function deleteComment(commentId) {
         if (confirm('¿Estás seguro de que quieres eliminar este comentario?')) {
-        fetch(baseUrl + `comments/${commentId}`, {
+            fetch(baseUrl + `/comments/${commentId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                // Check if response is ok
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                        window.location.href = baseUrl + '/login';
+                        return;
+                    }
+                    if (response.status === 403) {
+                        alert('No tienes permisos para eliminar este comentario.');
+                        return;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.success) {
-                    // Recargar la página para actualizar los comentarios
+                if (data && data.success) {
                     location.reload();
+                } else if (data && data.error) {
+                    alert(data.error);
                 } else {
                     alert('Error al eliminar el comentario.');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error al eliminar el comentario.');
+                alert('Error al eliminar el comentario. Revisa la consola para más detalles.');
             });
         }
     }
 
-    // Función para manejar favoritos
-    const baseUrl = '{{ url("/") }}';
-    window.toggleFavorite = function(eventId, button) {
+    // Favorite toggle function
+    function toggleFavorite(eventId, button) {
         const isFavorite = button.getAttribute('data-is-favorite') === 'true';
         const icon = button.querySelector('svg');
         
-        // Deshabilitar botón mientras se procesa
         button.disabled = true;
         button.style.opacity = '0.7';
         
@@ -806,59 +819,36 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Actualizar estado del botón
                 button.setAttribute('data-is-favorite', data.is_favorite ? 'true' : 'false');
                 
                 if (data.is_favorite) {
-                    // Agregar a favoritos - corazón lleno con animaciones mejoradas
                     icon.className = 'w-10 h-10 transition-all duration-500 relative z-10 text-red-500 scale-110 drop-shadow-lg';
                     icon.setAttribute('fill', 'currentColor');
                     
-                    // Agregar efectos de animación múltiples
-                    const pulseEffect1 = document.createElement('div');
-                    pulseEffect1.className = 'absolute inset-0 rounded-full bg-red-500/40 animate-ping';
-                    button.appendChild(pulseEffect1);
+                    // Add animation effects
+                    const effects = ['animate-ping', 'animate-pulse', 'animate-spin'];
+                    effects.forEach((effect, index) => {
+                        const element = document.createElement('div');
+                        element.className = `absolute inset-0 rounded-full bg-red-500/40 ${effect}`;
+                        if (effect === 'animate-spin') {
+                            element.style.animationDuration = '4s';
+                        }
+                        button.appendChild(element);
+                    });
                     
-                    const pulseEffect2 = document.createElement('div');
-                    pulseEffect2.className = 'absolute inset-0 rounded-full bg-red-400/30 animate-pulse';
-                    button.appendChild(pulseEffect2);
-                    
-                    const glowEffect = document.createElement('div');
-                    glowEffect.className = 'absolute inset-0 rounded-full bg-gradient-to-r from-red-400/30 via-pink-400/30 to-red-400/30 animate-spin';
-                    glowEffect.style.animationDuration = '4s';
-                    button.appendChild(glowEffect);
-                    
-                    const blurEffect = document.createElement('div');
-                    blurEffect.className = 'absolute inset-0 rounded-full bg-red-400/20 blur-sm';
-                    button.appendChild(blurEffect);
-                    
-                    // Efecto de animación mejorado
                     button.style.transform = 'scale(1.3) rotate(5deg)';
                     setTimeout(() => {
                         button.style.transform = 'scale(1) rotate(0deg)';
                     }, 300);
-                    
-                    // Efecto de partículas (simulado con múltiples pulsos)
-                    for (let i = 0; i < 3; i++) {
-                        setTimeout(() => {
-                            const particle = document.createElement('div');
-                            particle.className = 'absolute inset-0 rounded-full bg-red-400/50 animate-ping';
-                            particle.style.animationDelay = `${i * 0.2}s`;
-                            button.appendChild(particle);
-                            setTimeout(() => particle.remove(), 1000);
-                        }, i * 100);
-                    }
                 } else {
-                    // Quitar de favoritos - corazón vacío
                     icon.className = 'w-10 h-10 transition-all duration-500 relative z-10 text-gray-700 group-hover:text-red-500 group-hover:scale-105';
                     icon.setAttribute('fill', 'none');
                     
-                    // Remover todos los efectos de animación
+                    // Remove animation effects
                     const effects = button.querySelectorAll('.animate-ping, .animate-pulse, .animate-spin, .blur-sm');
                     effects.forEach(effect => effect.remove());
                 }
                 
-                // Mostrar mensaje temporal
                 showToast(data.message, data.is_favorite ? 'success' : 'info');
             } else {
                 showToast(data.message || 'Error al procesar la solicitud', 'error');
@@ -869,13 +859,12 @@
             showToast('Error al procesar la solicitud', 'error');
         })
         .finally(() => {
-            // Rehabilitar botón
             button.disabled = false;
             button.style.opacity = '1';
         });
-    };
+    }
 
-    // Función para mostrar mensajes toast
+    // Toast notification function
     function showToast(message, type = 'info') {
         const toast = document.createElement('div');
         toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg text-white font-medium shadow-lg transform transition-all duration-300 translate-x-full`;
@@ -894,17 +883,18 @@
         toast.textContent = message;
         document.body.appendChild(toast);
         
-        // Animar entrada
         setTimeout(() => {
             toast.style.transform = 'translateX(0)';
         }, 100);
         
-        // Animar salida
         setTimeout(() => {
-            toast.style.transform = 'translateX(full)';
+            toast.style.transform = 'translateX(100%)';
             setTimeout(() => {
-                document.body.removeChild(toast);
+                if (document.body.contains(toast)) {
+                    document.body.removeChild(toast);
+                }
             }, 300);
         }, 3000);
     }
 </script>
+@endsection
