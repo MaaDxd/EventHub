@@ -418,7 +418,7 @@
             <h2 class="text-3xl font-bold mb-6">¿No encontraste tu respuesta?</h2>
             <p class="text-xl mb-8 opacity-90">Si tienes alguna pregunta específica que no está cubierta aquí, no dudes en contactarnos.</p>
             <div class="flex justify-center flex-wrap gap-4">
-                <a href="{{ route('help.contact') }}" class="bg-white text-[#1A0046] px-8 py-4 rounded-xl font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <a href="{{ route('help.contact') }}" class="px-8 py-4 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 shadow-lg">
                     Contactar Soporte
                 </a>
                 <a href="{{ route('help.index') }}" class="border-2 border-white text-white px-8 py-4 rounded-xl font-semibold hover:bg-white hover:text-[#1A0046] transition-all duration-300 transform hover:scale-105">
