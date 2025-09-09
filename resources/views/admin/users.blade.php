@@ -100,23 +100,22 @@
 
                     <!-- Espacio vacío para alineación -->
                     <div></div>
+                    <!-- Botones de acción -->
+                    <div class="flex flex-wrap gap-4 pt-6 border-t border-gray-100">
+                        <button type="submit"
+                                class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform animate-pulse-gentle"
+                                style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
+                            <i class="fas fa-search mr-2"></i>
+                            <span>Buscar Usuarios</span>
+                        </button>
+                        <a href="{{ route('admin.users') }}"
+                           class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
+                           style="background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);">
+                            <i class="fas fa-sync-alt mr-2"></i>
+                            <span>Limpiar Filtros</span>
+                        </a>
+                    </div>
                 </form>
-
-                <!-- Botones de acción -->
-                <div class="flex flex-wrap gap-4 pt-6 border-t border-gray-100">
-                    <button type="submit"
-                            class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform animate-pulse-gentle"
-                            style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
-                        <i class="fas fa-search mr-2"></i>
-                        <span>Buscar Usuarios</span>
-                    </button>
-                    <a href="{{ route('admin.users') }}"
-                       class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
-                       style="background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);">
-                        <i class="fas fa-sync-alt mr-2"></i>
-                        <span>Limpiar Filtros</span>
-                    </a>
-                </div>
             </div>
 
             <!-- Mensajes de éxito/error -->

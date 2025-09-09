@@ -38,7 +38,7 @@ class AdminController extends Controller
         // Filter by status
         if ($request->has('status')) {
             if ($request->status === 'deleted') {
-                $query->onlyTrashed();
+                $query = $query->onlyTrashed();
             } elseif ($request->status === 'active') {
                 $query->whereNull('deleted_at');
             }
