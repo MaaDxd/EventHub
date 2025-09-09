@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/qr-verify/{token}', [QrLoginController::class, 'verifyQr'])->name('qr.verify');
 // Ruta raíz para evitar error 404
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('welcome');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Ruta para mostrar todos los eventos públicos
 Route::get('/eventos', [App\Http\Controllers\HomeController::class, 'allEvents'])->name('events.public');
