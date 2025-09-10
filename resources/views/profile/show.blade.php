@@ -10,15 +10,15 @@
             <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                     <div class="text-center md:text-left">
-                        <h1 class="text-4xl font-bold text-black mb-3">Mi Perfil</h1>
+                        <h1 class="text-4xl font-bold text-[#2a1b4d] mb-3">Mi Perfil</h1>
                         <p class="text-lg text-gray-600">Gestiona tu información personal y configuración de cuenta</p>
                     </div>
                     <div class="flex flex-wrap gap-4">
-                        <a href="{{ route('welcome') }}" class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-3 font-semibold border border-black">
+                        <a href="{{ route('welcome') }}" class="bg-gradient-to-r from-[#2a1b4d] to-[#4a3b6a] hover:from-[#3a2a5d] hover:to-[#5a4b7a] text-[#f8f9fa] px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-xl hover:scale-105 flex items-center gap-3 font-semibold border border-[#4a3b6a] hover:border-[#5a4b7a]">
                             <span class="text-xl">🏠</span>
                             <span>Ir al Inicio</span>
                         </a>
-                        <a href="{{ route('dashboard.user') }}" class="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg flex items-center gap-3 font-semibold border border-black">
+                        <a href="{{ route('dashboard.user') }}" class="bg-gradient-to-r from-[#2a1b4d] to-[#4a3b6a] hover:from-[#3a2a5d] hover:to-[#5a4b7a] text-[#f8f9fa] px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-xl hover:scale-105 flex items-center gap-3 font-semibold border border-[#4a3b6a] hover:border-[#5a4b7a]">
                             <span class="text-xl">📊</span>
                             <span>Dashboard</span>
                         </a>
@@ -41,8 +41,8 @@
                 <div class="event-card animate__animated animate__fadeInLeft">
                     <div class="event-content">
                         <div class="flex items-center gap-4 mb-8">
-                            <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
-                                <span class="text-2xl text-white">📝</span>
+                            <div class="w-14 h-14 bg-gradient-to-br from-[#2a1b4d] to-[#4a3b6a] rounded-xl flex items-center justify-center shadow-lg">
+                                <span class="text-2xl text-[#f8f9fa]">📝</span>
                             </div>
                             <h2 class="event-title text-2xl">Información Personal</h2>
                         </div>
@@ -98,8 +98,8 @@
                 <div class="event-card animate__animated animate__fadeInRight">
                     <div class="event-content">
                         <div class="flex items-center gap-4 mb-8">
-                            <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
-                                <span class="text-2xl text-white">🔒</span>
+                            <div class="w-14 h-14 bg-gradient-to-br from-[#2a1b4d] to-[#4a3b6a] rounded-xl flex items-center justify-center shadow-lg">
+                                <span class="text-2xl text-[#f8f9fa]">🔒</span>
                             </div>
                             <h2 class="event-title text-2xl">Cambiar Contraseña</h2>
                         </div>
@@ -164,8 +164,8 @@
             <div class="event-card mt-8 animate__animated animate__fadeInUp">
                 <div class="event-content">
                     <div class="flex items-center gap-4 mb-8">
-                        <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
-                            <span class="text-2xl text-white">ℹ️</span>
+                        <div class="w-14 h-14 bg-gradient-to-br from-[#2a1b4d] to-[#4a3b6a] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-2xl text-[#f8f9fa]">ℹ️</span>
                         </div>
                         <h2 class="event-title text-2xl">Información de la Cuenta</h2>
                     </div>
@@ -197,8 +197,8 @@
             <div class="event-card mt-8 animate__animated animate__fadeInUp">
                 <div class="event-content">
                     <div class="flex items-center gap-4 mb-8">
-                        <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
-                            <span class="text-2xl text-white">📸</span>
+                        <div class="w-14 h-14 bg-gradient-to-br from-[#2a1b4d] to-[#4a3b6a] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-2xl text-[#f8f9fa]">📸</span>
                         </div>
                         <h2 class="event-title text-2xl">Foto de Perfil</h2>
                     </div>
@@ -252,8 +252,8 @@
             <div class="event-card mt-8 animate__animated animate__fadeInUp">
                 <div class="event-content">
                     <div class="flex items-center gap-4 mb-8">
-                        <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
-                            <span class="text-2xl text-white">📊</span>
+                        <div class="w-14 h-14 bg-gradient-to-br from-[#2a1b4d] to-[#4a3b6a] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-2xl text-[#f8f9fa]">📊</span>
                         </div>
                         <h2 class="event-title text-2xl">Progreso del Perfil</h2>
                     </div>
@@ -296,8 +296,8 @@
             <div class="event-card mt-8">
                 <div class="event-content">
                     <div class="flex items-center gap-4 mb-8">
-                        <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
-                            <span class="text-2xl text-white">🚪</span>
+                        <div class="w-14 h-14 bg-gradient-to-br from-[#2a1b4d] to-[#4a3b6a] rounded-xl flex items-center justify-center shadow-lg">
+                            <span class="text-2xl text-[#f8f9fa]">🚪</span>
                         </div>
                         <div>
                             <h2 class="event-title text-2xl">Cerrar Sesión</h2>
@@ -543,22 +543,22 @@
 <style>
     /* Gradientes corporativos */
     .gradient-bg {
-        background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
+        background: linear-gradient(135deg, #2a1b4d 0%, #4a3b6a 100%);
     }
     
     /* Event cards - Aplicando el estilo profesional del CSS proporcionado */
     .event-card {
-        background: #FFFFFF;
+        background: #f8f9fa;
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 10px 25px -5px rgba(26, 0, 70, 0.3), 0 10px 10px -5px rgba(26, 0, 70, 0.04);
+        box-shadow: 0 10px 25px -5px rgba(42, 27, 77, 0.2), 0 10px 10px -5px rgba(42, 27, 77, 0.08);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(50, 0, 78, 0.1);
+        border: 1px solid rgba(74, 59, 106, 0.15);
     }
     
     .event-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 20px 40px -12px rgba(26, 0, 70, 0.3), 0 10px 10px -5px rgba(26, 0, 70, 0.04);
+        box-shadow: 0 20px 40px -12px rgba(42, 27, 77, 0.25), 0 10px 10px -5px rgba(42, 27, 77, 0.08);
     }
     
     .event-content {
@@ -568,13 +568,13 @@
     .event-title {
         font-size: 1.5rem;
         font-weight: 700;
-        color: #1A0046;
+        color: #2a1b4d;
         margin-bottom: 12px;
         line-height: 1.4;
     }
     
     .event-description {
-        color: #32004E;
+        color: #4a3b6a;
         opacity: 0.8;
         margin-bottom: 16px;
         line-height: 1.6;
@@ -591,14 +591,14 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        color: #32004E;
+        color: #4a3b6a;
         font-size: 0.875rem;
         opacity: 0.7;
     }
     
     .view-all-btn {
-        background: linear-gradient(135deg, #1A0046, #32004E);
-        color: #FFFFFF;
+        background: linear-gradient(135deg, #2a1b4d, #4a3b6a);
+        color: #f8f9fa;
         padding: 16px 32px;
         border-radius: 12px;
         font-weight: 600;
@@ -607,25 +607,25 @@
         align-items: center;
         justify-content: center;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 25px rgba(26, 0, 70, 0.3);
+        box-shadow: 0 8px 25px rgba(42, 27, 77, 0.25);
         border: none;
         cursor: pointer;
     }
     
     .view-all-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 15px 35px rgba(26, 0, 70, 0.4);
-        color: #FFFFFF;
+        box-shadow: 0 15px 35px rgba(42, 27, 77, 0.35);
+        color: #f8f9fa;
     }
 
     /* Form inputs styling */
     .form-input {
-        box-shadow: 0 2px 8px rgba(26, 0, 70, 0.08);
+        box-shadow: 0 2px 8px rgba(42, 27, 77, 0.1);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .form-input:focus {
-        box-shadow: 0 4px 16px rgba(26, 0, 70, 0.15);
+        box-shadow: 0 4px 16px rgba(42, 27, 77, 0.2);
         transform: translateY(-1px);
     }
 
@@ -634,7 +634,7 @@
     }
 
     .form-group label {
-        color: #1A0046;
+        color: #2a1b4d;
         font-weight: 600;
     }
 
