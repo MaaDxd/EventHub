@@ -107,11 +107,16 @@
                     @auth
                         <!-- User Dropdown Menu -->
                         <div class="relative">
-                            <button id="userDropdownBtn" class="relative flex items-center justify-center w-12 h-12 bg-white border-2 border-gray-300 rounded-lg hover:border-[#1A0046] hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1A0046] focus:ring-opacity-50 shadow-sm hover:shadow-md">
-                                <!-- Icono de casa minimalista -->
-                                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                </svg>
+                            <button id="userDropdownBtn" class="relative flex items-center justify-center w-12 h-12 bg-white border-2 border-gray-300 rounded-lg hover:border-[#1A0046] hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#1A0046] focus:ring-opacity-50 shadow-sm hover:shadow-md overflow-hidden">
+                                @if(auth()->user()->avatar)
+                                    <img src="{{ asset('storage/' . auth()->user()->avatar) }}"
+                                         alt="Avatar"
+                                         class="w-full h-full object-cover rounded-lg">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-r from-[#1A0046] to-[#32004E] rounded-lg flex items-center justify-center">
+                                        <span class="text-white font-bold text-lg">{{ substr(auth()->user()->name, 0, 1) }}</span>
+                                    </div>
+                                @endif
                                 <!-- Indicador de menú desplegable -->
                                 <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-[#1A0046] rounded-full border-2 border-white"></div>
                             </button>

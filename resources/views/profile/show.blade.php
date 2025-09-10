@@ -1,3 +1,5 @@
+
+
 @extends('layouts.app')
 
 @section('content')
@@ -36,7 +38,7 @@
 
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Formulario de Información Personal -->
-                <div class="event-card">
+                <div class="event-card animate__animated animate__fadeInLeft">
                     <div class="event-content">
                         <div class="flex items-center gap-4 mb-8">
                             <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
@@ -93,7 +95,7 @@
                 </div>
 
                 <!-- Formulario de Cambio de Contraseña -->
-                <div class="event-card">
+                <div class="event-card animate__animated animate__fadeInRight">
                     <div class="event-content">
                         <div class="flex items-center gap-4 mb-8">
                             <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
@@ -159,7 +161,7 @@
             </div>
 
             <!-- Información de la cuenta -->
-            <div class="event-card mt-8">
+            <div class="event-card mt-8 animate__animated animate__fadeInUp">
                 <div class="event-content">
                     <div class="flex items-center gap-4 mb-8">
                         <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
@@ -190,59 +192,103 @@
                     </div>
                 </div>
             </div>
-            <!-- Sección QR Login -->
-            <div class="event-card mt-8">
+
+            <!-- Profile Picture Upload -->
+            <div class="event-card mt-8 animate__animated animate__fadeInUp">
                 <div class="event-content">
                     <div class="flex items-center gap-4 mb-8">
                         <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
-                            <span class="text-2xl text-white">🔐</span>
+                            <span class="text-2xl text-white">📸</span>
                         </div>
-                        <h2 class="event-title text-2xl">Login con Código QR</h2>
+                        <h2 class="event-title text-2xl">Foto de Perfil</h2>
                     </div>
 
-                    @if(!isset($qrCode))
-                        <div class="text-center p-8 bg-gray-50 rounded-xl border border-gray-100">
-                            <div class="text-6xl mb-6">📱</div>
-                            <h4 class="text-xl font-semibold text-black mb-4">Acceso Rápido con QR</h4>
-                            <p class="text-gray-600 mb-6 leading-relaxed">
-                                Genera un código QR para iniciar sesión desde otro dispositivo de forma rápida y segura.
-                            </p>
-                            <a href="{{ route('qr.login.show') }}"
-                               class="view-all-btn inline-flex items-center gap-3 px-8 py-4">
-                                <span class="text-xl">📱</span>
-                                <span>Generar Código QR</span>
-                            </a>
-                        </div>
-                    @else
+                    <div class="flex flex-col md:flex-row items-center gap-6">
                         <div class="text-center">
-                            <p class="text-gray-600 mb-6 text-lg">Escanea este código QR con otro dispositivo para iniciar sesión</p>
-
-                            <div class="qr-code inline-block p-6 bg-white rounded-xl shadow-lg border border-gray-200" style="min-width: 320px; min-height: 320px;">
-                                @if(isset($qrCode) && !empty($qrCode))
-                                    {!! $qrCode !!}
+                            <div class="w-24 h-24 bg-gray-200 rounded-full flex items-center justify-center mb-4 overflow-hidden">
+                                @if($user->avatar)
+                                    <img src="{{ asset('storage/' . $user->avatar) }}"
+                                         alt="Avatar"
+                                         class="w-full h-full object-cover zoomable-avatar">
                                 @else
-                                    <p class="text-red-500 font-semibold">Error al generar el código QR</p>
+                                    <div class="w-full h-full bg-gradient-to-r from-[#1A0046] to-[#32004E] rounded-full flex items-center justify-center zoomable-avatar">
+                                        <span class="text-4xl text-white font-bold">{{ substr($user->name, 0, 1) }}</span>
+                                    </div>
                                 @endif
                             </div>
+                            <p class="text-sm text-gray-600">Foto actual <span class="text-xs text-gray-400">(haz clic para hacer zoom)</span></p>
+                        </div>
 
-                            <div class="mt-6 space-y-4">
-                                <p id="countdown" class="text-sm font-medium text-gray-700 bg-blue-50 px-4 py-2 rounded-lg inline-block">
-                                    ⏰ Próxima actualización en: <span id="time-left" class="font-bold text-blue-600">60</span> segundos
-                                </p>
-                                <p class="text-sm text-gray-500">
-                                    🔄 El código se actualiza automáticamente cada 60 segundos para mayor seguridad
-                                </p>
+                        <form method="POST" action="{{ route('profile.avatar.update') }}" enctype="multipart/form-data" class="flex-1">
+                            @csrf
+                            <div class="space-y-4">
+                                <div class="form-group">
+                                    <label for="avatar" class="block text-sm font-semibold text-black mb-3">Seleccionar nueva foto</label>
+                                    <input type="file"
+                                           id="avatar"
+                                           name="avatar"
+                                           accept="image/*"
+                                           class="form-input w-full px-4 py-4 bg-white border-2 border-gray-200 rounded-xl text-black placeholder-gray-500 focus:outline-none focus:border-black transition-all duration-300"
+                                           onchange="previewImage(event)">
+                                    @error('avatar')
+                                        <p class="text-red-600 text-sm mt-2 flex items-center gap-2 font-medium">
+                                            <span>⚠️</span>
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                                <button type="submit"
+                                        class="view-all-btn w-full md:w-auto">
+                                    <span class="text-xl mr-2">📤</span>
+                                    <span>Subir Foto</span>
+                                </button>
                             </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-                            <div class="mt-6">
-                                <a href="{{ route('profile.show') }}"
-                                   class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-lg inline-flex items-center gap-3 font-semibold">
-                                    <span class="text-lg">🙈</span>
-                                    <span>Ocultar Código QR</span>
-                                </a>
+            <!-- Profile Completion Progress -->
+            <div class="event-card mt-8 animate__animated animate__fadeInUp">
+                <div class="event-content">
+                    <div class="flex items-center gap-4 mb-8">
+                        <div class="w-14 h-14 bg-black rounded-xl flex items-center justify-center">
+                            <span class="text-2xl text-white">📊</span>
+                        </div>
+                        <h2 class="event-title text-2xl">Progreso del Perfil</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-700">Completitud del perfil</span>
+                            <span id="completionPercentage" class="text-sm font-bold text-black">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div id="progressBar" class="bg-gradient-to-r from-[#1A0046] to-[#32004E] h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-gray-50 rounded-lg p-3">
+                                <div class="text-2xl mb-1">👤</div>
+                                <div class="text-xs text-gray-600">Nombre</div>
+                                <div id="nameCheck" class="text-sm font-semibold text-red-500">❌</div>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3">
+                                <div class="text-2xl mb-1">📧</div>
+                                <div class="text-xs text-gray-600">Email</div>
+                                <div id="emailCheck" class="text-sm font-semibold text-red-500">❌</div>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3">
+                                <div class="text-2xl mb-1">📸</div>
+                                <div class="text-xs text-gray-600">Avatar</div>
+                                <div id="avatarCheck" class="text-sm font-semibold text-red-500">❌</div>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-3">
+                                <div class="text-2xl mb-1">🔒</div>
+                                <div class="text-xs text-gray-600">Contraseña</div>
+                                <div class="text-sm font-semibold text-green-500">✅</div>
                             </div>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
 
@@ -279,22 +325,220 @@
     </div>
 </div>
 
-@if(isset($qrCode))
+
+
 <script>
-    let timeLeft = 60;
-    const countdownElement = document.getElementById('time-left');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Profile Completion Calculation
+        function calculateProfileCompletion() {
+            let completed = 0;
+            const total = 4;
 
-    const interval = setInterval(function() {
-        timeLeft--;
-        countdownElement.textContent = timeLeft;
+            // Check name
+            const name = '{{ $user->name }}';
+            if (name && name.trim() !== '') {
+                completed++;
+                document.getElementById('nameCheck').textContent = '✅';
+                document.getElementById('nameCheck').className = 'text-sm font-semibold text-green-500';
+            }
 
-        if (timeLeft <= 0) {
-            clearInterval(interval);
-            window.location.href = '{{ route("qr.login.show") }}';
+            // Check email
+            const email = '{{ $user->email }}';
+            if (email && email.trim() !== '') {
+                completed++;
+                document.getElementById('emailCheck').textContent = '✅';
+                document.getElementById('emailCheck').className = 'text-sm font-semibold text-green-500';
+            }
+
+            // Check avatar
+            const avatar = '{{ $user->avatar }}';
+            if (avatar && avatar.trim() !== '') {
+                completed++;
+                document.getElementById('avatarCheck').textContent = '✅';
+                document.getElementById('avatarCheck').className = 'text-sm font-semibold text-green-500';
+            }
+
+            // Password is always completed
+            const percentage = Math.round((completed / total) * 100);
+            document.getElementById('completionPercentage').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
         }
-    }, 1000); // Actualizar cada segundo
+
+        calculateProfileCompletion();
+
+        // Image Preview Function
+        window.previewImage = function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // You could add a preview here if needed
+                    console.log('Image selected:', file.name);
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Zoom Modal Functionality
+        const zoomModal = document.getElementById('zoomModal');
+        const zoomImage = document.getElementById('zoomImage');
+        const closeZoom = document.getElementById('closeZoom');
+        let scale = 1;
+        let isDragging = false;
+        let startX, startY, initialX, initialY;
+        let translateX = 0;
+        let translateY = 0;
+
+        // Open zoom modal when clicking on profile picture
+        document.querySelectorAll('.zoomable-avatar').forEach(element => {
+            element.addEventListener('click', function() {
+                // Handle both img elements and div elements
+                let imgSrc = '';
+                if (element.tagName === 'IMG') {
+                    imgSrc = element.src;
+                } else {
+                    // For div with initial, create a data URL with the initial
+                    const initial = element.textContent.trim();
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 200;
+                    canvas.height = 200;
+                    const ctx = canvas.getContext('2d');
+
+                    // Create gradient background
+                    const gradient = ctx.createLinearGradient(0, 0, 200, 200);
+                    gradient.addColorStop(0, '#1A0046');
+                    gradient.addColorStop(1, '#32004E');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, 200, 200);
+
+                    // Add text
+                    ctx.fillStyle = 'white';
+                    ctx.font = 'bold 80px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(initial, 100, 100);
+
+                    imgSrc = canvas.toDataURL();
+                }
+
+                zoomImage.src = imgSrc;
+                zoomModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                resetZoom();
+            });
+        });
+
+        // Close zoom modal
+        closeZoom.addEventListener('click', closeModal);
+        zoomModal.addEventListener('click', function(e) {
+            if (e.target === zoomModal) {
+                closeModal();
+            }
+        });
+
+        function closeModal() {
+            zoomModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            resetZoom();
+        }
+
+        function resetZoom() {
+            scale = 1;
+            translateX = 0;
+            translateY = 0;
+            zoomImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+            zoomImage.style.cursor = 'zoom-in';
+        }
+
+        // Zoom functionality
+        zoomImage.addEventListener('click', function(e) {
+            if (isDragging) return;
+            if (scale === 1) {
+                scale = 2;
+                zoomImage.style.cursor = 'grab';
+            } else {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                zoomImage.style.cursor = 'zoom-in';
+            }
+            zoomImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+        });
+
+        // Mouse wheel zoom
+        zoomImage.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            scale = Math.max(0.5, Math.min(3, scale + delta));
+            if (scale === 1) {
+                translateX = 0;
+                translateY = 0;
+            }
+            zoomImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+            zoomImage.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', function(e) {
+            if (!zoomModal.classList.contains('hidden')) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                } else if (e.key === '+' || e.key === '=') {
+                    scale = Math.min(3, scale + 0.2);
+                    if (scale === 1) {
+                        translateX = 0;
+                        translateY = 0;
+                    }
+                    zoomImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+                    zoomImage.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+                } else if (e.key === '-') {
+                    scale = Math.max(0.5, scale - 0.2);
+                    if (scale === 1) {
+                        translateX = 0;
+                        translateY = 0;
+                    }
+                    zoomImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+                    zoomImage.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+                } else if (e.key === '0') {
+                    resetZoom();
+                }
+            }
+        });
+
+        // Drag functionality
+        zoomImage.addEventListener('mousedown', function(e) {
+            if (scale <= 1) return;
+            e.preventDefault();
+            isDragging = true;
+            initialX = translateX;
+            initialY = translateY;
+            startX = e.clientX;
+            startY = e.clientY;
+            zoomImage.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            translateX = initialX + (e.clientX - startX);
+            translateY = initialY + (e.clientY - startY);
+            zoomImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                zoomImage.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+            }
+        });
+
+        document.addEventListener('mouseleave', function() {
+            if (isDragging) {
+                isDragging = false;
+                zoomImage.style.cursor = scale > 1 ? 'grab' : 'zoom-in';
+            }
+        });
+    });
 </script>
-@endif
 
 <style>
     /* Gradientes corporativos */
@@ -393,22 +637,154 @@
         color: #1A0046;
         font-weight: 600;
     }
-    .qr-container {
-        text-align: center;
-        padding: 20px;
-        max-width: 400px;
-        margin: 20px auto;
-        border: 1px solid #ddd;
+
+    /* Zoom Modal Styles */
+    .zoom-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .zoom-modal-content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .zoom-image {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+        cursor: zoom-in;
         border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     }
-    .qr-code {
-        margin: 20px 0;
-        display: inline-block;
+
+    .zoom-close {
+        position: absolute;
+        top: -50px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
     }
-    .status-pending { background-color: #fff3cd; color: #856404; }
-    .status-success { background-color: #d4edda; color: #155724; }
-    .status-error { background-color: #f8d7da; color: #721c24; }
+
+    .zoom-close:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(1.1);
+    }
+
+    .zoom-instructions {
+        position: absolute;
+        bottom: -60px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.5);
+        padding: 8px 16px;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+    }
+
+    /* Zoomable avatar hover effect */
+    .zoomable-avatar {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .zoomable-avatar:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 25px rgba(26, 0, 70, 0.3);
+    }
+
+    /* Animation keyframes */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Apply animations with delay for staggered effect */
+    .animate__fadeInUp {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .animate__fadeInLeft {
+        animation: fadeInLeft 0.6s ease-out;
+    }
+
+    .animate__fadeInRight {
+        animation: fadeInRight 0.6s ease-out;
+    }
 </style>
 
 @include('layouts.footer')
+
+<!-- Zoom Modal -->
+<div id="zoomModal" class="zoom-modal hidden">
+    <div class="zoom-modal-content">
+        <button id="closeZoom" class="zoom-close">&times;</button>
+        <img id="zoomImage" class="zoom-image" src="" alt="Zoomed Avatar">
+        <div class="zoom-instructions">
+            Haz clic para hacer zoom • Usa la rueda del mouse • Presiona ESC para cerrar<br>
+            <small>Teclas: + para zoom in, - para zoom out, 0 para reset</small>
+        </div>
+    </div>
+</div>
+
 @endsection
