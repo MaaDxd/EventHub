@@ -271,21 +271,6 @@
                             </div>
                         </div>
                         
-                        <!-- Teléfono -->
-                        <div class="contact-item rounded-2xl px-6 py-5 group cursor-pointer">
-                            <div class="flex items-center gap-4">
-                                <div class="flex-shrink-0">
-                                    <i class="bi bi-telephone-fill text-3xl text-yellow-400 icon-glow"></i>
-                                </div>
-                                <div class="flex-1 text-left">
-                                    <div class="text-white/70 text-sm font-medium mb-1">Teléfono</div>
-                                    <a href="tel:+34123456789" 
-                                       class="text-white text-lg font-semibold hover:text-yellow-300 transition-colors duration-300">
-                                        123 456 789
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
                         
                         <!-- Dirección -->
                         <div class="contact-item rounded-2xl px-6 py-5 group cursor-pointer">
