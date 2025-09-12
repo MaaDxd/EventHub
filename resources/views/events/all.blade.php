@@ -5,6 +5,15 @@
 <div class="min-h-screen" style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
     <div class="py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
+            <!-- Botón Volver -->
+            <div class="mb-6 animate-fade-in">
+                <button onclick="if (history.length > 1) { history.back(); } else { window.location.href='{{ url('/') }}'; }" 
+                        class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform glass-effect backdrop-blur-sm"
+                        style="border: 1px solid rgba(255,255,255,0.25);">
+                    <span class="text-lg">‹</span>
+                    <span>Volver</span>
+                </button>
+            </div>
             <!-- Header con diseño mejorado -->
             <div class="text-center mb-12">
                 <div class="inline-flex items-center justify-center w-24 h-24 rounded-3xl shadow-2xl mb-6 animate-float"

@@ -231,6 +231,15 @@
 
     <div class="contact-section pt-32 pb-24 text-center relative overflow-hidden before:content-[''] before:absolute before:inset-0 before:z-10">
         <div class="container mx-auto relative z-20 px-6 max-w-6xl">
+            <!-- Botón Volver -->
+            <div class="mb-6 flex justify-start" style="animation: fadeInDown 1s ease-out;">
+                <button onclick="if (history.length > 1) { history.back(); } else { window.location.href='{{ url('/') }}'; }"
+                        class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
+                        style="background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%); border: 1px solid rgba(255,255,255,0.25); backdrop-filter: blur(10px);">
+                    <span class="text-lg">‹</span>
+                    <span>Volver</span>
+                </button>
+            </div>
             <!-- Título principal mejorado -->
             <div class="mb-16">
                 <h1 class="contact-title text-6xl md:text-7xl font-black mb-8 tracking-wider uppercase drop-shadow-2xl" style="animation: fadeInDown 1s ease-out;">
