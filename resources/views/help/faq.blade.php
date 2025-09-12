@@ -445,6 +445,7 @@
     </div>
 </div>
 
+<script>
 // Función para volver atrás
 function goBack() {
     try {
