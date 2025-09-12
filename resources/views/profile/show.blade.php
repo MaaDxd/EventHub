@@ -541,24 +541,24 @@
 </script>
 
 <style>
-    /* Gradientes corporativos */
+    /* Gradientes corporativos - ACTUALIZADOS CON NUEVA PALETA */
     .gradient-bg {
-        background: linear-gradient(135deg, #2a1b4d 0%, #4a3b6a 100%);
+        background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
     }
     
-    /* Event cards - Aplicando el estilo profesional del CSS proporcionado */
+    /* Event cards - Aplicando el estilo profesional con nueva paleta */
     .event-card {
-        background: #f8f9fa;
+        background: #FFFFFF;
         border-radius: 16px;
         overflow: hidden;
-        box-shadow: 0 10px 25px -5px rgba(42, 27, 77, 0.2), 0 10px 10px -5px rgba(42, 27, 77, 0.08);
+        box-shadow: 0 10px 25px -5px rgba(26, 0, 70, 0.2), 0 10px 10px -5px rgba(26, 0, 70, 0.08);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        border: 1px solid rgba(74, 59, 106, 0.15);
+        border: 1px solid rgba(50, 0, 78, 0.15);
     }
     
     .event-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 20px 40px -12px rgba(42, 27, 77, 0.25), 0 10px 10px -5px rgba(42, 27, 77, 0.08);
+        box-shadow: 0 20px 40px -12px rgba(26, 0, 70, 0.25), 0 10px 10px -5px rgba(26, 0, 70, 0.08);
     }
     
     .event-content {
@@ -568,13 +568,13 @@
     .event-title {
         font-size: 1.5rem;
         font-weight: 700;
-        color: #2a1b4d;
+        color: #1A0046;
         margin-bottom: 12px;
         line-height: 1.4;
     }
     
     .event-description {
-        color: #4a3b6a;
+        color: #32004E;
         opacity: 0.8;
         margin-bottom: 16px;
         line-height: 1.6;
@@ -591,14 +591,14 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        color: #4a3b6a;
+        color: #32004E;
         font-size: 0.875rem;
         opacity: 0.7;
     }
     
     .view-all-btn {
-        background: linear-gradient(135deg, #2a1b4d, #4a3b6a);
-        color: #f8f9fa;
+        background: linear-gradient(135deg, #1A0046, #32004E);
+        color: #FFFFFF;
         padding: 16px 32px;
         border-radius: 12px;
         font-weight: 600;
@@ -607,25 +607,25 @@
         align-items: center;
         justify-content: center;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 8px 25px rgba(42, 27, 77, 0.25);
+        box-shadow: 0 8px 25px rgba(26, 0, 70, 0.25);
         border: none;
         cursor: pointer;
     }
     
     .view-all-btn:hover {
         transform: translateY(-2px);
-        box-shadow: 0 15px 35px rgba(42, 27, 77, 0.35);
-        color: #f8f9fa;
+        box-shadow: 0 15px 35px rgba(26, 0, 70, 0.35);
+        color: #FFFFFF;
     }
 
-    /* Form inputs styling */
+    /* Form inputs styling - ACTUALIZADOS */
     .form-input {
-        box-shadow: 0 2px 8px rgba(42, 27, 77, 0.1);
+        box-shadow: 0 2px 8px rgba(26, 0, 70, 0.1);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .form-input:focus {
-        box-shadow: 0 4px 16px rgba(42, 27, 77, 0.2);
+        box-shadow: 0 4px 16px rgba(26, 0, 70, 0.2);
         transform: translateY(-1px);
     }
 
@@ -634,11 +634,11 @@
     }
 
     .form-group label {
-        color: #2a1b4d;
+        color: #1A0046;
         font-weight: 600;
     }
 
-    /* Zoom Modal Styles */
+    /* Zoom Modal Styles - ACTUALIZADOS */
     .zoom-modal {
         position: fixed;
         top: 0;
@@ -681,7 +681,7 @@
         top: -50px;
         right: 0;
         background: rgba(255, 255, 255, 0.2);
-        color: white;
+        color: #FFFFFF;
         border: none;
         width: 40px;
         height: 40px;
@@ -714,7 +714,7 @@
         backdrop-filter: blur(10px);
     }
 
-    /* Zoomable avatar hover effect */
+    /* Zoomable avatar hover effect - ACTUALIZADO */
     .zoomable-avatar {
         transition: all 0.3s ease;
         cursor: pointer;
@@ -770,6 +770,34 @@
 
     .animate__fadeInRight {
         animation: fadeInRight 0.6s ease-out;
+    }
+
+    /* Clases adicionales para usar la nueva paleta de marca */
+    .brand-primary {
+        color: #1A0046;
+    }
+
+    .brand-secondary {
+        color: #32004E;
+    }
+
+    .brand-white {
+        color: #FFFFFF;
+    }
+
+    .brand-black {
+        color: #000000;
+    }
+
+    .brand-gradient {
+        background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
+    }
+
+    .brand-gradient-text {
+        background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 </style>
 
