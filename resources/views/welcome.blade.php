@@ -363,10 +363,13 @@ use Illuminate\Support\Str;
 
 @include('layouts.footer')
 @endsection
-
 @section('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        let currentDirection = 'forward';
+        let autoplayInterval;
+        let isUserInteracting = false;
+
         var swiper = new Swiper('.swiper-container', {
             effect: 'coverflow',
             grabCursor: true,
@@ -376,11 +379,8 @@ use Illuminate\Support\Str;
             loop: true,
             loopAdditionalSlides: 3,
             loopedSlides: 5,
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-                reverseDirection: false,
-            },
+            // Desactivamos el autoplay nativo de Swiper
+            autoplay: false,
             coverflowEffect: {
                 rotate: 25,
                 stretch: 0,
@@ -417,32 +417,351 @@ use Illuminate\Support\Str;
             }
         });
 
-        // Control de navegación mejorado
-        document.querySelector('.swiper-button-next').addEventListener('click', function() {
-            swiper.autoplay.stop();
-            setTimeout(() => {
-                swiper.params.autoplay.reverseDirection = false;
-                swiper.autoplay.start();
-            }, 500);
-        });
+        // Función para iniciar autoplay personalizado
+        function startCustomAutoplay() {
+            if (autoplayInterval) clearInterval(autoplayInterval);
+            
+            autoplayInterval = setInterval(() => {
+                if (!isUserInteracting && !document.hidden) {
+                    if (currentDirection === 'forward') {
+                        swiper.slideNext();
+                        
+                        // Cambiar dirección después de cierto número de slides
+                        setTimeout(() => {
+                            if (Math.random() > 0.7) { // 30% de probabilidad de cambiar dirección
+                                currentDirection = 'backward';
+                            }
+                        }, 100);
+                    } else {
+                        swiper.slidePrev();
+                        
+                        // Cambiar dirección después de cierto número de slides
+                        setTimeout(() => {
+                            if (Math.random() > 0.7) { // 30% de probabilidad de cambiar dirección
+                                currentDirection = 'forward';
+                            }
+                        }, 100);
+                    }
+                }
+            }, 4000);
+        }
 
-        document.querySelector('.swiper-button-prev').addEventListener('click', function() {
-            swiper.autoplay.stop();
-            setTimeout(() => {
-                swiper.params.autoplay.reverseDirection = true;
-                swiper.autoplay.start();
-            }, 500);
-        });
+        // Función para pausar autoplay
+        function pauseAutoplay() {
+            isUserInteracting = true;
+            if (autoplayInterval) {
+                clearInterval(autoplayInterval);
+            }
+        }
 
-        // Pausar autoplay al hover
+        // Función para reanudar autoplay
+        function resumeAutoplay() {
+            isUserInteracting = false;
+            startCustomAutoplay();
+        }
+
+        // Control de navegación
+        const nextButton = document.querySelector('.swiper-button-next');
+        const prevButton = document.querySelector('.swiper-button-prev');
+        
+        if (nextButton) {
+            nextButton.addEventListener('click', function() {
+                currentDirection = 'forward';
+                pauseAutoplay();
+                setTimeout(resumeAutoplay, 3000);
+            });
+        }
+
+        if (prevButton) {
+            prevButton.addEventListener('click', function() {
+                currentDirection = 'backward';
+                pauseAutoplay();
+                setTimeout(resumeAutoplay, 3000);
+            });
+        }
+
+        // Pausar en hover
         const swiperContainer = document.querySelector('.swiper-container');
-        swiperContainer.addEventListener('mouseenter', () => {
-            swiper.autoplay.stop();
+        if (swiperContainer) {
+            swiperContainer.addEventListener('mouseenter', pauseAutoplay);
+            swiperContainer.addEventListener('mouseleave', () => {
+                setTimeout(resumeAutoplay, 500);
+            });
+
+            // Pausar en interacciones táctiles
+            swiperContainer.addEventListener('touchstart', pauseAutoplay);
+            swiperContainer.addEventListener('touchend', () => {
+                setTimeout(resumeAutoplay, 2000);
+            });
+        }
+
+        // Pausar con teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                if (e.key === 'ArrowRight') {
+                    currentDirection = 'forward';
+                } else {
+                    currentDirection = 'backward';
+                }
+                pauseAutoplay();
+                setTimeout(resumeAutoplay, 3000);
+            }
         });
 
-        swiperContainer.addEventListener('mouseleave', () => {
-            swiper.autoplay.start();
+        // Pausar cuando la página no está visible
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                pauseAutoplay();
+            } else {
+                setTimeout(resumeAutoplay, 1000);
+            }
         });
+
+        // Cambiar dirección aleatoriamente cada cierto tiempo
+        setInterval(() => {
+            if (!isUserInteracting) {
+                currentDirection = currentDirection === 'forward' ? 'backward' : 'forward';
+            }
+        }, 15000); // Cambiar cada 15 segundos
+
+        // Iniciar el autoplay personalizado
+        startCustomAutoplay();
     });
 </script>
+
+<style>
+  /* Contenedor principal del swiper */
+    .swiper-container {
+        position: relative;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(26, 0, 70, 0.15);
+    }
+
+    /* Indicadores de dirección mejorados */
+    .swiper-direction-forward::after {
+        content: '→ ADELANTE';
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, rgba(26, 0, 70, 0.9), rgba(50, 0, 78, 0.9));
+        color: #FFFFFF;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        z-index: 100;
+        opacity: 0.8;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(26, 0, 70, 0.3);
+        text-transform: uppercase;
+    }
+
+    .swiper-direction-backward::after {
+        content: '← ATRÁS';
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, rgba(50, 0, 78, 0.9), rgba(26, 0, 70, 0.9));
+        color: #FFFFFF;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        z-index: 100;
+        opacity: 0.8;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 15px rgba(50, 0, 78, 0.3);
+        text-transform: uppercase;
+    }
+
+    .swiper-container:hover::after {
+        opacity: 1;
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(26, 0, 70, 0.4);
+    }
+
+    /* Botones de navegación mejorados */
+    .swiper-button-next,
+    .swiper-button-prev {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #1A0046, #32004E);
+        border-radius: 50%;
+        color: #FFFFFF !important;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: -25px;
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        box-shadow: 0 8px 25px rgba(26, 0, 70, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        opacity: 0.8;
+    }
+
+    .swiper-button-next::after,
+    .swiper-button-prev::after {
+        font-size: 16px;
+        font-weight: 900;
+    }
+
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+        transform: scale(1.15) translateY(-3px);
+        box-shadow: 0 15px 40px rgba(26, 0, 70, 0.5);
+        opacity: 1;
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .swiper-button-next {
+        right: 20px;
+        background: linear-gradient(135deg, #1A0046, #32004E);
+    }
+
+    .swiper-button-prev {
+        left: 20px;
+        background: linear-gradient(135deg, #32004E, #1A0046);
+    }
+
+    /* Paginación mejorada */
+    .swiper-pagination {
+        bottom: 20px !important;
+        z-index: 10;
+    }
+
+    .swiper-pagination-bullet {
+        width: 12px;
+        height: 12px;
+        background: rgba(255, 255, 255, 0.5);
+        opacity: 1;
+        border: 2px solid rgba(26, 0, 70, 0.3);
+        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        margin: 0 6px !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: linear-gradient(135deg, #1A0046, #32004E);
+        border-color: #FFFFFF;
+        transform: scale(1.3);
+        box-shadow: 0 4px 15px rgba(26, 0, 70, 0.5);
+    }
+
+    .swiper-pagination-bullet:hover {
+        transform: scale(1.2);
+        background: linear-gradient(135deg, #1A0046, #32004E);
+        border-color: rgba(255, 255, 255, 0.8);
+    }
+
+    /* Efectos de slide mejorados */
+    .swiper-slide {
+        transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .swiper-slide-active {
+        transform: scale(1.02);
+    }
+
+    /* Indicador de pausa al hacer hover */
+    .swiper-container::before {
+        content: '⏸ PAUSADO';
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(26, 0, 70, 0.8));
+        color: #FFFFFF;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        z-index: 100;
+        opacity: 0;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        text-transform: uppercase;
+        transform: translateY(-10px);
+    }
+
+    .swiper-container:hover::before {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Animaciones de entrada */
+    @keyframes slideInFromRight {
+        0% {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInFromLeft {
+        0% {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .swiper-direction-forward::after {
+        animation: slideInFromRight 0.5s ease-out;
+    }
+
+    .swiper-direction-backward::after {
+        animation: slideInFromLeft 0.5s ease-out;
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 768px) {
+        .swiper-button-next,
+        .swiper-button-prev {
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+        }
+
+        .swiper-button-next::after,
+        .swiper-button-prev::after {
+            font-size: 14px;
+        }
+
+        .swiper-direction-forward::after,
+        .swiper-direction-backward::after {
+            font-size: 9px;
+            padding: 6px 12px;
+            top: 10px;
+            right: 10px;
+        }
+
+        .swiper-container::before {
+            font-size: 9px;
+            padding: 4px 8px;
+            top: 10px;
+            left: 10px;
+        }
+    }
+
+    /* Efecto de glassmorphism para mejor integración */
+    .swiper-container {
+        backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+</style>
 @endsection
