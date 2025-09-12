@@ -18,10 +18,7 @@
                             <span class="text-xl">🏠</span>
                             <span>Ir al Inicio</span>
                         </a>
-                        <a href="{{ route('dashboard.user') }}" class="bg-gradient-to-r from-[#2a1b4d] to-[#4a3b6a] hover:from-[#3a2a5d] hover:to-[#5a4b7a] text-[#f8f9fa] px-6 py-3 rounded-xl transition-all duration-300 hover:shadow-xl hover:scale-105 flex items-center gap-3 font-semibold border border-[#4a3b6a] hover:border-[#5a4b7a]">
-                            <span class="text-xl">📊</span>
-                            <span>Dashboard</span>
-                        </a>
+                        
                     </div>
                 </div>
             </div>
