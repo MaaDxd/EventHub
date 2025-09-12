@@ -390,7 +390,7 @@
                 @if($recentEvents->count() > 0)
                     <div class="space-y-4">
                         @foreach($recentEvents as $event)
-                            <div class="event-card p-6">
+                            <a href="{{ route('events.show', $event) }}" class="block event-card p-6">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-6">
                                         @if($event->image && Storage::exists($event->image))
@@ -429,7 +429,7 @@
                                                 </span>
                                             </div>
                                             <span class="inline-flex items-center px-3 py-1 text-sm font-semibold text-white rounded-full" 
-                                                  style="background: linear-gradient(135deg, {{ $event->category ? $event->category->color : '#1A0046' }}, {{ $event->category ? $event->category->color.'99' : '#32004E' }})">
+                                                  style="background: linear-gradient(135deg, {{ $event->category ? $event->category->color : '#1A0046' }}, {{ $event->category ? $event->category->color . '99' : '#32004E' }})">
                                                 {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
                                             </span>
                                         </div>
@@ -455,7 +455,7 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         @endforeach
                     </div>
                 @else

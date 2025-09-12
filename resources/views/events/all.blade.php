@@ -5,14 +5,24 @@
 <div class="min-h-screen" style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
     <div class="py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
-            <!-- Botón Volver -->
+            <!-- Botones: Volver Atrás y Página Principal -->
             <div class="mb-6 animate-fade-in">
-                <button onclick="if (history.length > 1) { history.back(); } else { window.location.href='{{ url('/') }}'; }" 
-                        class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform glass-effect backdrop-blur-sm"
-                        style="border: 1px solid rgba(255,255,255,0.25);">
-                    <span class="text-lg">‹</span>
-                    <span>Volver</span>
-                </button>
+                <div class="flex items-center gap-4">
+                    <button onclick="if (history.length > 1) { history.back(); } else { window.location.href='{{ url('/') }}'; }" 
+                            class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform glass-effect backdrop-blur-sm"
+                            style="border: 1px solid rgba(255,255,255,0.25);">
+                        <span class="text-lg">‹</span>
+                        <span>Volver Atrás</span>
+                    </button>
+                    <a href="{{ route('welcome') }}" 
+                       class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform glass-effect backdrop-blur-sm"
+                       style="border: 1px solid rgba(255,255,255,0.25);">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                        </svg>
+                        <span>Página Principal</span>
+                    </a>
+                </div>
             </div>
             <!-- Header con diseño mejorado -->
             <div class="text-center mb-12">
@@ -94,7 +104,7 @@
                                        id="date_from" 
                                        name="date_from" 
                                        value="{{ request('date_from') }}"
-                                       class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300"
+                                       class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300">
                                 <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                     <i class="fas fa-calendar-alt"></i>
                                 </div>
@@ -257,7 +267,7 @@
                                     <div class="flex items-center space-x-3">
                                         @auth
                                             <!-- Botón de favoritos mejorado -->
-                                            <button onclick="toggleFavorite({{ $event->id }}, this)" 
+                                            <button onclick="toggleFavorite(event, {{ $event->id }}, this)" 
                                                     class="favorite-btn group relative w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 transform shadow-lg border-2 border-white/30 backdrop-blur-sm"
                                                     data-event-id="{{ $event->id }}"
                                                     data-is-favorite="{{ Auth::user()->hasFavorite($event->id) ? 'true' : 'false' }}"
@@ -655,7 +665,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Función para manejar favoritos
-    window.toggleFavorite = function(eventId, button) {
+    window.toggleFavorite = function(event, eventId, button) {
         event.stopPropagation(); // Evitar que se active el enlace del card
         
         const isFavorite = button.getAttribute('data-is-favorite') === 'true';

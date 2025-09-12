@@ -22,76 +22,78 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($events as $event)
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition duration-300">
-                        <!-- Imagen del evento -->
-                        <div class="h-48 bg-gray-200 relative">
-                            @if($event->image)
-                                <img src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}" 
-                                     class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <span class="text-6xl text-gray-400">📷</span>
-                                </div>
-                            @endif
-                            <!-- Badge de estado -->
-                            <div class="absolute top-4 right-4">
-                                <span class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full 
-                                    {{ $event->status === 'published' ? 'bg-green-500' : ($event->status === 'draft' ? 'bg-yellow-500' : 'bg-red-500') }}">
-                                    {{ ucfirst($event->status) }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Contenido del evento -->
-                        <div class="p-6">
-                            <div class="flex items-start justify-between mb-3">
-                                <h3 class="text-xl font-semibold text-gray-900 line-clamp-2">{{ $event->title }}</h3>
-                            </div>
-
-                            <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ Str::limit($event->description, 120) }}</p>
-
-                            <!-- Información del evento -->
-                            <div class="space-y-2 mb-4">
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <span class="mr-2">📅</span>
-                                    <span>{{ $event->date->format('d/m/Y') }} a las {{ $event->time }}</span>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <span class="mr-2">📍</span>
-                                    <span>{{ $event->location }}</span>
-                                </div>
-                                <div class="flex items-center text-sm text-gray-600">
-                                    <span class="mr-2">🗂</span>
-                                    <span class="inline-block px-2 py-1 text-xs font-semibold text-white rounded-full"
-                                          @if($event->category?->color)
-                                              style="background-color: {{ $event->category->color }}"
-                                          @else
-                                              style="background-color: #6366f1"
-                                          @endif>
-                                        {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
+                        <a href="{{ route('events.show', $event) }}" class="block focus:outline-none">
+                            <!-- Imagen del evento -->
+                            <div class="h-48 bg-gray-200 relative">
+                                @if($event->image)
+                                    <img src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}" 
+                                         class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <span class="text-6xl text-gray-400">📷</span>
+                                    </div>
+                                @endif
+                                <!-- Badge de estado -->
+                                <div class="absolute top-4 right-4">
+                                    <span class="inline-block px-3 py-1 text-xs font-semibold text-white rounded-full 
+                                        {{ $event->status === 'published' ? 'bg-green-500' : ($event->status === 'draft' ? 'bg-yellow-500' : 'bg-red-500') }}">
+                                        {{ ucfirst($event->status) }}
                                     </span>
                                 </div>
                             </div>
 
-                            <!-- Acciones -->
-                            <div class="flex justify-between items-center pt-4 border-t border-gray-200">
-                                <div class="flex space-x-2">
-                                    <a href="{{ route('events.edit', $event) }}" 
-                                       class="text-blue-600 hover:text-blue-800 font-medium text-sm">
-                                        ✏️ Editar
-                                    </a>
-                                    <form method="POST" action="{{ route('events.destroy', $event) }}" class="inline" 
-                                          onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium text-sm">
-                                            🗑️ Eliminar
-                                        </button>
-                                    </form>
+                            <!-- Contenido del evento -->
+                            <div class="p-6">
+                                <div class="flex items-start justify-between mb-3">
+                                    <h3 class="text-xl font-semibold text-gray-900 line-clamp-2">{{ $event->title }}</h3>
                                 </div>
-                                <span class="text-xs text-gray-500">
-                                    Creado {{ $event->created_at->diffForHumans() }}
-                                </span>
+
+                                <p class="text-gray-600 text-sm mb-4 line-clamp-3">{{ Str::limit($event->description, 120) }}</p>
+
+                                <!-- Información del evento -->
+                                <div class="space-y-2 mb-4">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <span class="mr-2">📅</span>
+                                        <span>{{ $event->date->format('d/m/Y') }} a las {{ $event->time }}</span>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <span class="mr-2">📍</span>
+                                        <span>{{ $event->location }}</span>
+                                    </div>
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <span class="mr-2">🗂</span>
+                                        <span class="inline-block px-2 py-1 text-xs font-semibold text-white rounded-full"
+                                              @if($event->category?->color)
+                                                  style="background-color: {{ $event->category->color }}"
+                                              @else
+                                                  style="background-color: #6366f1"
+                                              @endif>
+                                            {{ $event->category ? $event->category->name : ucfirst($event->category_type) }}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
+                        </a>
+
+                        <!-- Acciones -->
+                        <div class="flex justify-between items-center pt-4 border-t border-gray-200 px-6 pb-6">
+                            <div class="flex space-x-2">
+                                <a href="{{ route('events.edit', $event) }}" 
+                                   class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                                    ✏️ Editar
+                                </a>
+                                <form method="POST" action="{{ route('events.destroy', $event) }}" class="inline" 
+                                      onsubmit="return confirm('¿Estás seguro de que quieres eliminar este evento?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800 font-medium text-sm">
+                                        🗑️ Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                            <span class="text-xs text-gray-500">
+                                Creado {{ $event->created_at->diffForHumans() }}
+                            </span>
                         </div>
                     </div>
                 @endforeach
