@@ -371,7 +371,7 @@
         <div class="p-8">
             <h2 class="text-2xl font-bold text-[#1A0046] mb-8 text-center">Canales de Soporte</h2>
 
-            <div class="grid md:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 gap-8">
                 <div class="support-card">
                     <div class="support-icon">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -398,18 +398,7 @@
                     </a>
                 </div>
 
-                <div class="support-card">
-                    <div class="support-icon">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-semibold text-[#1A0046] mb-3">Chat en Vivo</h3>
-                    <p class="text-[#32004E] opacity-80 mb-4">Obtén ayuda inmediata con nuestro chat</p>
-                    <button onclick="openChat()" class="text-[#1A0046] font-semibold hover:text-[#32004E] transition-colors">
-                        Iniciar Chat
-                    </button>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -437,41 +426,7 @@
     </div>
 </div>
 
-<!-- Modal de Chat -->
-<div id="chatModal" class="modal-overlay">
-    <div class="modal-content">
-        <div class="p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h3 class="text-2xl font-bold text-[#1A0046]">Chat de Soporte</h3>
-                <button onclick="closeChat()" class="text-[#32004E] opacity-60 hover:opacity-100 transition-opacity">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <div class="text-center">
-                <div class="w-20 h-20 bg-gradient-to-r from-[#1A0046] to-[#32004E] rounded-full flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-
-                <h4 class="text-xl font-semibold text-[#1A0046] mb-4">Chat en Vivo</h4>
-                <p class="text-[#32004E] opacity-80 mb-8">Nuestro equipo de soporte está disponible para ayudarte en tiempo real.</p>
-
-                <div class="space-y-4">
-                    <button onclick="startChat()" class="w-full bg-gradient-to-r from-[#1A0046] to-[#32004E] text-white py-4 px-8 rounded-xl font-semibold hover:from-[#32004E] hover:to-[#1A0046] transition-all duration-300 transform hover:scale-105 shadow-lg">
-                        Iniciar Conversación
-                    </button>
-                    <button onclick="closeChat()" class="w-full border-2 border-[#1A0046] text-[#1A0046] py-4 px-8 rounded-xl font-semibold hover:bg-[#1A0046] hover:text-white transition-all duration-300">
-                        Cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+ 
 
 <script>
 // Función para volver atrás
@@ -483,25 +438,7 @@ function goBack() {
     }
 }
 
-function openChat() {
-    document.getElementById('chatModal').classList.add('show');
-}
-
-function closeChat() {
-    document.getElementById('chatModal').classList.remove('show');
-}
-
-function startChat() {
-    alert('Funcionalidad de chat en desarrollo. Por favor, utiliza el formulario de contacto o envía un correo electrónico.');
-    closeChat();
-}
-
-// Cerrar modal al hacer clic fuera
-document.getElementById('chatModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeChat();
-    }
-});
+ 
 
 // Manejo del formulario
 document.querySelector('form').addEventListener('submit', function(e) {
