@@ -271,6 +271,90 @@
                     </div>
                 </div>
 
+                <!-- Security Questions Section -->
+                <div class="relative">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold text-purple-900 mb-2">Preguntas de Seguridad</h3>
+                        <p class="text-sm text-gray-600 mb-4">Estas preguntas te ayudarán a recuperar tu contraseña si la olvidas.</p>
+                        
+                        <!-- First Security Question -->
+                        <div class="mb-4">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                                </svg>
+                                <label for="security_question_1" class="block text-sm font-medium text-gray-700">
+                                    Pregunta de seguridad 1
+                                </label>
+                            </div>
+                            <select id="security_question_1" name="security_question_1" required class="register-input pl-4 @error('security_question_1') border-red-500 @enderror">
+                                <option value="">Selecciona una pregunta</option>
+                                @foreach(\App\Helpers\SecurityQuestions::getQuestions() as $question)
+                                    <option value="{{ $question }}" {{ old('security_question_1') == $question ? 'selected' : '' }}>{{ $question }}</option>
+                                @endforeach
+                            </select>
+                            @error('security_question_1')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <label for="security_answer_1" class="block text-sm font-medium text-gray-700">
+                                    Respuesta 1
+                                </label>
+                            </div>
+                            <input id="security_answer_1" type="text" name="security_answer_1" required 
+                                   class="register-input pl-4 @error('security_answer_1') border-red-500 @enderror" 
+                                   value="{{ old('security_answer_1') }}" placeholder="Tu respuesta">
+                            @error('security_answer_1')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <!-- Second Security Question -->
+                        <div class="mb-4">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+                                </svg>
+                                <label for="security_question_2" class="block text-sm font-medium text-gray-700">
+                                    Pregunta de seguridad 2
+                                </label>
+                            </div>
+                            <select id="security_question_2" name="security_question_2" required class="register-input pl-4 @error('security_question_2') border-red-500 @enderror">
+                                <option value="">Selecciona una pregunta</option>
+                                @foreach(\App\Helpers\SecurityQuestions::getQuestions() as $question)
+                                    <option value="{{ $question }}" {{ old('security_question_2') == $question ? 'selected' : '' }}>{{ $question }}</option>
+                                @endforeach
+                            </select>
+                            @error('security_question_2')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <label for="security_answer_2" class="block text-sm font-medium text-gray-700">
+                                    Respuesta 2
+                                </label>
+                            </div>
+                            <input id="security_answer_2" type="text" name="security_answer_2" required 
+                                   class="register-input pl-4 @error('security_answer_2') border-red-500 @enderror" 
+                                   value="{{ old('security_answer_2') }}" placeholder="Tu respuesta">
+                            @error('security_answer_2')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Submit Button -->
                 <div>
                     <button type="submit" class="register-btn group">

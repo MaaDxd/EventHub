@@ -20,10 +20,6 @@
         z-index: 0;
     }
     
-    .gradient-overlay {
-        background: linear-gradient(45deg, rgba(26, 0, 70, 0.9) 0%, rgba(50, 0, 78, 0.9) 100%);
-    }
-    
     /* Animations */
     @keyframes fadeInDown {
         from {
@@ -149,7 +145,7 @@
 </style>
 
 <div class="gradient-bg min-h-screen py-16 px-4 flex items-center justify-center">
-    <div class="container mx-auto max-w-md relative z-10">
+    <div class="container mx-auto max-w-lg relative z-10">
         <!-- Decorative elements -->
         <div class="absolute top-10 left-10 w-20 h-20 bg-white opacity-10 rounded-full blur-xl animate-pulse"></div>
         <div class="absolute bottom-20 right-10 w-32 h-32 bg-white opacity-5 rounded-full blur-2xl"></div>
@@ -157,58 +153,62 @@
         
         <div class="login-card p-8 animate-fadeInUp backdrop-blur-sm bg-white/95">
             <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-[#1A0046] mb-2">Bienvenido</h2>
-                <p class="text-[#32004E] opacity-70">Inicia sesión para continuar</p>
+                <h2 class="text-3xl font-bold text-[#1A0046] mb-2">Preguntas de Seguridad</h2>
+                <p class="text-[#32004E] opacity-70">Responde las preguntas para verificar tu identidad</p>
             </div>
             
-            <form method="POST" action="{{ route('login') }}">
+            <form method="POST" action="{{ route('password.verify.questions') }}">
                 @csrf
+                
+                <!-- First Security Question -->
                 <div class="mb-6">
-                    <label for="email" class="block text-[#1A0046] font-medium mb-2">Email</label>
+                    <label class="block text-[#1A0046] font-medium mb-2">Pregunta 1:</label>
+                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                        <p class="text-gray-700 font-medium">{{ $user->security_question_1 }}</p>
+                    </div>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus 
-                               class="login-input pl-10">
+                        <input type="text" name="security_answer_1" required 
+                               class="login-input pl-10" placeholder="Tu respuesta" value="{{ old('security_answer_1') }}">
                     </div>
-                    @error('email')
+                    @error('security_answer_1')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 
+                <!-- Second Security Question -->
                 <div class="mb-6">
-                    <label for="password" class="block text-[#1A0046] font-medium mb-2">Contraseña</label>
+                    <label class="block text-[#1A0046] font-medium mb-2">Pregunta 2:</label>
+                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                        <p class="text-gray-700 font-medium">{{ $user->security_question_2 }}</p>
+                    </div>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
                             </svg>
                         </div>
-                        <input id="password" type="password" name="password" required 
-                               class="login-input pl-10 pr-12">
+                        <input type="text" name="security_answer_2" required 
+                               class="login-input pl-10" placeholder="Tu respuesta" value="{{ old('security_answer_2') }}">
                     </div>
-                    @error('password')
+                    @error('security_answer_2')
                         <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 
-                <div class="mb-6 flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="remember" id="remember" class="mr-2 h-4 w-4 accent-[#1A0046]">
-                        <label for="remember" class="text-[#32004E] text-sm">Recordarme</label>
+                @error('security_answers')
+                    <div class="mb-4 text-red-500 text-sm">
+                        {{ $message }}
                     </div>
-                    <a href="{{ route('password.request') }}" class="text-[#1A0046] text-sm font-semibold hover:underline">
-                        ¿Olvidaste tu contraseña?
-                    </a>
-                </div>
+                @enderror
                 
                 <button type="submit" class="login-btn mb-4 group">
                     <span class="inline-flex items-center">
-                        <span>Iniciar Sesión</span>
+                        <span>Verificar Respuestas</span>
                         <svg class="w-5 h-5 ml-2 transform transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                         </svg>
@@ -216,7 +216,7 @@
                 </button>
                 
                 <div class="text-center text-sm text-[#32004E] opacity-70">
-                    ¿No tienes una cuenta? <a href="{{ route('register') }}" class="text-[#1A0046] font-semibold hover:underline">Regístrate</a>
+                    <a href="{{ route('password.request') }}" class="text-[#1A0046] font-semibold hover:underline">Volver al inicio</a>
                 </div>
             </form>
         </div>

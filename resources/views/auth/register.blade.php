@@ -218,6 +218,58 @@
                                class="register-input pl-10 pr-12">
                     </div>
                 </div>
+
+                <!-- Security Questions Section -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-[#1A0046] mb-4">Preguntas de Seguridad</h3>
+                    <p class="text-sm text-gray-600 mb-4">Estas preguntas te ayudarán a recuperar tu contraseña si la olvidas.</p>
+                    
+                    <!-- First Security Question -->
+                    <div class="mb-4">
+                        <label for="security_question_1" class="block text-[#1A0046] font-medium mb-2">Pregunta de seguridad 1</label>
+                        <select id="security_question_1" name="security_question_1" required class="register-input">
+                            <option value="">Selecciona una pregunta</option>
+                            @foreach(\App\Helpers\SecurityQuestions::getQuestions() as $question)
+                                <option value="{{ $question }}" {{ old('security_question_1') == $question ? 'selected' : '' }}>{{ $question }}</option>
+                            @endforeach
+                        </select>
+                        @error('security_question_1')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="security_answer_1" class="block text-[#1A0046] font-medium mb-2">Respuesta 1</label>
+                        <input id="security_answer_1" type="text" name="security_answer_1" required 
+                               class="register-input" value="{{ old('security_answer_1') }}" placeholder="Tu respuesta">
+                        @error('security_answer_1')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                    <!-- Second Security Question -->
+                    <div class="mb-4">
+                        <label for="security_question_2" class="block text-[#1A0046] font-medium mb-2">Pregunta de seguridad 2</label>
+                        <select id="security_question_2" name="security_question_2" required class="register-input">
+                            <option value="">Selecciona una pregunta</option>
+                            @foreach(\App\Helpers\SecurityQuestions::getQuestions() as $question)
+                                <option value="{{ $question }}" {{ old('security_question_2') == $question ? 'selected' : '' }}>{{ $question }}</option>
+                            @endforeach
+                        </select>
+                        @error('security_question_2')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="security_answer_2" class="block text-[#1A0046] font-medium mb-2">Respuesta 2</label>
+                        <input id="security_answer_2" type="text" name="security_answer_2" required 
+                               class="register-input" value="{{ old('security_answer_2') }}" placeholder="Tu respuesta">
+                        @error('security_answer_2')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
                 
                 <button type="submit" class="register-btn mb-4 group">
                     <span class="inline-flex items-center">

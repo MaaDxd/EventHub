@@ -21,6 +21,10 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'security_question_1' => ['required', 'string'],
+            'security_answer_1' => ['required', 'string', 'min:3'],
+            'security_question_2' => ['required', 'string'],
+            'security_answer_2' => ['required', 'string', 'min:3'],
         ]);
 
         $user = User::create([
@@ -28,6 +32,10 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user', // Asignar rol de usuario por defecto
+            'security_question_1' => $request->security_question_1,
+            'security_answer_1' => strtolower(trim($request->security_answer_1)),
+            'security_question_2' => $request->security_question_2,
+            'security_answer_2' => strtolower(trim($request->security_answer_2)),
         ]);
 
         Auth::login($user);
@@ -47,6 +55,10 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'email_confirmation' => ['required', 'same:email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'security_question_1' => ['required', 'string'],
+            'security_answer_1' => ['required', 'string', 'min:3'],
+            'security_question_2' => ['required', 'string'],
+            'security_answer_2' => ['required', 'string', 'min:3'],
         ]);
 
         $user = User::create([
@@ -54,6 +66,10 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'user',
+            'security_question_1' => $request->security_question_1,
+            'security_answer_1' => strtolower(trim($request->security_answer_1)),
+            'security_question_2' => $request->security_question_2,
+            'security_answer_2' => strtolower(trim($request->security_answer_2)),
         ]);
 
         Auth::login($user);
@@ -74,6 +90,10 @@ class RegisterController extends Controller
             'email_confirmation' => ['required', 'same:email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone' => ['required', 'string', 'max:20'],
+            'security_question_1' => ['required', 'string'],
+            'security_answer_1' => ['required', 'string', 'min:3'],
+            'security_question_2' => ['required', 'string'],
+            'security_answer_2' => ['required', 'string', 'min:3'],
         ]);
 
         $user = User::create([
@@ -82,6 +102,10 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
             'role' => 'creator',
             'phone' => $request->phone,
+            'security_question_1' => $request->security_question_1,
+            'security_answer_1' => strtolower(trim($request->security_answer_1)),
+            'security_question_2' => $request->security_question_2,
+            'security_answer_2' => strtolower(trim($request->security_answer_2)),
         ]);
 
         Auth::login($user);

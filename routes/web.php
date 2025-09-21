@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\AdminController;
@@ -42,6 +44,19 @@ Route::get('/session/expired', function () {
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
+
+// Password reset routes with security questions
+Route::get('password/forgot', [ForgotPasswordController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::get('password/verify-email', function() {
+    return redirect()->route('password.request');
+});
+Route::post('password/verify-email', [ForgotPasswordController::class, 'verifyEmail'])->name('password.verify.email');
+Route::get('password/verify-questions', function() {
+    return redirect()->route('password.request');
+});
+Route::post('password/verify-questions', [ForgotPasswordController::class, 'verifySecurityQuestions'])->name('password.verify.questions');
+Route::get('password/reset-form', [ResetPasswordController::class, 'showResetForm'])->name('password.reset.form');
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.reset');
 
 // Rutas específicas para registro por tipo de usuario
 Route::get('register/user', [RegisterController::class, 'showUserRegistrationForm'])->name('register.user');
