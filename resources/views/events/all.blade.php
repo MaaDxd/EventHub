@@ -66,7 +66,6 @@
                                 </div>
                             </div>
                         </div>
-                        <br>
 
                         <!-- Filtro por categoría -->
                         <div class="space-y-2">

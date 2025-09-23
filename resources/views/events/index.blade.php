@@ -124,8 +124,9 @@
                         Comienza creando tu primer evento para compartir con tu audiencia
                     </p>
                     <a href="{{ route('events.create') }}" 
-                       class="inline-flex items-center gap-3 bg-gradient-to-r from-[#1A0046] to-[#32004E] text-white px-8 py-4 rounded-full font-semibold hover:opacity-95 transition-all duration-300 transform hover:scale-105 shadow-xl text-lg">
-                        Crear Mi Primer Evento
+                       class="inline-flex items-center gap-3 bg-white text-black px-8 py-4 rounded-full font-semibold hover:opacity-95 transition-all duration-300 transform hover:scale-105 shadow-xl text-lg border-2 border-gray-300">
+                        <i class="fas fa-plus"></i>
+                        + Crear Nuevo Evento
                     </a>
                 </div>
             @endif

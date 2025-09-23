@@ -32,25 +32,25 @@
             </div>
 
             <!-- Filtros y Búsqueda -->
-            <div class="bg-white rounded-3xl shadow-2xl p-8 mb-12 border border-white border-opacity-20">
-                <div class="flex items-center mb-8">
-                    <div class="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-lg"
+            <div class="bg-white rounded-3xl shadow-2xl p-6 mb-12 border border-white border-opacity-20">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shadow-lg"
                          style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
                         🔍
                     </div>
-                    <h2 class="text-2xl font-bold ml-4" style="color: #1A0046;">Buscar y Filtrar Usuarios</h2>
+                    <h2 class="text-xl font-bold ml-3" style="color: #1A0046;">Buscar y Filtrar Usuarios</h2>
                 </div>
 
-                <form method="GET" action="{{ route('admin.users') }}" class="grid md:grid-cols-4 gap-6 mb-8">
+                <form method="GET" action="{{ route('admin.users') }}" class="grid md:grid-cols-4 gap-4 mb-6">
                     <!-- Búsqueda -->
-                    <div class="space-y-2">
+                    <div class="space-y-1">
                         <label class="block text-sm font-semibold" style="color: #32004E;">
                             <i class="fas fa-search mr-2"></i>Buscar Usuario
                         </label>
                         <div class="relative">
                             <input type="text" name="search" value="{{ request('search') }}"
                                    placeholder="Nombre o email..."
-                                   class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300">
+                                   class="w-full px-3 py-2 pl-10 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300">
                             <div class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                                 <i class="fas fa-search"></i>
                             </div>
@@ -58,12 +58,12 @@
                     </div>
 
                     <!-- Filtro por Estado -->
-                    <div class="space-y-2">
+                    <div class="space-y-1">
                         <label class="block text-sm font-semibold" style="color: #32004E;">
                             <i class="fas fa-toggle-on mr-2"></i>Estado
                         </label>
                         <div class="relative">
-                            <select name="status" class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300 appearance-none">
+                            <select name="status" class="w-full px-3 py-2 pl-10 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300 appearance-none">
                                 <option value="">Todos los estados</option>
                                 <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>✅ Activos</option>
                                 <option value="deleted" {{ request('status') === 'deleted' ? 'selected' : '' }}>🗑️ Eliminados</option>
@@ -78,12 +78,12 @@
                     </div>
 
                     <!-- Filtro por Rol -->
-                    <div class="space-y-2">
+                    <div class="space-y-1">
                         <label class="block text-sm font-semibold" style="color: #32004E;">
                             <i class="fas fa-user-tag mr-2"></i>Rol
                         </label>
                         <div class="relative">
-                            <select name="role" class="w-full px-4 py-3 pl-12 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300 appearance-none">
+                            <select name="role" class="w-full px-3 py-2 pl-10 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 transition-all duration-300 appearance-none">
                                 <option value="">Todos los roles</option>
                                 <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>⚙️ Administrador</option>
                                 <option value="creator" {{ request('role') === 'creator' ? 'selected' : '' }}>🎨 Creador</option>
@@ -101,18 +101,18 @@
                     <!-- Espacio vacío para alineación -->
                     <div></div>
                     <!-- Botones de acción -->
-                    <div class="flex flex-wrap gap-4 pt-6 border-t border-gray-100">
+                    <div class="flex flex-wrap gap-3 pt-4 border-t border-gray-100">
                         <button type="submit"
-                                class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform animate-pulse-gentle"
+                                class="flex items-center px-6 py-2 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform animate-pulse-gentle"
                                 style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
                             <i class="fas fa-search mr-2"></i>
                             <span>Buscar Usuarios</span>
                         </button>
-                        <a href="{{ route('admin.users') }}"
-                           class="flex items-center px-8 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
-                           style="background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);">
-                            <i class="fas fa-sync-alt mr-2"></i>
-                            <span>Limpiar Filtros</span>
+                        <a href="{{ route('admin.events.create') }}"
+                           class="flex items-center px-6 py-2 rounded-xl text-white font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
+                           style="background: linear-gradient(135deg, #10B981 0%, #059669 100%);">
+                            <i class="fas fa-plus mr-2"></i>
+                            <span>+ Crear Nuevo Evento</span>
                         </a>
                     </div>
                 </form>
@@ -337,7 +337,7 @@
                     </p>
                     <a href="{{ route('admin.users') }}"
                        class="inline-flex items-center px-8 py-4 rounded-xl text-white font-semibold text-lg transition-all duration-300 hover:shadow-xl hover:scale-105 transform"
-                       style="background: linear-gradient(135deg, #FFFFFF 20%, rgba(255, 255, 255, 0.9) 100%); color: #1A0046;">
+                       style="background: linear-gradient(135deg, #1A0046 0%, #32004E 100%);">
                         <i class="fas fa-users mr-3"></i>
                         <span>Ver Todos los Usuarios</span>
                     </a>
@@ -345,6 +345,9 @@
             @endif
     </div>
 </div>
+
+<!-- Espacio adicional para bajar el footer -->
+<div class="py-20"></div>
 
 @include('layouts.footer')
 
