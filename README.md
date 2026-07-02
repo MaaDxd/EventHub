@@ -1,62 +1,62 @@
 # 📍 EventHub
 
-Plataforma web para descubrir y publicar eventos locales en Bogotá, con mapa interactivo de geolocalización. Proyecto académico desarrollado durante la Tecnología en Análisis y Desarrollo de Software (SENA).
+Web platform to discover and publish local events in Bogotá, featuring an interactive map. Academic project developed during my Software Development Technologist program (SENA).
 
-## 🎯 ¿Qué hace?
+## 🎯 What it does
 
-EventHub permite a cualquier usuario:
+EventHub allows any user to:
 
-- **Explorar eventos** que están sucediendo en la ciudad de Bogotá a través de un mapa interactivo.
-- **Registrarse** y crear una cuenta de usuario.
-- **Publicar eventos propios**, con ubicación geográfica, fecha y detalles.
-- **Visualizar eventos publicados por otros usuarios** de forma pública, filtrando por ubicación.
+- **Explore events** happening around the city of Bogotá through an interactive map.
+- **Sign up** and create a user account.
+- **Publish their own events**, including geographic location, date, and details.
+- **View events published by other users** publicly, filtering by location.
 
-## 🛠️ Stack técnico
+## 🛠️ Tech Stack
 
-- **Backend:** PHP + Laravel (arquitectura MVC)
-- **Vistas:** Blade Templates
-- **Base de datos:** MySQL + Eloquent ORM
+- **Backend:** PHP + Laravel (MVC architecture)
+- **Views:** Blade Templates
+- **Database:** MySQL + Eloquent ORM
 - **Frontend:** JavaScript, Vite
 - **Testing:** PHPUnit
 
-## 🧱 Arquitectura
+## 🧱 Architecture
 
-El proyecto sigue el patrón **MVC (Modelo-Vista-Controlador)** propio de Laravel:
+The project follows the **MVC (Model-View-Controller)** pattern native to Laravel:
 
-- **Modelos:** definición de entidades (usuarios, eventos) y relaciones de base de datos.
-- **Controladores:** lógica de negocio para registro de usuarios, creación y consulta de eventos.
-- **Vistas (Blade):** renderizado de la interfaz, incluyendo el mapa interactivo y los listados de eventos.
+- **Models:** entity definitions (users, events) and database relationships.
+- **Controllers:** business logic for user registration, event creation, and event queries.
+- **Views (Blade):** UI rendering, including the interactive map and event listings.
 
-## 🚀 Cómo ejecutarlo localmente
+## 🚀 Running it locally
 
 ```bash
-# Clonar el repositorio
+# Clone the repository
 git clone https://github.com/MaaDxd/EventHub.git
 cd EventHub
 
-# Instalar dependencias PHP
+# Install PHP dependencies
 composer install
 
-# Instalar dependencias de frontend
+# Install frontend dependencies
 npm install
 
-# Configurar variables de entorno
+# Set up environment variables
 cp .env.example .env
 php artisan key:generate
 
-# Ejecutar migraciones
+# Run migrations
 php artisan migrate
 
-# Levantar el servidor
+# Start the server
 php artisan serve
 npm run dev
 ```
 
-## 📌 Estado del proyecto
+## 📌 Project status
 
-✅ Proyecto concluido — desarrollado como parte de mi formación técnica en SENA.
+✅ Completed — developed as part of my technical training at SENA.
 
-## 👤 Autor
+## 👤 Author
 
 **Nicolas Madariaga**
 [LinkedIn](https://www.linkedin.com/in/nicol%C3%A1s-madariaga-marin-a8b3073b0/) · [GitHub](https://github.com/MaaDxd)
