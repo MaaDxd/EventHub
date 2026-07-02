@@ -1,3 +1,67 @@
+# 📍 EventHub
+
+Plataforma web para descubrir y publicar eventos locales en Bogotá, con mapa interactivo de geolocalización. Proyecto académico desarrollado durante la Tecnología en Análisis y Desarrollo de Software (SENA).
+
+## 🎯 ¿Qué hace?
+
+EventHub permite a cualquier usuario:
+
+- **Explorar eventos** que están sucediendo en la ciudad de Bogotá a través de un mapa interactivo.
+- **Registrarse** y crear una cuenta de usuario.
+- **Publicar eventos propios**, con ubicación geográfica, fecha y detalles.
+- **Visualizar eventos publicados por otros usuarios** de forma pública, filtrando por ubicación.
+
+## 🛠️ Stack técnico
+
+- **Backend:** PHP + Laravel (arquitectura MVC)
+- **Vistas:** Blade Templates
+- **Base de datos:** MySQL + Eloquent ORM
+- **Frontend:** JavaScript, Vite
+- **Testing:** PHPUnit
+
+## 🧱 Arquitectura
+
+El proyecto sigue el patrón **MVC (Modelo-Vista-Controlador)** propio de Laravel:
+
+- **Modelos:** definición de entidades (usuarios, eventos) y relaciones de base de datos.
+- **Controladores:** lógica de negocio para registro de usuarios, creación y consulta de eventos.
+- **Vistas (Blade):** renderizado de la interfaz, incluyendo el mapa interactivo y los listados de eventos.
+
+## 🚀 Cómo ejecutarlo localmente
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/MaaDxd/EventHub.git
+cd EventHub
+
+# Instalar dependencias PHP
+composer install
+
+# Instalar dependencias de frontend
+npm install
+
+# Configurar variables de entorno
+cp .env.example .env
+php artisan key:generate
+
+# Ejecutar migraciones
+php artisan migrate
+
+# Levantar el servidor
+php artisan serve
+npm run dev
+```
+
+## 📌 Estado del proyecto
+
+✅ Proyecto concluido — desarrollado como parte de mi formación técnica en SENA.
+
+## 👤 Autor
+
+**Nicolas Madariaga**
+[LinkedIn](https://www.linkedin.com/in/nicol%C3%A1s-madariaga-marin-a8b3073b0/) · [GitHub](https://github.com/MaaDxd)
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
